@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import LandingPage from "./components/CommonComponent/LandingPage";
 import Login from "./components/CommonComponent/Login";
 import Register from "./components/CommonComponent/Register";
+import QueryResultTable from './components/CommonComponent/Table';
 
 import Queryform from "./components/Queryform";
 import Querystatus from "./components/Querystatus";
@@ -43,6 +44,7 @@ function App() {
                   <Route path="/publisherform" element={<Publisherform />} />
                   <Route path="/s3fileupload" element={<S3fileupload />} />
                   <Route path="/provider-template-file" element={<TemplateFile />} />
+                  <Route path="/query-result-table" element={<QueryResultTable />} />
                 </Routes>
               </Sidebar>
             }
