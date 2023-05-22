@@ -71,7 +71,6 @@ const Publisherform = () => {
     ) {
       setFetchData(true);
       setTimeout(() => {
-        console.log("requestId in setTimeout", requestId)
         fetchcsvTableData();
       }, 10000);
     }

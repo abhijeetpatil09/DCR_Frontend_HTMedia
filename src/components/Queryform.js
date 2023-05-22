@@ -19,16 +19,6 @@ const initialState = {
   Consumer_Name: "",
 };
 
-// var snowflake = require('snowflake-sdk');
-// const connection = snowflake.createConnection({
-//   account: 'iw79253.ap-southeast-1',
-//   username: 'onkar97',
-//   password: 'Onkar@97',
-//   database: 'DCR_SAMP_CONSUMER',
-//   schema: 'public',
-//   warehouse: 'APP_WH'
-// });
-
 const s3 = new AWS.S3({
   accessKeyId: "AKIA57AGVWXYVR36XIEC",
   secretAccessKey: "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",
@@ -101,7 +91,7 @@ const Queryform = () => {
         }
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [user?.name]);
 
   useEffect(() => {
     if (databaseName !== "") {
@@ -119,7 +109,7 @@ const Queryform = () => {
         })
         .catch((error) => console.log(error));
     }
-  }, [databaseName]);
+  }, [databaseName, user?.name]);
 
   useEffect(() => {
     if (databaseName !== "" && formData["Query_Name"] !== "") {
@@ -203,6 +193,7 @@ const Queryform = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setStopAPICall(1);
+
     setSubmit(true);
 
     formData.RunId = Date.now();
@@ -255,7 +246,7 @@ const Queryform = () => {
           query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}');`,
         },
       }).then((response) => {
-        if (response) {
+        if(response) {
           toast.success(`Request has been submitted successfully. Request Id: ${formData?.RunId}`);
           dispatch(
             actions.ConsumerQueryForm({
