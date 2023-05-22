@@ -45,7 +45,7 @@ const Publisherform = () => {
   const [formData, setFormData] = useState({
     ...initialState,
     Provider_Name: user?.name,
-    Consumer_Name: user?.name,
+    Consumer_Name: 'Hoonartek',
   });
 
   const [gender, setGender] = useState("male");
@@ -57,20 +57,23 @@ const Publisherform = () => {
 
   let [stopAPICall, setStopAPICall] = useState(1);
 
+  const [submit, setSubmit] = useState(false);
+
   useEffect(() => {
     console.log("Publisher stopAPICall", stopAPICall);
 
     if (
       stopAPICall !== 0 &&
-      requestId &&
-      requestId !== "" &&
+      formData?.RunId &&
+      formData?.RunId !== "" &&
       queryName &&
-      queryName !== ""
+      queryName !== "" && submit
     ) {
       setFetchData(true);
       setTimeout(() => {
+        console.log("requestId in setTimeout", requestId)
         fetchcsvTableData();
-      }, 30000);
+      }, 10000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestId, queryName, stopAPICall]);
@@ -157,6 +160,8 @@ const Publisherform = () => {
     event.preventDefault();
     setStopAPICall(1);
 
+    setSubmit(true);
+
     formData.RunId = Date.now();
 
     const keys = Object.keys(formData);
@@ -219,13 +224,13 @@ const Publisherform = () => {
     });
 
     axios
-      .get("http://127.0.0.1:5000/data_fetcher", {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
         },
       })
       .then((response) => {
-        if(response) {
+        if (response) {
           toast.success(`Request has been submitted successfully. Request Id: ${formData?.RunId}`);
           dispatch(
             actions.PublisherForm({
@@ -239,6 +244,36 @@ const Publisherform = () => {
         console.log(error);
         toast.error(`We are facing some error in your request. Request Id: ${formData?.RunId}`);
       });
+
+      setTimeout(() => {
+        // Execute the second Axios request after the delay
+        axios
+          .get(`http://127.0.0.1:5000/${user?.name}`, {
+            params: {
+              query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS();`,
+            },
+          })
+          .then((response) => {
+            if (response) {
+              toast.success(
+                `Executing....... Request Id: ${formData?.RunId}`
+  
+              );
+              dispatch(
+                actions.ConsumerQueryForm({
+                  QueryName: formData?.Query_Name,
+                  RequestId: formData?.RunId,
+                })
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error(
+              `We are facing some error in your request. Request Id: ${formData?.RunId}`
+            );
+          });
+      }, 5000);
 
     const formData2 = new FormData();
     formData2.append("file", inputFile.files[0]);
@@ -291,9 +326,9 @@ const Publisherform = () => {
 
   const fetchcsvTableData = async () => {
     axios
-      .get("http://127.0.0.1:5000/data_fetcher", {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${queryName}_${requestId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${queryName}_${formData?.RunId} limit 1000;`,
         },
       })
       .then((response) => {
