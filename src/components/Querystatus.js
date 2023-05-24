@@ -15,12 +15,25 @@ const Querystatus = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE;",
+          query: "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc;",
         },
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
   }, [user?.name]);
+
+  const handleDate = (date) => {
+    const dateObj = new Date(date);
+    
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObj.getDate().toString().padStart(2, "0");
+    const hours = dateObj.getHours().toString().padStart(2, "0");
+    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+    const seconds = dateObj.getSeconds().toString().padStart(2, "0");
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
 
   const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
     axios
@@ -74,7 +87,7 @@ const Querystatus = () => {
               <td>{item.PROVIDER_NAME}</td>
               <td>{item.COLOUMNS}</td>
               <td>{item.STATUS === "true" ? "Approved" : "Rejected"}</td>
-              <td>{new Date().toLocaleString()}</td>
+              <td>{handleDate(item.RUN_ID)}</td>
               <td>
                 <button
                   onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)}
