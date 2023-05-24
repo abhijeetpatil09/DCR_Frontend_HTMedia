@@ -14,9 +14,10 @@ import Home from "./components/Home";
 import S3fileupload from "./components/S3fileupload";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Publisherform from "./components/Publisherform";
-//import TemplateFile from './components/TemplateFile';
+import TemplateFile from './components/TemplateFile';
 import PrivacyPolicy from "./components/CommonComponent/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/TermsAndConditions";
+import Analytics from "./components/Analytics";
 
 // import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,6 +46,7 @@ function App() {
                   <Route path="/s3fileupload" element={<S3fileupload />} />
                   <Route path="/provider-template-file" element={<TemplateFile />} />
                   <Route path="/query-result-table" element={<QueryResultTable />} />
+                  <Route path="/analytics" element={<Analytics />} />
                 </Routes>
               </Sidebar>
             }
