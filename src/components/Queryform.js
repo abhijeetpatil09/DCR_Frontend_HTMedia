@@ -19,16 +19,6 @@ const initialState = {
   Consumer_Name: "",
 };
 
-// var snowflake = require('snowflake-sdk');
-// const connection = snowflake.createConnection({
-//   account: 'iw79253.ap-southeast-1',
-//   username: 'onkar97',
-//   password: 'Onkar@97',
-//   database: 'DCR_SAMP_CONSUMER',
-//   schema: 'public',
-//   warehouse: 'APP_WH'
-// });
-
 const s3 = new AWS.S3({
   accessKeyId: "AKIA57AGVWXYVR36XIEC",
   secretAccessKey: "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",
@@ -58,20 +48,23 @@ const Queryform = () => {
   const [fetchData, setFetchData] = useState(false);
   let [stopAPICall, setStopAPICall] = useState(1);
 
+  const [submit, setSubmit] = useState(false);
+
   useEffect(() => {
     console.log("Consumer stopAPICall", stopAPICall);
 
     if (
       stopAPICall !== 0 &&
-      requestId &&
-      requestId !== "" &&
+      formData?.RunId &&
+      formData?.RunId !== "" &&
       queryName &&
-      queryName !== ""
+      queryName !== "" && submit
     ) {
       setFetchData(true);
       setTimeout(() => {
+        console.log("requestId in setTimeout", requestId)
         fetchcsvTableData();
-      }, 30000);
+      }, 10000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestId, queryName, stopAPICall]);
@@ -85,7 +78,7 @@ const Queryform = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/data_fetcher", {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query: "select provider from DCR_SAMP_CONSUMER1.PUBLIC.PROV_DETAILS;",
         },
@@ -98,12 +91,12 @@ const Queryform = () => {
         }
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [user?.name]);
 
   useEffect(() => {
     if (databaseName !== "") {
       axios
-        .get("http://127.0.0.1:5000/data_fetcher", {
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
             query: `select template_name from ${databaseName}.CLEANROOM.TEMPLATES where template_name <> 'advertiser_match';`,
           },
@@ -116,12 +109,12 @@ const Queryform = () => {
         })
         .catch((error) => console.log(error));
     }
-  }, [databaseName]);
+  }, [databaseName, user?.name]);
 
   useEffect(() => {
     if (databaseName !== "" && formData["Query_Name"] !== "") {
       axios
-        .get("http://127.0.0.1:5000/data_fetcher", {
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
             query: `select dimensions from ${databaseName}.CLEANROOM.TEMPLATES where template_name='${formData["Query_Name"]}';`,
           },
@@ -161,7 +154,7 @@ const Queryform = () => {
 
   const getDatabaseName = (selectedProvider) => {
     axios
-      .get("http://127.0.0.1:5000/data_fetcher", {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query: `select database from DCR_SAMP_CONSUMER1.PUBLIC.PROV_DETAILS where provider = '${selectedProvider}';`,
         },
@@ -200,6 +193,8 @@ const Queryform = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setStopAPICall(1);
+
+    setSubmit(true);
 
     formData.RunId = Date.now();
 
@@ -246,7 +241,7 @@ const Queryform = () => {
     });
 
     axios
-      .get("http://127.0.0.1:5000/data_fetcher", {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}');`,
         },
@@ -266,27 +261,39 @@ const Queryform = () => {
         toast.error(`We are facing some error in your request. Request Id: ${formData?.RunId}`);
       });
 
-    // connection.execute({
-    //     sqlText: `CREATE OR REPLACE STAGE my_stage;`
-    // });
 
-    // connection.connect((err, conn) => {
-    //     if (err) {
-    //       console.error('Error connecting to Snowflake:', err);
-    //     } else {
-    //       conn.put({
-    //         localPath: blob,
-    //         remotePath: 'my_stage/',
-    //         sourceCompression: 'none'
-    //       }, (err, result) => {
-    //         if (err) {
-    //           console.error('Error uploading CSV file to Snowflake:', err);
-    //         } else {
-    //           console.log('CSV file uploaded successfully to Snowflake!');
-    //         }
-    //       });
-    //     }
-    //   });
+
+    setTimeout(() => {
+      // Execute the second Axios request after the delay
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS();`,
+          },
+        })
+        .then((response) => {
+          if (response) {
+            toast.success(
+              `Executing....... Request Id: ${formData?.RunId}`
+
+            );
+            dispatch(
+              actions.ConsumerQueryForm({
+                QueryName: formData?.Query_Name,
+                RequestId: formData?.RunId,
+              })
+            );
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(
+            `We are facing some error in your request. Request Id: ${formData?.RunId}`
+          );
+        });
+    }, 5000);
+
+
   };
 
   const fetchTable = (data, runId) => {
@@ -308,9 +315,9 @@ const Queryform = () => {
 
   const fetchcsvTableData = async () => {
     axios
-      .get("http://127.0.0.1:5000/data_fetcher", {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${queryName}_${requestId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${queryName}_${formData?.RunId} limit 1000;`,
         },
       })
       .then((response) => {
@@ -456,14 +463,14 @@ const Queryform = () => {
                   className="w-full"
                 >
                   <option value="">--Select--</option>
-                  {user["name"] === "HTmedia" && (
-                    <option value="htmedia">HT Media</option>
+                  {user["name"] === "Hoonartekcons1" && (
+                    <option value="Hoonartek">Hoonartek</option>
                   )}
                   {user["name"] === "Hoonartek" && (
                     <option value="Hoonartek">Hoonartek</option>
                   )}
-                  {user["name"] === "admin" && (
-                    <option value="htmedia">HT Media</option>
+                  {user["name"] === "Hoonartekcons2" && (
+                    <option value="Hoonartek">Hoonartek</option>
                   )}
                   {user["name"] === "admin" && (
                     <option value="hoonartek">Hoonartek</option>

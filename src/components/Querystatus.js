@@ -1,27 +1,28 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
+
 import "./styles.css";
-// import AWS from 'aws-sdk';
 import "./pure-react.css";
 
-
-
 const Querystatus = () => {
+  const state = useSelector((state) => state);
+  const user = state && state.user;
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/data_fetcher', {
+    axios.get(`http://127.0.0.1:5000/${user?.name}`, {
       params: {
         query: 'select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE;'
       }
     })
     .then(response => setData(response.data.data))
     .catch(error => console.log(error));
-  }, []);
+  }, [user?.name]);
 
   const downloadFile = (TEMPLATE_NAME, RUN_ID)  =>{
-    axios.get('http://127.0.0.1:5000/data_fetcher', {
+    axios.get(`http://127.0.0.1:5000/${user?.name}`, {
       responseType: 'arraybuffer',
       params: {
         query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`
@@ -42,14 +43,14 @@ const Querystatus = () => {
   
   return (
     <div className=' '>
-       <h3 class="my-4 text-xl font-bold bg-white text-deep-navy">Query status</h3>
+       <h3 class="my-4 text-xl font-bold bg-white text-deep-navy">Query Status</h3>
          <table className='w-full' >
          <thead>
             <tr>
                 <th>Request ID</th>
-                <th>Template name</th>
-                <th>Provider name</th>
-                <th>Column names</th>
+                <th>Template Name</th>
+                <th>Provider Name</th>
+                <th>Column Names</th>
                 <th>Status</th>
                 <th>Last modified Date & Time</th>
                 <th>Download O/P file</th>
