@@ -43,7 +43,7 @@ function App() {
                   <Route path="/requestinfo" element={<Requestinfo />} />
                   <Route path="/publisherform" element={<Publisherform />} />
                   <Route path="/s3fileupload" element={<S3fileupload />} />
-                  //<Route path="/provider-template-file" element={<TemplateFile />} />
+                  <Route path="/provider-template-file" element={<TemplateFile />} />
                   <Route path="/query-result-table" element={<QueryResultTable />} />
                 </Routes>
               </Sidebar>
