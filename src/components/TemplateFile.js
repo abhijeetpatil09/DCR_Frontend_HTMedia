@@ -59,17 +59,16 @@ const TemplateFile = () => {
       header: true,
       skipEmptyLines: true,
       complete: function (results) {
-        const rows = [];
-        const values = [];
+        setParsedData(results?.data);
 
+        const rows = [];
         // Iterating data to get column name and their values
         results?.data?.map((d) => {
-          rows.push(Object.keys(d));
-          values.push(Object.values(d));
+          return rows.push(Object.keys(d));
+          // values.push(Object.values(d));
         });
 
         // Parsed Data Response in array format
-        setParsedData(results?.data);
         setFileUploaded(true);
         handleValidFileValidations(rows);
       },
@@ -82,12 +81,18 @@ const TemplateFile = () => {
       return;
     } else {
 
+      let obj = {};
+
+      obj.attributes = parsedData;
+      obj.tag = entryType;
+
       parsedData = parsedData?.map((item) => {
-        console.log("item", item)
         return {...item, tag: entryType};
-      })
+      });
 
       console.log("New Json", parsedData);
+      let result = JSON.stringify(parsedData);
+      console.log("result", result);
 
       // let values = [];
 
@@ -101,22 +106,19 @@ const TemplateFile = () => {
       // const joinedValues = `('${values.join("'),('")}')`;
       // console.log("joinedValues", joinedValues);
 
-      // axios
-      // .get(`http://127.0.0.1:5000/Brandone`, {
-      //   params: {
-      //     query: `insert into DEMO1.PUBLIC.PROVIDER(PROVIDER_NAME,ATTRIBUTE_NAME,CATEGORY,SUBCATEGORY,subcategory_description,TECHNAME) values ${joinedValues};`,
-      //   },
-      // }).then((response) => {
-      //   if(response) {
-      //     toast.success(`Request has been submitted successfully.`);
-      //   }
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      //   toast.error(`We are facing some error in your request.`);
-      // });
-
-      // insert into DEMO1.PUBLIC.PROVIDER(PROVIDER_NAME,ATTRIBUTE_NAME,CATEGORY,SUBCATEGORY,subcategory_description,TECHNAME) values ('provider4','table1','Demographic','Age','Age Group','age_group');
+      axios
+      .get(`http://127.0.0.1:5000/Brandone`, {
+        params: {
+          // query: `insert into DEMO1.PUBLIC.PROVIDER(PROVIDER_NAME,ATTRIBUTE_NAME,CATEGORY,SUBCATEGORY,subcategory_description,TECHNAME) values ${joinedValues};`,
+          query: `insert into DEMO1.PUBLIC.PROV_TAB select parse_json('${result}');`
+        },
+      }).then((response) => {
+        if(response) {
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     }
   };
 
