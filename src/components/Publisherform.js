@@ -36,6 +36,7 @@ const Publisherform = () => {
   const user = state && state.user;
   const TableData =
     state && state.PublisherForm && state.PublisherForm.TableData;
+  const CardData = state && state.PublisherForm && state.PublisherForm.CardData;
   const requestId =
     state && state.PublisherForm && state.PublisherForm.RequestId;
   const fetchData =
@@ -55,10 +56,22 @@ const Publisherform = () => {
 
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
 
-  // MUI Modal
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  // Modal style 
+  const resultstyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '95%',
+    maxHeight: '90%',
+    bgcolor: 'background.paper',
+    // p: 4,
+    // pt:8\,
+    overflow: 'scroll'
+    
+  
+   };
   const style = {
     position: 'absolute',
     top: '50%',
@@ -66,10 +79,17 @@ const Publisherform = () => {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
     p: 4,
   };
+  // Create query Modal
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // Result Modal
+  const [isResultModalOpen, toggleResultModal] = React.useState(false);
+  const handleResultModalOpen = () => toggleResultModal(true);
+  const handleResultModalClose = () => toggleResultModal(false);
 
 
 
@@ -361,6 +381,7 @@ const Publisherform = () => {
   };
 
   const fetchTable = (data, runId) => {
+    console.log("🚀 ~ file: Publisherform.js:383 ~ fetchTable ~ data:", data)
     let head = [];
     let row = [];
     if (data?.length > 0) {
@@ -372,6 +393,7 @@ const Publisherform = () => {
     dispatch(
       actions.PublisherForm({
         TableData: { head: head, rows: row, runId: runId },
+        CardData : data,
         fetchData: false,
       })
     );
@@ -388,6 +410,7 @@ const Publisherform = () => {
         if (response?.data?.data) {
           fetchTable(response?.data?.data, runId);
           toast.success(`Data fetched successfully. Request Id: ${runId}`);
+          handleResultModalOpen();
         }
       })
       .catch((error) => {
@@ -632,14 +655,33 @@ const Publisherform = () => {
           </form>
         </Box>
       </Modal>
-    
-     
-      <div className="flex flex-row  gap-3  w-full px-5">
-
+      
+      <Modal
+        open={isResultModalOpen}
+        onClose={handleResultModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={resultstyle}>
         {!fetchData ? (
-          <div className=" flex flex-grow">
+          <div className=" flex flex-col flex-grow w-full">
+            <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
+              <h3 className="font-bold text-white">Query result</h3>
+              <button onClick={handleResultModalClose}>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                  </svg>
+
+              </button>
+            </div>
             {tableHead?.length > 0 && tableRows?.length > 0 ? (
-              <Table id={TableData?.runId} head={tableHead} rows={tableRows} />
+              <>
+               {/* {TableData.map((item, index) => ( 
+                // console.log
+                    <div className="mr-2 border-r " key={index}>{item},</div>
+                ))} */}
+                <Table id={TableData?.runId} head={tableHead} rows={tableRows} />
+              </>
             ) : null}
           </div>
         ) : (
@@ -648,7 +690,10 @@ const Publisherform = () => {
             <strong>{requestId}</strong>
           </span>
         )}
-      </div>
+        </Box>
+      </Modal>
+     
+     
     </div>
   );
 };
