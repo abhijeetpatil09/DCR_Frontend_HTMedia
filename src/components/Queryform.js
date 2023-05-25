@@ -381,7 +381,7 @@ const Queryform = () => {
 
   return (
     <div className="flex flex-col w-full h-screen ">
-      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+      <div className="flex h-12 sticky top-12 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Customer enrichment</h3>
 
         <button
