@@ -32,3 +32,14 @@ code {
 .fil1 {
   fill: url(#id0)
 }
+
+.sidebar{
+  width: 60px; 
+  transition: width 0.5s;
+
+}
+.opened{
+  width: 200px;
+  transition: width 0.25s;
+
+}

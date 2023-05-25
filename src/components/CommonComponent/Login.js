@@ -185,14 +185,14 @@ const Login = () => {
       <div className=" w-full">
         <button
           onClick={handleSubmit}
-          className="flex w-full justify-center rounded-md bg-amaranth-600  px-3 py-1.5 text-sm font-semibold leading-6 text-stone-700shadow-sm hover:bg-amaranth-600  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-600 "
+          className=" rounded-3xl flex w-full justify-center  text-white bg-amaranth-600  px-3 py-1.5 text-sm font-semibold leading-6 text-stone-700shadow-sm hover:bg-amaranth-600  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-600 "
         >
           {loading ? (
             <CircularProgress
               style={{ width: "24px", height: "24px", color: "#FFFFFF" }}
             />
           ) : (
-            "Submit"
+            "Log In"
           )}
         </button>
       </div>
@@ -200,7 +200,7 @@ const Login = () => {
   );
 
   return (
-    <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen ">
+    <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen " >
       <div className="flex flex-row mx-auto min-w-[70%] min-h-[70%] bg-white rounded-3xl shadow-lg shadow-stone-400">
         <div className="w-1/2 px-6 py-4">
           <div className=" flex flex-row items-start justify-start py-4 ">
