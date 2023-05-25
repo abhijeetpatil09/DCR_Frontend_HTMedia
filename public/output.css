@@ -2163,6 +2163,10 @@ html {
   opacity: 0.9;
 }
 
+.opacity-10{
+  opacity: 0.1;
+}
+
 .bg-blend-darken{
   background-blend-mode: darken;
 }
@@ -2559,6 +2563,15 @@ code {
 .hover\:text-amaranth-600:hover{
   --tw-text-opacity: 1;
   color: rgb(233 31 100 / var(--tw-text-opacity));
+}
+
+.hover\:text-gray-100:hover{
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+
+.hover\:text-inherit:hover{
+  color: inherit;
 }
 
 .hover\:shadow-lg:hover{

@@ -121,7 +121,7 @@ const Querystatus = () => {
                   <button 
                   
                     onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)}
-                    className="px-1 hover:text-amaranth-600"
+                    className={`${item.STATUS === "false" ? "disabled opacity-10 hover:text-inherit" : ""}  px-1 hover:text-amaranth-600`}
                     disabled={item.STATUS === "false"}
 
                     >
@@ -133,8 +133,7 @@ const Querystatus = () => {
                 </td>
               </tr>
             ))}
-            console.log("🚀 ~ file: Querystatus.js:133 ~ Querystatus ~ map:", map)
-          </tbody>
+           </tbody>
         </table>
       </div>
     </div>
