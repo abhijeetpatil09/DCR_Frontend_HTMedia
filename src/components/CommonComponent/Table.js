@@ -24,7 +24,7 @@ const OutputTable = ({ id, head, rows }) => {
 
   return (
     <Paper elevation={0}  className="w-full flex flex-col flex-grow">
-      <div className="flex flex-row justify-between px-4 py-3">
+      <div className="flex flex-row justify-between px-1 py-3">
         {/* <h3 className="text-xl font-light text-deep-navy">Query result</h3> */}
         <span className="text-amaranth-700">Request Id - <strong className="font-bold">{id}</strong></span>
       </div>
@@ -32,10 +32,23 @@ const OutputTable = ({ id, head, rows }) => {
         <p>Output Console: Request Id - &nbsp;</p>
         <p style={{ color: 'red'}}></p>
       </h4> */}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" classes={{root:"w-100"}} aria-label="simple table">
+      <TableContainer  >
+        <Table sx={{ minWidth: 650, borderRadius: 0 }} stickyHeader size="small" classes={{root:"w-100"}} aria-label="simple table">
           <TableHead>
-            <TableRow>
+            <TableRow   sx={{
+              "& th": {
+                fontSize: "0.9rem",
+                fontWeight: 900,
+                color: "#8c0f45",
+                backgroundColor: "#fff1f4",
+                borderRadius : 0,
+                borderTop : 1,
+                borderRight : 1,
+                borderColor: '#d6d3d1'
+              },
+              "& th:first-child": { borderLeft: 1, borderColor: '#d6d3d1' },
+
+            }}>
               {head?.map((column, index) => {
                 return (
                   <TableCell key={index} align="center">
@@ -54,7 +67,8 @@ const OutputTable = ({ id, head, rows }) => {
                     <TableRow
                       key={index}
                       sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
+                        "& td:last-child": { borderRight: 1, borderColor: '#d6d3d1' },
+                        "& td": { borderLeft: 1, borderColor: '#d6d3d1' },
                       }}
                     >
                       {item &&

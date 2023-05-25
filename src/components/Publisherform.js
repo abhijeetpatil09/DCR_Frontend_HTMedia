@@ -674,15 +674,18 @@ const Publisherform = () => {
 
               </button>
             </div>
-            {tableHead?.length > 0 && tableRows?.length > 0 ? (
-              <>
-               {/* {TableData.map((item, index) => ( 
-                // console.log
-                    <div className="mr-2 border-r " key={index}>{item},</div>
-                ))} */}
-                <Table id={TableData?.runId} head={tableHead} rows={tableRows} />
-              </>
-            ) : null}
+            <div className="px-4">
+              {tableHead?.length > 0 && tableRows?.length > 0 ? (
+                <>
+                {/* {TableData.map((item, index) => ( 
+                  // console.log
+                      <div className="mr-2 border-r " key={index}>{item},</div>
+                  ))} */}
+                  <Table id={TableData?.runId} head={tableHead} rows={tableRows} />
+                </>
+                
+              ) : null}
+            </div>
           </div>
         ) : (
           <span className="text-deep-navy flex flex-grow mt-4">
