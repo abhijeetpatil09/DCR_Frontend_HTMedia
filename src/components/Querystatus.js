@@ -60,63 +60,80 @@ const Querystatus = () => {
   };
 
   return (
-    <div className=" ">
-      <h3 class="my-4 text-xl font-bold bg-white text-deep-navy">
-        Query Status
-      </h3>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th>Request ID</th>
-            <th>Template Name</th>
-            <th>Provider Name</th>
-            <th>Column Names</th>
-            <th>Status</th>
-            <th>Last modified Date & Time</th>
-            <th>Download O/P file</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr
-              key={index}
-              className="bg-white px-2 py-1 border-b border-gray-200 hover:bg-gray-500"
-            >
-              <td>{item.RUN_ID}</td>
-              <td>{item.TEMPLATE_NAME}</td>
-              <td>{item.PROVIDER_NAME}</td>
-              <td>{item.COLOUMNS}</td>
-              <td>{item.STATUS === "true" ? "Approved" : "Rejected"}</td>
-              <td>{handleDate(item.RUN_ID)}</td>
-              <td>
-                <button
-                  onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)}
-                  className={`flex flex-row items-center justify-center ${
-                    item.STATUS === "true" && "text-[#0000FF]"
-                  }`}
-                  disabled={item.STATUS === "false"}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                    />
-                  </svg>
-                  <span className="pl-2 underline">Download</span>
-                </button>
-              </td>
+    <div className="flex flex-col w-full ">
+      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+        <h3 className="  text-lg font-light text-white">Query status</h3>
+
+
+      </div>
+      <div className="flex flex-col w-full px-5 mt-4">
+        <table className="table-auto w-full text-left text-sm">
+          <thead>
+            <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
+              <th className="px-4 py-2 w-4 ">Request ID</th>
+              <th className="px-4 py-2 border-r">Template Name</th>
+              <th className="px-4 py-2 border-r">Provider Name</th>
+              <th className="px-4 py-2 border-r">Column Names</th>
+              <th className="px-4 py-2 border-r">Status</th>
+              <th className="px-4 py-2 border-r">Requested</th>
+              <th className="px-4 py-2 border-r">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-gray-600 text-sm font-light">
+            {data.map((item, index) => (
+               <tr
+                key={index}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
+                <td className="border  px-4 py-2">{item.RUN_ID}</td>
+                <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
+                <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
+                <td className="border border-l-0 px-4 py-2">{item.COLOUMNS}</td>
+                <td className="border border-l-0 px-4 py-2">{item.STATUS === "true" ? "Approved" : "Rejected"}</td>
+                <td className="border border-l-0 px-4 py-2">{handleDate(item.RUN_ID)}</td>
+                <td className="border border-l-0 px-4 py-2">
+                  {/* <button
+                    onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)}
+                    className={`flex flex-row items-center justify-center ${
+                      item.STATUS === "true" && "text-[#0000FF]"
+                    }`}
+                    disabled={item.STATUS === "false"}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                      />
+                    </svg>
+                    <span className="pl-2 underline">Download</span>
+                  </button> */}
+                  <button 
+                  
+                    onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)}
+                    className="px-1 hover:text-amaranth-600"
+                    disabled={item.STATUS === "false"}
+
+                    >
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+            console.log("🚀 ~ file: Querystatus.js:133 ~ Querystatus ~ map:", map)
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

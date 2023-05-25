@@ -356,8 +356,8 @@ const Queryform = () => {
 
         <table className="table-auto w-full text-left text-sm">
           <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th className="px-4 py-2  "></th>
+            <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
+              <th className="px-4 py-2 w-4 "></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
               <th className="px-4 py-2 border-r">Template name</th>
@@ -393,7 +393,6 @@ const Queryform = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
                   </svg>
-
                 </button>
               </td>
 
@@ -464,7 +463,7 @@ const Queryform = () => {
               <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
                 <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span></td>
               <td className="border border-l-0 px-4 py-2">1685008777027</td>
-              <td className="border border-l-0 px-4 py-2">Advertiser match</td>
+              <td className="border border-l-0 px-4 py-2">Customer enrichment	</td>
               <td className="border border-l-0 px-4 py-2">Hoonartek</td>
               <td className="border border-l-0 px-4 py-2"><span className="num-2">3</span> days ago</td>
               <td className="border border-l-0 border-r-0 px-4 py-2">
@@ -492,7 +491,7 @@ const Queryform = () => {
               <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
                 <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span></td>
               <td className="border border-l-0 px-4 py-2">1684996564070</td>
-              <td className="border border-l-0 px-4 py-2">Advertiser match</td>
+              <td className="border border-l-0 px-4 py-2">Customer enrichment	</td>
               <td className="border border-l-0 px-4 py-2">Hoonartek</td>
               <td className="border border-l-0 px-4 py-2"><span className="num-2">4</span> days ago</td>
               <td className="border border-l-0 border-r-0 px-4 py-2">
@@ -545,8 +544,8 @@ const Queryform = () => {
                   <option value="">Select a provider</option>
                   {providerList?.length > 0 ? (
                     providerList.map((item, index) => (
-                      <option key={index} value={item.PROVIDER}>
-                        {item.PROVIDER}
+                      <option  key={index} value={item.PROVIDER}>
+                          <span className="capitalize"> {item.PROVIDER}</span> 
                       </option>
                     ))
                   ) : (
