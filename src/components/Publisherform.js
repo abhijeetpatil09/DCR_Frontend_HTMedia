@@ -454,7 +454,7 @@ const Publisherform = () => {
           <tbody className="text-gray-600 text-sm font-light">
           {data.map((item, index) => (
             <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
+              <td className="border   px-4 py-2">
                 <span class="relative flex h-3 w-3 mr-2">
                   {item.STATUS === "true" ? <span class="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>: 
                                     <>
@@ -465,14 +465,14 @@ const Publisherform = () => {
                   }
                 </span>
               </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
+              <td className="border  px-4 py-2  whitespace-nowrap">
                 <span className={`${item.STATUS === "true" ? "bg-green-200 text-green-600" :"bg-amaranth-200 text-amaranth-600 "  }   py-1 px-3 rounded-full text-xs`}>{item.STATUS === "true" ? "Approved" : item.STATUS === "false" ? "Rejected" : "In Progress"}</span>
               </td>
-              <td className="border border-l-0 px-4 py-2">{item.RUN_ID}</td>
-              <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
-              <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
+              <td className="border   px-4 py-2">{item.RUN_ID}</td>
+              <td className="border px-4 py-2">{item.TEMPLATE_NAME}</td>
+              <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
+              <td className="border px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
+              <td className="border border-r-0 px-4 py-2">
                 <button onClick={() => fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)}
                   className={`${item.STATUS === "false" ? "disabled opacity-10 hover:text-inherit" : item.STATUS === "pending" ? "disabled opacity-10 hover:text-inherit" : " "}  px-1 hover:text-amaranth-600`}
                   
