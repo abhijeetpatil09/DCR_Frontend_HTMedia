@@ -43,12 +43,6 @@ const Queryform = () => {
   const [tableRows, setTableRows] = useState([]);
 
 
-  const [openModal, setOpenModal] = useState(false);
-  const handleModal = () => {
-
-    setOpenModal(!openModal);
-
-  }
 
   // MUI Modal
   const [open, setOpen] = React.useState(false);

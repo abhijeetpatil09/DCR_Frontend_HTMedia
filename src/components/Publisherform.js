@@ -8,9 +8,8 @@ import { useDispatch } from "react-redux";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
+import { Box, Modal } from "@mui/material";
 
-import "./styles.css";
-import "./pure-react.css";
 
 const s3 = new AWS.S3({
   accessKeyId: "AKIA57AGVWXYVR36XIEC",
@@ -55,6 +54,26 @@ const Publisherform = () => {
   const [tableRows, setTableRows] = useState([]);
 
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
+
+  // MUI Modal
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+
+
+
 
   // useEffect for set match attribute values..
   useEffect(() => {
@@ -338,6 +357,7 @@ const Publisherform = () => {
     // } catch {
     //   console.log("Error in Upload 2")
     // }
+    handleClose();
   };
 
   const fetchTable = (data, runId) => {
@@ -377,12 +397,96 @@ const Publisherform = () => {
   };
 
   return (
-    <div className="flex flex-col  ">
-      <h3 className="mt-4 text-xl font-bold text-deep-navy">Publisher query</h3>
-      <div className="flex flex-row  gap-3  w-full">
-        <div className="flex flex-col flex-shrink h-auto">
-          <form
-            className=" border border-gray-400 rounded my-4 px-4 py-2 h-auto  w-80 max-w-xs"
+    <div className="flex flex-col  w-full h-screen  ">
+      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+        <h3 className="  text-lg font-light text-white">Match rate</h3>
+
+        <button
+          onClick={handleOpen}
+          className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+          </svg>
+          Create new query
+        </button>
+
+      </div>
+
+      <div className="flex flex-col w-full px-5">
+        <h1 class=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">Recent requests</h1>
+
+        <table className="table-auto w-full text-left text-sm">
+          <thead>
+            <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
+              <th className="px-4 py-2 w-4 "></th>
+              <th className="px-4 py-2 border-r">Status</th>
+              <th className="px-4 py-2 border-r">Request ID</th>
+              <th className="px-4 py-2 border-r">Template name</th>
+              <th className="px-4 py-2 border-r">Provider</th>
+              <th className="px-4 py-2 border-r">Requested</th>
+              <th className="px-4 py-2 border-r">Actions</th>
+
+            </tr>
+          </thead>
+          <tbody className="text-gray-600 text-sm font-light">
+          {data.map((item, index) => (
+            <tr className="border-b border-gray-200 hover:bg-gray-100">
+              <td className="border border-l-0 px-4 py-2">
+                <span class="relative flex h-3 w-3 mr-2">
+                  {item.STATUS === "true" ? <span class="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>: 
+                                    <>
+                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amaranth-400 opacity-75"></span>
+                                      <span class="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                                    </>
+
+                  }
+                </span>
+              </td>
+              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
+                <span className={`${item.STATUS === "true" ? "bg-green-200 text-green-600" :"bg-amaranth-200 text-amaranth-600 "  }   py-1 px-3 rounded-full text-xs`}>{item.STATUS === "true" ? "Approved" : item.STATUS === "false" ? "Rejected" : "In Progress"}</span>
+              </td>
+              <td className="border border-l-0 px-4 py-2">{item.RUN_ID}</td>
+              <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
+              <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
+              <td className="border border-l-0 px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
+              <td className="border border-l-0 border-r-0 px-4 py-2">
+                <button onClick={() => fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)}
+                  className={`${item.STATUS === "false" ? "disabled opacity-10 hover:text-inherit" : item.STATUS === "pending" ? "disabled opacity-10 hover:text-inherit" : " "}  px-1 hover:text-amaranth-600`}
+                  
+             >
+
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                    <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
+                  
+                </button>
+                <button onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)} 
+                  className={`${item.STATUS === "false" ? "disabled opacity-10 hover:text-inherit" : item.STATUS === "pending" ? "disabled opacity-10 hover:text-inherit" : " "}  px-1 hover:text-amaranth-600 cursor-pointer`}
+                  
+                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </td>
+
+            </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+        
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <form
+            className="  my-4 px-4 py-2 h-auto  w-80 max-w-xs"
             name="myForm"
             onSubmit={handleSubmit}
           >
@@ -518,7 +622,7 @@ const Publisherform = () => {
               </div>
               <div className="flex justify-end">
                 <button
-                  className="my-2 flex w-full justify-center rounded-md bg-deep-navy px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-electric-green hover:text-deep-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-green"
+                  className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
                   type="submit"
                 >
                   Submit query
@@ -526,61 +630,10 @@ const Publisherform = () => {
               </div>
             </div>
           </form>
-        </div>
-      </div>
-      <div className="flex flex-col w-full px-5">
-        <h1 class=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">Recent requests</h1>
-
-        <table className="table-auto w-full text-left text-sm">
-          <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th className="px-4 py-2  "></th>
-              <th className="px-4 py-2 border-r">Status</th>
-              <th className="px-4 py-2 border-r">Request ID</th>
-              <th className="px-4 py-2 border-r">Template name</th>
-              <th className="px-4 py-2 border-r">Provider</th>
-              <th className="px-4 py-2 border-r">Requested</th>
-              <th className="px-4 py-2 border-r">Actions</th>
-
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-sm font-light">
-          {data.map((item, index) => (
-            <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
-                {/* <span class="relative flex h-3 w-3 mr-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-                </span> */}
-              </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">{item.STATUS === "true" ? "Approved" :item.STATUS === "false" ? "Rejected" : "In Progress"}</span></td>
-              <td className="border border-l-0 px-4 py-2">{item.RUN_ID}</td>
-              <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
-              <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
-                <button onClick={() => fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)}
-                className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                    <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <button onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)} 
-                className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
-                  </svg>
-
-                </button>
-              </td>
-
-            </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        </Box>
+      </Modal>
+    
+     
       <div className="flex flex-row  gap-3  w-full px-5">
 
         {!fetchData ? (
