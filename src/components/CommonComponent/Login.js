@@ -201,7 +201,7 @@ const Login = () => {
 
   return (
     <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen " >
-      <div className="flex flex-row mx-auto min-w-[70%] min-h-[70%] bg-white rounded-3xl shadow-lg shadow-stone-400">
+      <div className="flex flex-row mx-auto min-w-[70%] max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
         <div className="w-1/2 px-6 py-4">
           <div className=" flex flex-row items-start justify-start py-4 ">
             <a href="#_"
@@ -220,14 +220,15 @@ const Login = () => {
             <span className="text-center font-normal text-stone-800 text-sm">Welcome to DataHaven. Your trusted partner.</span>
           </div>
         
-        <div className="flex items-center justify-center my-auto"> 
+        <div className="flex items-start justify-center my-auto"> 
             {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
         </div>
         </div>
-        <div className="w-1/2 h-full overflow-hidden relative ">
- 
-            <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3>
-           <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" />
+        <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl">
+            <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2>
+            <h1 class="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">Hoonartek<span className="font-bold text-4xl text-amaranth-500"></span></h1>
+            {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
+           {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
         </div>
       </div>
     </div>

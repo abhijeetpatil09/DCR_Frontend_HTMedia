@@ -1445,6 +1445,10 @@ html {
   border-radius: 0.75rem;
 }
 
+.rounded-lg{
+  border-radius: 0.5rem;
+}
+
 .rounded-r-3xl{
   border-top-right-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
@@ -1723,6 +1727,51 @@ html {
   background-color: rgb(196 12 79 / var(--tw-bg-opacity));
 }
 
+.bg-gradient-to-br{
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.from-blue-600{
+  --tw-gradient-from: #2563eb var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(37 99 235 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-blue-100{
+  --tw-gradient-from: #dbeafe var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(219 234 254 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-amaranth-600{
+  --tw-gradient-from: #e91f64 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(233 31 100 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-amaranth-100{
+  --tw-gradient-from: #ffe3e8 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 227 232 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-purple-800{
+  --tw-gradient-to: #6b21a8 var(--tw-gradient-to-position);
+}
+
+.to-purple-200{
+  --tw-gradient-to: #e9d5ff var(--tw-gradient-to-position);
+}
+
+.to-amaranth-800{
+  --tw-gradient-to: #a40d49 var(--tw-gradient-to-position);
+}
+
+.bg-clip-text{
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+
 .object-cover{
   object-fit: cover;
 }
@@ -1965,6 +2014,16 @@ html {
   line-height: 1rem;
 }
 
+.text-9xl{
+  font-size: 8rem;
+  line-height: 1;
+}
+
+.text-7xl{
+  font-size: 4.5rem;
+  line-height: 1;
+}
+
 .font-black{
   font-weight: 900;
 }
@@ -2043,6 +2102,10 @@ html {
 
 .tracking-wider{
   letter-spacing: 0.05em;
+}
+
+.tracking-tighter{
+  letter-spacing: -0.05em;
 }
 
 .text-\[\#0000FF\]{
@@ -2183,6 +2246,15 @@ html {
 .text-amaranth-700{
   --tw-text-opacity: 1;
   color: rgb(196 12 79 / var(--tw-text-opacity));
+}
+
+.text-transparent{
+  color: transparent;
+}
+
+.text-purple-800{
+  --tw-text-opacity: 1;
+  color: rgb(107 33 168 / var(--tw-text-opacity));
 }
 
 .underline{
