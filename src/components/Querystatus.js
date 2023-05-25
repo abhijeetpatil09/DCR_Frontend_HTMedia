@@ -2,8 +2,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
-import "./styles.css";
-import "./pure-react.css";
 
 const Querystatus = () => {
   const state = useSelector((state) => state);
@@ -61,12 +59,13 @@ const Querystatus = () => {
 
   return (
     <div className="flex flex-col w-full ">
-      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+      <div className="flex h-12 sticky top-12 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Query status</h3>
 
 
       </div>
       <div className="flex flex-col w-full px-5 mt-4">
+     
         <table className="table-auto w-full text-left text-sm">
           <thead>
             <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
@@ -85,11 +84,15 @@ const Querystatus = () => {
                 key={index}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
+               
                 <td className="border  px-4 py-2">{item.RUN_ID}</td>
                 <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
                 <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border border-l-0 px-4 py-2">{item.COLOUMNS}</td>
-                <td className="border border-l-0 px-4 py-2">{item.STATUS === "true" ? "Approved" : "Rejected"}</td>
+
+                <td className="border border-l-0 px-4 py-2">
+                  <span className={`${item.STATUS === "true" ? "bg-green-200 text-green-600": "bg-amaranth-200 text-amaranth-600"}  py-1 px-3 rounded-full text-xs`}>{item.STATUS === "true" ? "Approved" : "Rejected"}</span>
+                </td>
                 <td className="border border-l-0 px-4 py-2">{handleDate(item.RUN_ID)}</td>
                 <td className="border border-l-0 px-4 py-2">
                   {/* <button

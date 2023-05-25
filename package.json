@@ -13,6 +13,8 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "ag-grid-community": "^29.3.5",
+    "ag-grid-react": "^29.3.5",
     "aws-sdk": "^2.1321.0",
     "http-proxy-middleware": "^2.0.6",
     "jszip": "^3.10.1",
@@ -36,8 +38,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "tail" : "tailwindcss -i ./src/index.css -o ./public/output.css --watch"
-
+    "tail": "tailwindcss -i ./src/index.css -o ./public/output.css --watch"
   },
   "eslintConfig": {
     "extends": [
