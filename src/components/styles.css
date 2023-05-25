@@ -66,7 +66,7 @@ input[type="submit"]:hover {
 }
 
 /* Define the table structure */
-table {
+/* table {
     border-collapse: collapse;
     width: 80%;
 }
@@ -76,21 +76,21 @@ th, td {
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
-  
+   */
   /* Set the styles for the table */
-th {
+/* th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
+} */
   
-td {
+/* td {
     background-color: #fff;
-}
+} */
   
   /* Style the individual table cells */
-td:nth-child(even) {
+/* td:nth-child(even) {
     background-color: #f2f2f2;
-}
+} */
 
 .appleft {
     /* background-color: azure; */
