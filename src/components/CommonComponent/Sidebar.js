@@ -73,13 +73,13 @@ const Sidebar = ({ children }) => {
 
               </i>
             </div>}
-          <ul>
+          <ul className="w-full">
             {/* <!-- Items Section --> */}
             
-            <li className="">
+            <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
               <button 
                 onClick={() => navigateTo("/home")} 
-                className=" py-2 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm hover:bg-amaranth-200 transition ease-in-out duration-500">
+                className="py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
                 <i class="text-xs mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clipRule="evenodd" />
@@ -95,10 +95,10 @@ const Sidebar = ({ children }) => {
             </li>
 
             {user["role"] && user["role"].includes("Provider") && (          
-            <li className="">
+            <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
               <button 
                 onClick={() => navigateTo("/home")} 
-                className=" py-2 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm hover:bg-amaranth-200 transition ease-in-out duration-500">
+                className="py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
                 <i class="text-xs mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M13.75 7h-3V3.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L6.2 4.74a.75.75 0 001.1 1.02l1.95-2.1V7h-3A2.25 2.25 0 004 9.25v7.5A2.25 2.25 0 006.25 19h7.5A2.25 2.25 0 0016 16.75v-7.5A2.25 2.25 0 0013.75 7zm-3 0h-1.5v5.25a.75.75 0 001.5 0V7z" clipRule="evenodd" />
@@ -115,10 +115,10 @@ const Sidebar = ({ children }) => {
             </li>
             )}
             {user["role"] && user["role"].includes("Consumer") && (
-               <li className="">
+               <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
                <button 
-                 onClick={() => navigateTo("/home")} 
-                 className=" py-2 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm hover:bg-amaranth-200 transition ease-in-out duration-500">
+                 onClick={() => navigateTo("/queryform")} 
+                 className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
                  <i class="text-xs mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                       <path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" />
@@ -135,159 +135,59 @@ const Sidebar = ({ children }) => {
 
             )}
 
-            {user["role"] && user["role"].includes("Provider") && (
-              
-              <li className="hover:text-white">
-                <button
-                  className="h-16 px-6 flex justify-start items-center w-full
-              focus:text-amaranth-900"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 stroke-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                    />
-                  </svg>
-
-                  <span
-                    className={`${isOpened ? "" : "hidden"
-                      } pl-5 uppercase font-semibold`}
-                  >
-                    Upload{" "}
-                  </span>
-                </button>
-              </li>
-            )}
-
-
-
-            {user["role"] && user["role"].includes("Consumer") && (
-              <li className="hover:text-white">
-                <button
-                  onClick={() => navigateTo("/queryform")}
-                  className="h-16 px-6 flex  justify-start items-center w-full
-              focus:text-amaranth-900"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 stroke-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
-                    />
-                  </svg>
-
-                  <span
-                    className={`${isOpened ? "" : "hidden"
-                      } pl-5 uppercase font-semibold`}
-                  >
-                    Enrichment
-                  </span>
-                </button>
-              </li>
-            )}
             {user["role"] && user["role"].includes("Publisher") && (
-              <li className="hover:text-white">
+              <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
                 <button
                   onClick={() => navigateTo("/publisherform")}
-                  className="h-16 px-6 flex flex justify-start items-center w-full
-              focus:text-amaranth-900"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 stroke-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"
-                    />
-                  </svg>
+                  className="py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                  <i class="text-xs mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                      <path fillRule="evenodd" d="M9.638 1.093a.75.75 0 01.724 0l2 1.104a.75.75 0 11-.724 1.313L10 2.607l-1.638.903a.75.75 0 11-.724-1.313l2-1.104zM5.403 4.287a.75.75 0 01-.295 1.019l-.805.444.805.444a.75.75 0 01-.724 1.314L3.5 7.02v.73a.75.75 0 01-1.5 0v-2a.75.75 0 01.388-.657l1.996-1.1a.75.75 0 011.019.294zm9.194 0a.75.75 0 011.02-.295l1.995 1.101A.75.75 0 0118 5.75v2a.75.75 0 01-1.5 0v-.73l-.884.488a.75.75 0 11-.724-1.314l.806-.444-.806-.444a.75.75 0 01-.295-1.02zM7.343 8.284a.75.75 0 011.02-.294L10 8.893l1.638-.903a.75.75 0 11.724 1.313l-1.612.89v1.557a.75.75 0 01-1.5 0v-1.557l-1.612-.89a.75.75 0 01-.295-1.019zM2.75 11.5a.75.75 0 01.75.75v1.557l1.608.887a.75.75 0 01-.724 1.314l-1.996-1.101A.75.75 0 012 14.25v-2a.75.75 0 01.75-.75zm14.5 0a.75.75 0 01.75.75v2a.75.75 0 01-.388.657l-1.996 1.1a.75.75 0 11-.724-1.313l1.608-.887V12.25a.75.75 0 01.75-.75zm-7.25 4a.75.75 0 01.75.75v.73l.888-.49a.75.75 0 01.724 1.313l-2 1.104a.75.75 0 01-.724 0l-2-1.104a.75.75 0 11.724-1.313l.888.49v-.73a.75.75 0 01.75-.75z" clipRule="evenodd" />
+                    </svg>
 
+                  </i>
                   <span
                     className={`${isOpened ? "" : "hidden"
-                      } pl-5 uppercase font-semibold`}
+                      } `}
                   >
-                    Match Rate
+                    Match rate
                   </span>
                 </button>
               </li>
             )}
 
-            <li className="hover:text-white">
+            <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
               <button
                 onClick={() => navigateTo("/querystatus")}
-                className="h-16 px-6 flex flex justify-start items-center w-full
-              focus:text-amaranth-900"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 stroke-2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-
+                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                <i class="text-xs mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
+                  </svg>
+                </i>
                 <span
                   className={`${isOpened ? "" : "hidden"
-                    } pl-5 uppercase font-semibold`}
+                    } `}
                 >
-                  Status
+                 Status
                 </span>
               </button>
             </li>
-
-            <li className="hover:text-white">
+            <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
               <button
                 onClick={() => navigateTo("/requestinfo")}
-                className="h-16 px-6 flex flex justify-start items-center w-full
-              focus:text-amaranth-900"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 stroke-2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                  />
-                </svg>
-
+                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                <i class="text-xs mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path d="M8 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+                    <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm5 5a3 3 0 101.524 5.585l1.196 1.195a.75.75 0 101.06-1.06l-1.195-1.196A3 3 0 009.5 7z" clipRule="evenodd" />
+                  </svg>
+                </i>
                 <span
                   className={`${isOpened ? "" : "hidden"
-                    } pl-5 uppercase font-semibold`}
+                    } `}
                 >
-                  Requests
+                 Requests
                 </span>
               </button>
             </li>
