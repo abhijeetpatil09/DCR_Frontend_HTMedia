@@ -72,7 +72,7 @@ const Querystatus = () => {
             <th>Provider Name</th>
             <th>Column Names</th>
             <th>Status</th>
-            <th>Last modified Date & Time</th>
+            <th>Requested Date & Time</th>
             <th>Download O/P file</th>
           </tr>
         </thead>
@@ -86,7 +86,7 @@ const Querystatus = () => {
               <td>{item.TEMPLATE_NAME}</td>
               <td>{item.PROVIDER_NAME}</td>
               <td>{item.COLOUMNS}</td>
-              <td>{item.STATUS === "true" ? "Approved" : "Rejected"}</td>
+              <td>{item.STATUS === "true" ? "Approved" :item.STATUS === "false" ? "Rejected" : "In Progress"}</td>
               <td>{handleDate(item.RUN_ID)}</td>
               <td>
                 <button
@@ -94,7 +94,7 @@ const Querystatus = () => {
                   className={`flex flex-row items-center justify-center ${
                     item.STATUS === "true" && "text-[#0000FF]"
                   }`}
-                  disabled={item.STATUS === "false"}
+                  disabled={item.STATUS === "false" || item.STATUS === "Rejected"}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

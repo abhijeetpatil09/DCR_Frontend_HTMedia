@@ -71,6 +71,7 @@ const Queryform = () => {
   const [databaseName, setDatabaseName] = useState("");
   const [colunms, setColumns] = useState([]);
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (TableData) {
@@ -78,6 +79,17 @@ const Queryform = () => {
       setTableRows(TableData?.rows || []);
     }
   }, [TableData]);
+
+  useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'customer_enrichment' order by RUN_ID desc limit 5;",
+        },
+      })
+      .then((response) => setData(response.data.data))
+      .catch((error) => console.log(error));
+  }, [user?.name]);
 
   useEffect(() => {
     axios
@@ -199,12 +211,12 @@ const Queryform = () => {
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
-            query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS();`,
+            query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
           },
         })
         .then((response) => {
           if (response) {
-            fetchcsvTableData();
+            // fetchcsvTableData();
             setByPassAPICalled(false);
           } else {
             setByPassAPICalled(false);
@@ -225,6 +237,43 @@ const Queryform = () => {
           );
         });
     }, 5000);
+  };
+
+  const handleDate = (date) => {
+    const dateObj = new Date(date);
+    
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObj.getDate().toString().padStart(2, "0");
+    const hours = dateObj.getHours().toString().padStart(2, "0");
+    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+    const seconds = dateObj.getSeconds().toString().padStart(2, "0");
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        responseType: "arraybuffer",
+        params: {
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
+        },
+      })
+      .then((response) => {
+        // Convert the response data to a CSV format
+        const csvData = new Blob([response.data], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const csvUrl = URL.createObjectURL(csvData);
+
+        const link = document.createElement("a");
+        link.setAttribute("href", csvUrl);
+        link.setAttribute("download", `${TEMPLATE_NAME}_${RUN_ID}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
   };
 
   const handleSubmit = (event) => {
@@ -311,23 +360,23 @@ const Queryform = () => {
     }
     dispatch(
       actions.ConsumerQueryForm({
-        TableData: { head: head, rows: row },
+        TableData: { head: head, rows: row, runId: runId },
         fetchData: false
       })
     );
   };
 
-  const fetchcsvTableData = async () => {
+  const fetchcsvTableData = async (templateName, runId) => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${formData?.Query_Name}_${formData?.RunId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
         },
       })
       .then((response) => {
         if (response?.data?.data) {
-          fetchTable(response?.data?.data, formData?.RunId);
-          toast.success(`Data fetched successfully. Request Id: ${formData?.RunId}`);
+          fetchTable(response?.data?.data, runId);
+          toast.success(`Data fetched successfully. Request Id: ${runId}`);
         }
       })
       .catch((error) => {
@@ -368,28 +417,30 @@ const Queryform = () => {
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-
+          {data.map((item, index) => (
             <tr className="border-b border-gray-200 hover:bg-gray-100">
               <td className="border border-l-0 px-4 py-2">
-                <span class="relative flex h-3 w-3 mr-2">
+                {/* <span class="relative flex h-3 w-3 mr-2">
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-                </span>
+                </span> */}
               </td>
               <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">Active</span></td>
-              <td className="border border-l-0 px-4 py-2">1691891590841</td>
-              <td className="border border-l-0 px-4 py-2">Customer enrichment</td>
-              <td className="border border-l-0 px-4 py-2">Hoonartek</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">32</span> minutes ago</td>
+                <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">{item.STATUS === "true" ? "Approved" :item.STATUS === "false" ? "Rejected" : "In Progress"}</span></td>
+              <td className="border border-l-0 px-4 py-2">{item.RUN_ID}</td>
+              <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
+              <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
+              <td className="border border-l-0 px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
               <td className="border border-l-0 border-r-0 px-4 py-2">
-                <button className="px-1">
+                <button onClick={() => fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)}
+                className="px-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
                     <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
                   </svg>
                 </button>
-                <button className="px-1">
+                <button onClick={() => downloadFile(item.TEMPLATE_NAME, item.RUN_ID)} 
+                className="px-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
                   </svg>
@@ -398,120 +449,7 @@ const Queryform = () => {
               </td>
 
             </tr>
-            <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
-                <span class="relative flex h-3 w-3 mr-2">
-                  {/* <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span> */}
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                </span>
-              </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span class="bg-amaranth-200 text-amaranth-600 py-1 px-3 rounded-full text-xs">Approved</span></td>
-              <td className="border border-l-0 px-4 py-2">1685008890370</td>
-              <td className="border border-l-0 px-4 py-2">Customer enrichment</td>
-              <td className="border border-l-0 px-4 py-2">Hoonartek</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">42</span> minutes ago</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                    <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
-                  </svg>
-
-                </button>
-              </td>
-            </tr>
-            <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
-                <span class="relative flex h-3 w-3 mr-2">
-                  {/* <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span> */}
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                </span>
-              </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span class="bg-amaranth-200 text-amaranth-600 py-1 px-3 rounded-full text-xs">Approved</span></td>
-              <td className="border border-l-0 px-4 py-2">1685008890370</td>
-              <td className="border border-l-0 px-4 py-2">Customer enrichment</td>
-              <td className="border border-l-0 px-4 py-2">Hoonartek</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">2</span> days ago</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                    <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
-                  </svg>
-
-                </button>
-              </td>
-            </tr>
-            <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
-                <span class="relative flex h-3 w-3 mr-2">
-                  {/* <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span> */}
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-              </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span></td>
-              <td className="border border-l-0 px-4 py-2">1685008777027</td>
-              <td className="border border-l-0 px-4 py-2">Advertiser match</td>
-              <td className="border border-l-0 px-4 py-2">Hoonartek</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">3</span> days ago</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                    <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
-                  </svg>
-
-                </button>
-              </td>
-            </tr>
-            <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
-                <span class="relative flex h-3 w-3 mr-2">
-                  {/* <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span> */}
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-              </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Completed</span></td>
-              <td className="border border-l-0 px-4 py-2">1684996564070</td>
-              <td className="border border-l-0 px-4 py-2">Advertiser match</td>
-              <td className="border border-l-0 px-4 py-2">Hoonartek</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">4</span> days ago</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                    <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <button className="px-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
-                  </svg>
-
-                </button>
-              </td>
-            </tr>
-
-
+            ))}
           </tbody>
         </table>
       </div>
@@ -652,12 +590,12 @@ const Queryform = () => {
         {!fetchData ? (
           <div className=" flex flex-grow">
             {tableHead?.length > 0 && tableRows?.length > 0 ? (
-              <Table id={requestId} head={tableHead} rows={tableRows} />
+              <Table id={TableData?.runId} head={tableHead} rows={tableRows} />
             ) : null}
           </div>
         ) : (
           <span className="text-deep-navy flex flex-grow mt-4">
-            We are fetching the data you requested: Request Id -{" "}
+            We are fetching the data you requested: Request Id -
             <strong>{requestId}</strong>
           </span>
         )}
