@@ -24,16 +24,16 @@ const OutputTable = ({ id, head, rows }) => {
 
   return (
     <Paper elevation={0}  className="w-full flex flex-col flex-grow">
-      <div className="flex flex-row justify-between my-2">
-        <h3 className="text-xl font-light text-deep-navy">Query result</h3>
-        <span className="text-deep-navy">Output Console: Request Id - <strong>{id}</strong></span>
+      <div className="flex flex-row justify-between px-4 py-3">
+        {/* <h3 className="text-xl font-light text-deep-navy">Query result</h3> */}
+        <span className="text-amaranth-700">Request Id - <strong className="font-bold">{id}</strong></span>
       </div>
       {/* <h4  >
         <p>Output Console: Request Id - &nbsp;</p>
         <p style={{ color: 'red'}}></p>
       </h4> */}
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} classes={{root:"w-100"}} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} size="small" classes={{root:"w-100"}} aria-label="simple table">
           <TableHead>
             <TableRow>
               {head?.map((column, index) => {

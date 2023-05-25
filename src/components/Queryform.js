@@ -43,11 +43,21 @@ const Queryform = () => {
   const [tableRows, setTableRows] = useState([]);
 
 
-
-  // MUI Modal
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // Modal style 
+  const resultstyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '95%',
+    maxHeight: '90%',
+    bgcolor: 'background.paper',
+    // p: 4,
+    // pt:8\,
+    overflow: 'scroll'
+    
+  
+   };
   const style = {
     position: 'absolute',
     top: '50%',
@@ -55,10 +65,18 @@ const Queryform = () => {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
     p: 4,
   };
+  // Create query Modal
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // Result Modal
+  const [isResultModalOpen, toggleResultModal] = React.useState(false);
+  const handleResultModalOpen = () => toggleResultModal(true);
+  const handleResultModalClose = () => toggleResultModal(false);
+
 
   const [providerList, setProviderList] = useState([]);
   const [templateList, setTemplateList] = useState("");
@@ -371,6 +389,7 @@ const Queryform = () => {
         if (response?.data?.data) {
           fetchTable(response?.data?.data, runId);
           toast.success(`Data fetched successfully. Request Id: ${runId}`);
+          handleResultModalOpen();
         }
       })
       .catch((error) => {
@@ -413,7 +432,7 @@ const Queryform = () => {
           <tbody className="text-gray-600 text-sm font-light">
           {data.map((item, index) => (
             <tr className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="border border-l-0 px-4 py-2">
+              <td className="border  px-4 py-2">
                 <span class="relative flex h-3 w-3 mr-2">
                   {item.STATUS === "true" ? <span class="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>: 
                                     <>
@@ -424,14 +443,14 @@ const Queryform = () => {
                   }
                 </span>
               </td>
-              <td className="border border-l-0 px-4 py-2  whitespace-nowrap">
-                <span className={`${item.STATUS === "true" ? "bg-green-200 text-green-600" :"bg-amaranth-200 text-amaranth-600 "  }   py-1 px-3 rounded-full text-xs`}>{item.STATUS === "true" ? "Approved" : item.STATUS === "false" ? "Rejected" : "In Progress"}</span>
+              <td className="border px-4 py-2  whitespace-nowrap">
+                <span className={`${item.STATUS === "true" ? "bg-green-200 text-green-700" :"bg-amaranth-200 text-amaranth-700 "  }   py-1 px-3 rounded-full text-xs`}>{item.STATUS === "true" ? "Approved" : item.STATUS === "false" ? "Rejected" : "In Progress"}</span>
               </td>
-              <td className="border border-l-0 px-4 py-2">{item.RUN_ID}</td>
-              <td className="border border-l-0 px-4 py-2">{item.TEMPLATE_NAME}</td>
-              <td className="border border-l-0 px-4 py-2">{item.PROVIDER_NAME}</td>
-              <td className="border border-l-0 px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
-              <td className="border border-l-0 border-r-0 px-4 py-2">
+              <td className="border px-4 py-2">{item.RUN_ID}</td>
+              <td className="border px-4 py-2">{item.TEMPLATE_NAME}</td>
+              <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
+              <td className="border px-4 py-2"><span className="num-2">32</span>{handleDate(item.RUN_ID)}</td>
+              <td className="border px-4 py-2">
                 <button onClick={() => fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)}
                   className={`${item.STATUS === "false" ? "disabled opacity-10 hover:text-inherit" : item.STATUS === "pending" ? "disabled opacity-10 hover:text-inherit" : " "}  px-1 hover:text-amaranth-600`}
                   
@@ -590,10 +609,24 @@ const Queryform = () => {
           </form>
         </Box>
       </Modal>
-      <div className="flex flex-row  gap-3  w-full px-5">
-
+      <Modal
+        open={isResultModalOpen}
+        onClose={handleResultModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={resultstyle}>
         {!fetchData ? (
-          <div className=" flex flex-grow">
+          <div className=" flex flex-col flex-grow w-full">
+            <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
+              <h3 className="font-bold text-white">Query result</h3>
+              <button onClick={handleResultModalClose}>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                  </svg>
+
+              </button>
+            </div>
             {tableHead?.length > 0 && tableRows?.length > 0 ? (
               <Table id={TableData?.runId} head={tableHead} rows={tableRows} />
             ) : null}
@@ -604,7 +637,9 @@ const Queryform = () => {
             <strong>{requestId}</strong>
           </span>
         )}
-      </div>
+        </Box>
+      </Modal>
+      
     </div>
   );
 };
