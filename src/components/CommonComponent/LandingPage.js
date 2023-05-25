@@ -75,15 +75,15 @@ const LandingPage = () => {
           </div>
         </section>
         {/* Section 2 */}
-        <section className="px-2 py-32 bg-white md:px-0">
+        <section className="px-2 py-12 bg-white md:px-0">
           <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
-            <div className="flex flex-wrap items-center sm:-mx-3">
-              <div className="w-full md:w-1/2 md:px-3">
-                <div className="w-full pb-6 space-y-6 sm:max-w-md lg:max-w-lg md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-0 md:pb-0">
-                  <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl">
+            <div className="flex flex-wrap items-start sm:-mx-3">
+              <div className="w-full md:w-1/2  ">
+                <div className="w-full pb-6 space-y-6 sm:max-w-md lg:max-w-xl md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-5 md:pb-0">
+                  <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl">
                     <span className="block xl:inline">Unleash the power of </span>
                     <span className="block text-amaranth-600 xl:inline">
-                     Secure data collaboration.
+                     secure data collaboration.
                     </span>
                   </h1>
                   <p className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl">
@@ -112,7 +112,7 @@ const LandingPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-full md:w-1/2">
+              <div className="w-full md:w-1/2 pt-4">
                 <div className="w-full h-96  relative overflow-hidden rounded-md shadow-xl sm:rounded-xl">
                   <img src={Hero1}  className=' object-fit '/>
                 </div>
@@ -203,7 +203,7 @@ const LandingPage = () => {
           </div>
         </section>
         {/* Section 4 */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-amaranth-50">
           <div className="container items-center max-w-6xl px-4 px-10 mx-auto sm:px-20 md:px-32 lg:px-16">
             <div className="flex flex-wrap items-center -mx-3">
               <div className="order-1 w-full px-3 lg:w-1/2 lg:order-0">
@@ -310,7 +310,7 @@ const LandingPage = () => {
           </div>
           <div className="box-border flex flex-col items-center content-center px-8 mx-auto mt-2 leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-10 md:flex-row max-w-7xl lg:px-16">
             {/* Content */}
-            <div className="box-border w-full text-black border-solid md:w-1/2 md:pr-6 xl:pr-32">
+            <div className="box-border w-full text-black border-solid md:w-1/2 md:pr-6 xl:pr-32 space-x-0">
               <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
                 Data Governance and Auditing
               </h2>

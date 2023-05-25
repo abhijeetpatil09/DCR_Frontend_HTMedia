@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import HTWLogo from '../../Assets/hoonartek-logo.png';
+import Astro from '../../Assets/loginHero.jpg';
 
 import * as actions from "../../redux/actions/index";
 import BgVideo from "../../Assets/loginbg.mp4";
@@ -134,11 +136,11 @@ const Login = () => {
 
   // JSX code for login form
   const renderForm = (
-    <div className="space-y-6">
-      <div>
+    <div className="flex flex-col justify-center items-center space-y-6  w-4/5">
+      <div className=" w-full">
         <label
           htmlFor="uname"
-          className="block text-sm font-medium leading-6 text-electric-green"
+          className="block text-sm font-medium leading-6 text-amaranth-600 "
         >
           User Name{" "}
         </label>
@@ -150,17 +152,17 @@ const Login = () => {
             placeholder="Please enter a username. e.g. aditi_nair"
             onChange={handleOnChange}
             required
-            className="block w-full rounded-md border-0 py-1.5 text-electric-green bg-blend-darken bg-deep-navy shadow-sm ring-1 ring-inset ring-true-teal placeholder:text-true-teal focus:ring-2 focus:ring-inset focus:ring-electric-green sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
           />
           {errors.userName !== null ? (
             <span className="text-[#f44336] text-sm">{errors.userName}</span>
           ) : null}
         </div>
       </div>
-      <div>
+      <div className=" w-full">
         <label
           htmlFor="password"
-          className="block text-sm font-medium leading-6 text-electric-green"
+          className="block text-sm font-medium leading-6 text-amaranth-600 "
         >
           Password
         </label>
@@ -172,18 +174,18 @@ const Login = () => {
             placeholder="Please enter your password."
             required
             onChange={handleOnChange}
-            className="block w-full rounded-md border-0 py-1.5 text-electric-green bg-blend-darken bg-deep-navy shadow-sm ring-1 ring-inset ring-true-teal placeholder:text-true-teal focus:ring-2 focus:ring-inset focus:ring-electric-green sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken   shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
           />
           {errors.password !== null ? (
             <span className="text-[#f44336] text-sm">{errors.password}</span>
           ) : null}
         </div>
-      </div>
+      </div >
 
-      <div>
+      <div className=" w-full">
         <button
           onClick={handleSubmit}
-          className="flex w-full justify-center rounded-md bg-electric-green px-3 py-1.5 text-sm font-semibold leading-6 text-deep-navy shadow-sm hover:bg-true-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-green"
+          className="flex w-full justify-center rounded-md bg-amaranth-600  px-3 py-1.5 text-sm font-semibold leading-6 text-stone-700shadow-sm hover:bg-amaranth-600  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-600 "
         >
           {loading ? (
             <CircularProgress
@@ -198,31 +200,35 @@ const Login = () => {
   );
 
   return (
-    <div className="   flex flex-row  flex-1   justify-center items-center bg-deep-navy">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm w-2/6  bg-deep-navy mb-10 lg:mb-20">
-        <div className=" flex flex-row items-center justify-center  ">
-          <span className=" text-white font-semi-bold  text-2xl  ">
-            <span className="text-electric-green text-4xl">D</span>ata
-            <span className="text-electric-green text-4xl">X</span>change
-          </span>
+    <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen ">
+      <div className="flex flex-row mx-auto min-w-[70%] min-h-[70%] bg-white rounded-3xl shadow-lg shadow-stone-400">
+        <div className="w-1/2 px-6 py-4">
+          <div className=" flex flex-row items-start justify-start py-4 ">
+            <a href="#_"
+              className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
+            >
+              <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
+                <img src={HTWLogo} className='w-12 mr-2' />
+                DataHaven<span className="text-amaranth-600">.</span>
+              </span>
+            </a>
+          </div>
+          <div className="flex flex-col items-center my-6">
+            <h2 className="mt-10 mb-2 text-center text-6xl font-extrabold  tracking-tight    leading-9 text-amaranth-600 ">
+              Hi there!
+            </h2>
+            <span className="text-center font-normal text-stone-800 text-sm">Welcome to DataHaven. Your trusted partner.</span>
+          </div>
+        
+        <div className="flex items-center justify-center my-auto"> 
+            {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
         </div>
-        <h2 className="mt-10 mb-10 text-center text-2xl font-light   leading-9 tracking-tight text-electric-green">
-          Sign in to your account
-        </h2>
-        {/* </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm relative z-30"> */}
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
-      </div>
-      <div className="relative overflow-hidden h-screen w-4/6 ">
-        <video
-          autoPlay="autoplay"
-          loop={true}
-          muted
-          className="absolute z-10 w-auto min-w-full min-h-full max-w-none  backdrop-contrast-100 backdrop-blur-sm"
-        >
-          <source src={BgVideoGreen} type="video/mp4" />
-          <source src={BgVideo} type="video/mp4" />
-        </video>
+        </div>
+        <div className="w-1/2 h-full overflow-hidden relative ">
+ 
+            <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3>
+           <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" />
+        </div>
       </div>
     </div>
   );
