@@ -523,7 +523,7 @@ const Queryform = () => {
       >
         <Box sx={style}>
           <form
-            className="border border-gray-400 rounded my-4 px-4 py-2   w-80 max-w-xs"
+            className=" my-4 px-4 py-2   w-80 max-w-xs"
             name="myForm"
             onSubmit={handleSubmit}
           >
