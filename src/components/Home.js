@@ -7,7 +7,7 @@ import lvideo from '../Assets/DataCleanRoom_video.mp4';
 const Home = () => {
 
     return (
-        <div className="flex flex-row flex-wrap w-full h-screen">
+        <div className="flex flex-row flex-wrap w-full h-screen px-5">
             <div className="flex flex-col  text-coal w-2/3 px-2">
             <div className="card w-auto border rounded-xl border-stone-300 mt-4 py-2 px-4">
                     <h1 class="   text-2xl font-bold text-amaranth-600 pb-2 ">What is Snowflake Data Clean Room?</h1>

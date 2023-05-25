@@ -293,7 +293,7 @@ const Sidebar = ({ children }) => {
           </div>
           {/* CONTAINER */}
           <main className="flex flex-col w-full ">
-            <div className="flex flex-grow w-full px-5">{children}</div>
+            <div className="flex flex-grow w-full">{children}</div>
             <div className="bg-white  h-10 flex flex-row items-center justify-end text-xs sticky bottom-0 px-10 py-2">
               &copy; 2023 Hoonar Tekwurks Private Ltd.
             </div>

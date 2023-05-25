@@ -2,7 +2,7 @@ import React from 'react';
 
 const QueryModal = () => {
  return (
-    <div>
+    <div className='absolute'>
         This component is for Query Modal
     </div>
  )
