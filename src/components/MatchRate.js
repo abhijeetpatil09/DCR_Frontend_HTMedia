@@ -248,7 +248,11 @@ const Publisherform = () => {
             })
           );
         });
-    }, 10000);
+      setTimeout(() => {
+        setCallTable(true);
+        handleClose();
+      }, 2000);
+    }, 2000);
   };
 
   const handleSubmit = (event) => {
@@ -311,29 +315,30 @@ const Publisherform = () => {
       if (err) {
         console.log("err", err);
       } else {
-        axios
-          .get(`http://127.0.0.1:5000/${user?.name}`, {
-            params: {
-              query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
-            },
-          })
-          .then((response) => {
-            if (response) {
-              dispatch(
-                actions.PublisherForm({
-                  RequestId: formData?.RunId,
-                  fetchData: true,
-                })
-              );
-              callByPassAPI();
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        console.log("data", data);
       }
     });
 
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
+        },
+      })
+      .then((response) => {
+        if (response) {
+          dispatch(
+            actions.PublisherForm({
+              RequestId: formData?.RunId,
+              fetchData: true,
+            })
+          );
+          callByPassAPI();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     const formData2 = new FormData();
     formData2.append("file", inputFile.files[0]);
 
@@ -365,7 +370,6 @@ const Publisherform = () => {
     // } catch {
     //   console.log("Error in Upload 2")
     // }
-    window.location.reload();
   };
 
   const fetchTable = (data, runId) => {
@@ -531,6 +535,25 @@ const Publisherform = () => {
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z"
                         clipRule="evenodd"
                       />
+                    </svg>
+                  </button>
+                  <button
+                    className={`${
+                      item.STATUS === "false"
+                        ? "disabled opacity-10 hover:text-inherit"
+                        : item.STATUS === "pending"
+                        ? "disabled opacity-10 hover:text-inherit"
+                        : " "
+                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path d="M9.97.97a.75.75 0 011.06 0l3 3a.75.75 0 01-1.06 1.06l-1.72-1.72v3.44h-1.5V3.31L8.03 5.03a.75.75 0 01-1.06-1.06l3-3zM9.75 6.75v6a.75.75 0 001.5 0v-6h3a3 3 0 013 3v7.5a3 3 0 01-3 3h-7.5a3 3 0 01-3-3v-7.5a3 3 0 013-3h3z" />
+                      <path d="M7.151 21.75a2.999 2.999 0 002.599 1.5h7.5a3 3 0 003-3v-7.5c0-1.11-.603-2.08-1.5-2.599v7.099a4.5 4.5 0 01-4.5 4.5H7.151z" />
                     </svg>
                   </button>
                 </td>

@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import AWS from "aws-sdk";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import QueryModal from "./CommonComponent/QueryModal";
 import * as actions from "../redux/actions/index";
 
-import { jsonToCsv, handleDate, downloadFileInCSV } from '../utils/commonFunctions';
+import {
+  jsonToCsv,
+  handleDate,
+  downloadFileInCSV,
+} from "../utils/commonFunctions";
 
 import Table from "./CommonComponent/Table";
 import "./styles.css";
@@ -44,6 +49,9 @@ const Queryform = () => {
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
 
+  const [callTable, setCallTable] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   // Modal style
   const resultstyle = {
     position: "absolute",
@@ -69,7 +77,10 @@ const Queryform = () => {
   // Create query Modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setLoading(false);
+    setOpen(false);
+  };
 
   // Result Modal
   const [isResultModalOpen, toggleResultModal] = React.useState(false);
@@ -107,7 +118,7 @@ const Queryform = () => {
         }
       })
       .catch((error) => console.log(error));
-  }, [user?.name]);
+  }, [user?.name, callTable]);
 
   useEffect(() => {
     axios
@@ -236,8 +247,10 @@ const Queryform = () => {
           if (response) {
             // fetchcsvTableData();
             setByPassAPICalled(false);
+            setCallTable(false);
           } else {
             setByPassAPICalled(false);
+            setCallTable(false);
             dispatch(
               actions.ConsumerQueryForm({
                 fetchData: false,
@@ -248,13 +261,18 @@ const Queryform = () => {
         .catch((error) => {
           console.log(error);
           setByPassAPICalled(false);
+          setCallTable(false);
           dispatch(
             actions.ConsumerQueryForm({
               fetchData: false,
             })
           );
         });
-    }, 5000);
+      setTimeout(() => {
+        setCallTable(true);
+        handleClose();
+      }, 2000);
+    }, 2000);
   };
 
   const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
@@ -266,7 +284,7 @@ const Queryform = () => {
         },
       })
       .then((response) => {
-        if(response?.data) {
+        if (response?.data) {
           const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
           downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
         } else {
@@ -278,11 +296,10 @@ const Queryform = () => {
       });
   };
 
-  // Helper function to convert JSON to CSV
-  
-
   const handleSubmit = (event) => {
     event.preventDefault();
+    setLoading(true);
+
     if (byPassAPICalled) {
       toast.error(
         "We are fetching the data for current request. Please wait..."
@@ -353,7 +370,6 @@ const Queryform = () => {
       .catch((error) => {
         console.log(error);
       });
-    handleClose();
   };
 
   const fetchTable = (data, runId) => {
@@ -648,7 +664,17 @@ const Queryform = () => {
                   className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
                   type="submit"
                 >
-                  Submit query
+                  {loading ? (
+                    <CircularProgress
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        color: "#FFFFFF",
+                      }}
+                    />
+                  ) : (
+                    "Submit Query"
+                  )}
                 </button>
               </div>
             </div>

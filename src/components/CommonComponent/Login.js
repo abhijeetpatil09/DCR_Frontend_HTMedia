@@ -5,11 +5,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import HTWLogo from '../../Assets/hoonartek-logo.png';
-import Astro from '../../Assets/loginHero.jpg';
 
 import * as actions from "../../redux/actions/index";
-import BgVideo from "../../Assets/loginbg.mp4";
-import BgVideoGreen from "../../Assets/loginbg_green.mp4";
 
 // import AWS from "aws-sdk";
 
@@ -208,7 +205,7 @@ const Login = () => {
               className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
             >
               <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                <img src={HTWLogo} className='w-12 mr-2' />
+                <img src={HTWLogo} className='w-12 mr-2' alt="" />
                 DataHaven<span className="text-amaranth-600">.</span>
               </span>
             </a>
