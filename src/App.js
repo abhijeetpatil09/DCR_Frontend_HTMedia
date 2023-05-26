@@ -6,14 +6,14 @@ import Login from "./components/CommonComponent/Login";
 import Register from "./components/CommonComponent/Register";
 import QueryResultTable from './components/CommonComponent/Table';
 
-import Queryform from "./components/Queryform";
+import Enrichment from "./components/Enrichment";
 import Querystatus from "./components/Querystatus";
 import Sidebar from "./components/CommonComponent/Sidebar";
 import Requestinfo from "./components/Requestinfo";
 import Home from "./components/Home";
 import S3fileupload from "./components/S3fileupload";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Publisherform from "./components/Publisherform";
+import MatchRate from "./components/MatchRate";
 import PrivacyPolicy from "./components/CommonComponent/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/TermsAndConditions";
 
@@ -37,10 +37,10 @@ function App() {
               <Sidebar>
                 <Routes>
                   <Route path="/home" element={<Home />} />
-                  <Route path="/queryform" element={<Queryform />} />
+                  <Route path="/queryform" element={<Enrichment />} />
                   <Route path="/querystatus" element={<Querystatus />} />
                   <Route path="/requestinfo" element={<Requestinfo />} />
-                  <Route path="/publisherform" element={<Publisherform />} />
+                  <Route path="/publisherform" element={<MatchRate />} />
                   <Route path="/s3fileupload" element={<S3fileupload />} />
                   <Route path="/query-result-table" element={<QueryResultTable />} />
                 </Routes>
