@@ -160,13 +160,13 @@ const Queryform = () => {
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
-            query: `select dimensions from ${databaseName}.CLEANROOM.TEMPLATES where template_name='${formData["Query_Name"]}';`,
+            query: `select allowed_columns from ${databaseName}.CLEANROOM.TEMPLATES where template_name='${formData["Query_Name"]}';`,
           },
         })
         .then((response) => {
           if (response?.data) {
             console.log("response?.data", response?.data);
-            let col_name = response?.data?.data[0]?.DIMENSIONS?.split("|");
+            let col_name = response?.data?.data[0]?.ALLOWED_COLUMNS?.split("|");
             col_name = col_name?.map((item) => {
               return item?.split(".")[1];
             });
@@ -494,6 +494,7 @@ const Queryform = () => {
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
                     }  px-1 hover:text-amaranth-600`}
+                    title="View File"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -520,6 +521,7 @@ const Queryform = () => {
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
                     }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                    title="Download file"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

@@ -131,6 +131,7 @@ const Querystatus = () => {
                         : ""
                     }  px-1 hover:text-amaranth-600`}
                     disabled={item.STATUS === "false"}
+                    title="Download file"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

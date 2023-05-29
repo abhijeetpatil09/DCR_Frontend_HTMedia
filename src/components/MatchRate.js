@@ -470,6 +470,7 @@ const Publisherform = () => {
                         ? "bg-green-200 text-green-600"
                         : "bg-amaranth-200 text-amaranth-600 "
                     }   py-1 px-3 rounded-full text-xs`}
+                    
                   >
                     {item.STATUS === "true"
                       ? "Approved"
@@ -497,6 +498,7 @@ const Publisherform = () => {
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
                     }  px-1 hover:text-amaranth-600`}
+                    title="View file"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -523,6 +525,7 @@ const Publisherform = () => {
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
                     }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                    title="Download file"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -545,6 +548,7 @@ const Publisherform = () => {
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
                     }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                    title="Upload match records into client ecospace"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
