@@ -127,7 +127,7 @@ const Publisherform = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
-            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'advertiser_match' order by RUN_ID desc limit 5;",
+            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'advertiser_match' order by RUN_ID desc limit 10;",
         },
       })
       .then((response) => setData(response.data.data))
@@ -427,7 +427,7 @@ const Publisherform = () => {
           >
             <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
           </svg>
-          Create new query
+          New Request
         </button>
       </div>
 
@@ -442,7 +442,7 @@ const Publisherform = () => {
               <th className="px-4 py-2 w-4 "></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
-              <th className="px-4 py-2 border-r">Template name</th>
+              <th className="px-4 py-2 border-r">Column names</th>
               <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
@@ -465,22 +465,21 @@ const Publisherform = () => {
                 </td>
                 <td className="border  px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${
-                      item.STATUS === "true"
+                    className={`${item.STATUS === "true"
                         ? "bg-green-200 text-green-600"
                         : "bg-amaranth-200 text-amaranth-600 "
-                    }   py-1 px-3 rounded-full text-xs`}
-                    
+                      }   py-1 px-3 rounded-full text-xs`}
+
                   >
                     {item.STATUS === "true"
                       ? "Approved"
                       : item.STATUS === "false"
-                      ? "Rejected"
-                      : "In Progress"}
+                        ? "Rejected"
+                        : "In Progress"}
                   </span>
                 </td>
                 <td className="border   px-4 py-2">{item.RUN_ID}</td>
-                <td className="border px-4 py-2">{item.TEMPLATE_NAME}</td>
+                <td className="border px-4 py-2">{item.COLOUMNS}</td>
                 <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
@@ -491,30 +490,20 @@ const Publisherform = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${
-                      item.STATUS === "false"
+                    className={`${item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600`}
+                          ? "disabled opacity-10 hover:text-inherit"
+                          : " "
+                      }  px-1 hover:text-amaranth-600`}
                     title="View file"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </button>
-                  <button
+                  {/* <button
                     onClick={() =>
                       downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                     }
@@ -539,26 +528,20 @@ const Publisherform = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </button>
+                  </button> */}
                   <button
-                    className={`${
-                      item.STATUS === "false"
+                    className={`${item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                          ? "disabled opacity-10 hover:text-inherit"
+                          : " "
+                      }  px-1 hover:text-amaranth-600 cursor-pointer`}
                     title="Upload match records into client ecospace"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path d="M9.97.97a.75.75 0 011.06 0l3 3a.75.75 0 01-1.06 1.06l-1.72-1.72v3.44h-1.5V3.31L8.03 5.03a.75.75 0 01-1.06-1.06l3-3zM9.75 6.75v6a.75.75 0 001.5 0v-6h3a3 3 0 013 3v7.5a3 3 0 01-3 3h-7.5a3 3 0 01-3-3v-7.5a3 3 0 013-3h3z" />
-                      <path d="M7.151 21.75a2.999 2.999 0 002.599 1.5h7.5a3 3 0 003-3v-7.5c0-1.11-.603-2.08-1.5-2.599v7.099a4.5 4.5 0 01-4.5 4.5H7.151z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                     </svg>
+
                   </button>
                 </td>
               </tr>

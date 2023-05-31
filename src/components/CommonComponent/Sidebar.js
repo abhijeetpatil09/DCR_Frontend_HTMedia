@@ -58,8 +58,8 @@ const Sidebar = ({ children }) => {
               </svg>
 
             </i>
-        
-           </div>
+
+          </div>
             :
             <div
               className={`${isOpened ? "" : "text-amaranth-600"
@@ -75,10 +75,10 @@ const Sidebar = ({ children }) => {
             </div>}
           <ul className="w-full">
             {/* <!-- Items Section --> */}
-            
+
             <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
-              <button 
-                onClick={() => navigateTo("/home")} 
+              <button
+                onClick={() => navigateTo("/home")}
                 className="py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
                 <i class="text-xs mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -94,44 +94,44 @@ const Sidebar = ({ children }) => {
               </button>
             </li>
 
-            {user["role"] && user["role"].includes("Provider") && (          
-            <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
-              <button 
-                onClick={() => navigateTo("/home")} 
-                className="py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
-                <i class="text-xs mr-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M13.75 7h-3V3.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L6.2 4.74a.75.75 0 001.1 1.02l1.95-2.1V7h-3A2.25 2.25 0 004 9.25v7.5A2.25 2.25 0 006.25 19h7.5A2.25 2.25 0 0016 16.75v-7.5A2.25 2.25 0 0013.75 7zm-3 0h-1.5v5.25a.75.75 0 001.5 0V7z" clipRule="evenodd" />
-                  </svg>
+            {user["role"] && user["role"].includes("Provider") && (
+              <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
+                <button
+                  onClick={() => navigateTo("/home")}
+                  className="py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                  <i class="text-xs mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                      <path fillRule="evenodd" d="M13.75 7h-3V3.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L6.2 4.74a.75.75 0 001.1 1.02l1.95-2.1V7h-3A2.25 2.25 0 004 9.25v7.5A2.25 2.25 0 006.25 19h7.5A2.25 2.25 0 0016 16.75v-7.5A2.25 2.25 0 0013.75 7zm-3 0h-1.5v5.25a.75.75 0 001.5 0V7z" clipRule="evenodd" />
+                    </svg>
 
-                </i>
-                <span
-                  className={`${isOpened ? "" : "hidden"
-                    } `}
-                >
-                  Upload
-                </span>
-              </button>
-            </li>
+                  </i>
+                  <span
+                    className={`${isOpened ? "" : "hidden"
+                      } `}
+                  >
+                    Upload
+                  </span>
+                </button>
+              </li>
             )}
             {user["role"] && user["role"].includes("Consumer") && (
-               <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
-               <button 
-                 onClick={() => navigateTo("/queryform")} 
-                 className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
-                 <i class="text-xs mr-2">
+              <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
+                <button
+                  onClick={() => navigateTo("/queryform")}
+                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                  <i class="text-xs mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                       <path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" />
                     </svg>
-                 </i>
-                 <span
-                   className={`${isOpened ? "" : "hidden"
-                     } `}
-                 >
-                   Enrichment  
-                 </span>
-               </button>
-             </li>
+                  </i>
+                  <span
+                    className={`${isOpened ? "" : "hidden"
+                      } `}
+                  >
+                    Enrichment
+                  </span>
+                </button>
+              </li>
 
             )}
 
@@ -169,7 +169,7 @@ const Sidebar = ({ children }) => {
                   className={`${isOpened ? "" : "hidden"
                     } `}
                 >
-                 Status
+                  Status
                 </span>
               </button>
             </li>
@@ -187,7 +187,25 @@ const Sidebar = ({ children }) => {
                   className={`${isOpened ? "" : "hidden"
                     } `}
                 >
-                 Requests
+                  Requests
+                </span>
+              </button>
+            </li>
+            <li className="hover:bg-amaranth-200 transition ease-in-out duration-500">
+              <button
+                onClick={() => navigateTo("/analytics")}
+                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                <i class="text-xs mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
+                  </svg>
+
+                </i>
+                <span
+                  className={`${isOpened ? "" : "hidden"
+                    } `}
+                >
+                  Analytics
                 </span>
               </button>
             </li>
@@ -198,9 +216,22 @@ const Sidebar = ({ children }) => {
           {/* HEADER */}
           <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50  bg-white drop-shadow-sm">
             <div className=" px-4">
+              <Breadcrumbs aria-label="breadcrumb">
+                <Link underline="hover" color="inherit" href="/">
+                  Home
+                </Link>
+                <Link
+                  underline="hover"
+                  color="inherit"
+                // href="/material-ui/getting-started/installation/"
+                >
+
+                </Link>
+                {/* <Typography color="text.primary">Breadcrumbs</Typography> */}
+              </Breadcrumbs>
               
             </div>
-               {/* <button
+            {/* <button
                 onClick={handleSignOut}
                 className={`${user?.name ? "" : "invisible"
                   }  px-6 w-auto  flex  justify-center items-center  text-amaranth-600  focus:outline-none`}
@@ -222,62 +253,62 @@ const Sidebar = ({ children }) => {
                   <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
                </button> */}
-               {/* <div onClick={handleSignOut} >{(user?.name) ? "Sign Out" : "Sign In"}</div> */}
-               {/* <!-- user --> */}
-              <div className="dropdown relative md:static pr-4">
+            {/* <div onClick={handleSignOut} >{(user?.name) ? "Sign Out" : "Sign In"}</div> */}
+            {/* <!-- user --> */}
+            <div className="dropdown relative md:static pr-4">
 
-                <button className="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
-                  <div className="w-8 h-8 overflow-hidden rounded-full">
-                    <img className="w-full h-full object-cover" src="https://moesaid.github.io/cleopatra/img/user.svg" />
-                  </div> 
-
-                  <div className="ml-2 capitalize flex ">
-                    <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">Aditi Tripathi</h1>
-                    <i className="fad fa-chevron-down ml-2 text-xs leading-none" onClick={() => setMenuIsOpened(!menuOpen)}>
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                            <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                          </svg>
-
-                    </i>
-                  </div>                        
-                </button>
-
-                <button className="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
-
-                <div  className={`${menuOpen ? " " : " hidden "
-                      } text-gray-500 menu    md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}>
-
-            
-                  <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                    <i className="fad fa-user-edit text-xs mr-1"></i> 
-                    edit my profile
-                  </a>     
-                
-                  <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                    <i className="fad fa-inbox-in text-xs mr-1"></i> 
-                    my inbox
-                  </a>     
-                
-                  <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                    <i className="fad fa-badge-check text-xs mr-1"></i> 
-                    tasks
-                  </a>     
-      
-                  <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                    <i className="fad fa-comment-alt-dots text-xs mr-1"></i> 
-                    chats
-                  </a>     
-      
-                
-
-                  <a onClick={handleSignOut} className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                    <i className="fad fa-user-times text-xs mr-1"></i> 
-                    log out
-                  </a>     
-      
+              <button className="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
+                <div className="w-8 h-8 overflow-hidden rounded-full">
+                  <img className="w-full h-full object-cover" src="https://moesaid.github.io/cleopatra/img/user.svg" />
                 </div>
+
+                <div className="ml-2 capitalize flex ">
+                  <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">Aditi Tripathi</h1>
+                  <i className="fad fa-chevron-down ml-2 text-xs leading-none" onClick={() => setMenuIsOpened(!menuOpen)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                      <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                    </svg>
+
+                  </i>
+                </div>
+              </button>
+
+              <button className="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
+
+              <div className={`${menuOpen ? " " : " hidden "
+                } text-gray-500 menu    md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}>
+
+
+                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                  <i className="fad fa-user-edit text-xs mr-1"></i>
+                  edit my profile
+                </a>
+
+                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                  <i className="fad fa-inbox-in text-xs mr-1"></i>
+                  my inbox
+                </a>
+
+                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                  <i className="fad fa-badge-check text-xs mr-1"></i>
+                  tasks
+                </a>
+
+                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                  <i className="fad fa-comment-alt-dots text-xs mr-1"></i>
+                  chats
+                </a>
+
+
+
+                <a onClick={handleSignOut} className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                  <i className="fad fa-user-times text-xs mr-1"></i>
+                  log out
+                </a>
+
               </div>
-        {/* <!-- end user --> */}
+            </div>
+            {/* <!-- end user --> */}
           </div>
           {/* CONTAINER */}
           <main className="flex flex-col w-full ">

@@ -20,17 +20,25 @@ export const jsonToCsv = (jsonData) => {
   };
 
  export const handleDate = (date) => {
-    const dateObj = new Date(date);
+  const dateObj = new Date(date);
 
-    const year = dateObj.getFullYear();
-    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
-    const day = dateObj.getDate().toString().padStart(2, "0");
-    const hours = dateObj.getHours().toString().padStart(2, "0");
-    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
-    const seconds = dateObj.getSeconds().toString().padStart(2, "0");
+  const year = dateObj.getFullYear();
+  const month = getMonthName(dateObj.getMonth());
+  const day = dateObj.getDate().toString().padStart(2, "0");
+  const hours = dateObj.getHours().toString().padStart(2, "0");
+  const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+  const seconds = dateObj.getSeconds().toString().padStart(2, "0");
 
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
+  return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+};
+
+const getMonthName = (monthIndex) => {
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  return monthNames[monthIndex];
+};
 
   export const downloadFileInCSV = (csvData, TEMPLATE_NAME, RUN_ID) => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" }); // Create a temporary URL for the Blob

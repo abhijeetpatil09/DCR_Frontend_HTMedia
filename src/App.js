@@ -16,7 +16,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MatchRate from "./components/MatchRate";
 import PrivacyPolicy from "./components/CommonComponent/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/TermsAndConditions";
-
+import Analytics from "./components/Analytics";
 // import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -43,6 +43,7 @@ function App() {
                   <Route path="/publisherform" element={<MatchRate />} />
                   <Route path="/s3fileupload" element={<S3fileupload />} />
                   <Route path="/query-result-table" element={<QueryResultTable />} />
+                  <Route path="/analytics" element={<Analytics />} />
                 </Routes>
               </Sidebar>
             }

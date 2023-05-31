@@ -106,7 +106,7 @@ const Queryform = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
-            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'customer_enrichment' order by RUN_ID desc limit 5;",
+            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'customer_enrichment' order by RUN_ID desc limit 10;",
         },
       })
       .then((response) => {
@@ -425,7 +425,7 @@ const Queryform = () => {
           >
             <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
           </svg>
-          Create new query
+          New Request
         </button>
       </div>
       <div className="flex flex-col w-full px-5">
@@ -439,7 +439,7 @@ const Queryform = () => {
               <th className="px-4 py-2 w-4 "></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
-              <th className="px-4 py-2 border-r">Template name</th>
+              <th className="px-4 py-2 border-r">Column names</th>
               <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
@@ -462,21 +462,20 @@ const Queryform = () => {
                 </td>
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${
-                      item.STATUS === "true"
-                        ? "bg-green-200 text-green-700"
-                        : "bg-amaranth-200 text-amaranth-700 "
-                    }   py-1 px-3 rounded-full text-xs`}
+                    className={`${item.STATUS === "true"
+                      ? "bg-green-200 text-green-700"
+                      : "bg-amaranth-200 text-amaranth-700 "
+                      }   py-1 px-3 rounded-full text-xs`}
                   >
                     {item.STATUS === "true"
                       ? "Approved"
                       : item.STATUS === "false"
-                      ? "Rejected"
-                      : "In Progress"}
+                        ? "Rejected"
+                        : "In Progress"}
                   </span>
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
-                <td className="border px-4 py-2">{item.TEMPLATE_NAME}</td>
+                <td className="border px-4 py-2">{item.COLOUMNS}</td>
                 <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
@@ -487,54 +486,36 @@ const Queryform = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${
-                      item.STATUS === "false"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : item.STATUS === "pending"
+                    className={`${item.STATUS === "false"
+                      ? "disabled opacity-10 hover:text-inherit"
+                      : item.STATUS === "pending"
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
-                    }  px-1 hover:text-amaranth-600`}
+                      }  px-2 hover:text-amaranth-600`}
                     title="View File"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clipRule="evenodd"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
+
                   </button>
                   <button
                     onClick={() =>
                       downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${
-                      item.STATUS === "false"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : item.STATUS === "pending"
+                    className={`${item.STATUS === "false"
+                      ? "disabled opacity-10 hover:text-inherit"
+                      : item.STATUS === "pending"
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
-                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                      }  px-2 hover:text-amaranth-600 cursor-pointer`}
                     title="Download file"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z"
-                        clipRule="evenodd"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
+
                   </button>
                 </td>
               </tr>
