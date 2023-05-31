@@ -163,7 +163,7 @@ const LandingPage = () => {
           </div>
           <div className="box-border flex flex-col items-center content-center px-8 mx-auto mt-10 pt-10 leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-10 md:flex-row max-w-7xl lg:px-16">
             {/* Content */}
-            <div className="box-border w-full text-black border-solid md:w-1/2 md:pl-6 xl:pl-32">
+            <div className="box-border w-full text-black border-solid md:w-1/2 md:pl-6 xl:pl-30 ml-10">
               <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
                 Scalable and Flexible
               </h2>

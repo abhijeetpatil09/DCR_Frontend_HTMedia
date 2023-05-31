@@ -198,19 +198,7 @@ const Sidebar = ({ children }) => {
           {/* HEADER */}
           <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50  bg-white drop-shadow-sm">
             <div className=" px-4">
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/">
-                  Home
-                </Link>
-                <Link
-                  underline="hover"
-                  color="inherit"
-                  // href="/material-ui/getting-started/installation/"
-                >
-                   
-                </Link>
-                {/* <Typography color="text.primary">Breadcrumbs</Typography> */}
-              </Breadcrumbs>
+              
             </div>
                {/* <button
                 onClick={handleSignOut}
