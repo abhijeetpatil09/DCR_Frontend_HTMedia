@@ -84,51 +84,64 @@ const ChartPage = () => {
   console.log("activeTab", activeTab);
 
   return (
-    <div>
-      <div className="flex flex-col justify-center items-center space-y-6 m-8">
-        <div className=" w-full">
+    <div className="flex flex-col w-full h-full dark:bg-slate-950 bg-gray-50">
+       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+        <h3 className="  text-lg font-light text-white">Analytics</h3>
+
+      </div>
+      
+      <div className="flex flex-row justify-start items-center w-full px-4 my-1">
+        <div className="w-1/3">
           <label
             htmlFor="uname"
             className="block text-sm font-medium leading-6 text-amaranth-600 "
           >
-            Request Id{" "}
+            Please enter a request id to proceed.
           </label>
           <div className="mt-2 flex">
             <input
               id="runId"
               type="number"
               name="runId"
-              placeholder="Please enter a Requested Id"
+              placeholder="e.g. 1691891590873"
               onChange={handleSelectRunId}
               required
-              className="block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-gray-350  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
             />
             <button
               type="submit"
               onClick={onSubmitRunId}
               className="px-4 ml-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-amaranth-600 border border-transparent rounded-md active:bg-amaranth-700 focus:outline-none focus:shadow-outline-amaranth hover:bg-amaranth-700"
             >
-              Submit
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+
             </button>
           </div>
         </div>
       </div>
-      {chartData?.genderData?.length > 0 && <Tabs value={activeTab} onChange={handleTabChange} centered>
-        <Tab
-          className="text-amaranth-600 !important"
-          label="Gender Distribution"
-          value="gender"
-        />
-        <Tab
-          className="text-amaranth-600 !important"
-          label="Age Distribution"
-          value="age"
-        />
-      </Tabs>}
+
+      <div className="flex flex-row px-4">
+        {chartData?.genderData?.length > 0 && <Tabs value={activeTab} onChange={handleTabChange} centered>
+          <Tab
+            className="text-amaranth-600 !important"
+            label="Gender distribution"
+            value="gender"
+          />
+          <Tab
+            className="text-amaranth-600 !important"
+            label="Age distribution"
+            value="age"
+          />
+        </Tabs>}
+      </div>
+     
+     
 
       {activeTab === "gender"
         ? chartData?.genderData?.length > 0 && (
-            <div className="flex  flex-row gap-4 w-full m-4">
+            <div className="flex  flex-row  w-full px-4">
               <div className="w-1/2">
                 <BarChartAnalytics data={chartData?.genderData} />
               </div>
@@ -138,7 +151,7 @@ const ChartPage = () => {
             </div>
           )
         : chartData?.ageData?.length > 0 && (
-            <div className="flex  flex-row gap-4 w-full m-4">
+            <div className="flex  flex-row  w-full px-4">
               <div className="w-1/2">
                 <BarChartAnalytics data={chartData?.ageData} />
               </div>
