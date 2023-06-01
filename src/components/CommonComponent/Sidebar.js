@@ -1,17 +1,7 @@
 import { useState } from "react";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as actions from "../../redux/actions/index";
-
-import GroupMLogo from "../../Assets/logo-download-01.png";
-import GroupMLogoDark from "../../Assets/logo-download-02.png";
-import { Breadcrumbs, Link } from "@material-ui/core";
-import { Typography } from "@mui/material";
-
-// import "../pure-react.css";
-// import "../styles.css";
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();

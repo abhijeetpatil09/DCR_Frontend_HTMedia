@@ -41,5 +41,7 @@ code {
 .opened{
   width: 200px;
   transition: width 0.25s;
-
+}
+.MuiTabs-indicator {
+  background-color: #E91F64 !important;
 }

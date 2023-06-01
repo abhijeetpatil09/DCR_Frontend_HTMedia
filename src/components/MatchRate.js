@@ -440,7 +440,7 @@ const Publisherform = () => {
               <th className="px-4 py-2 border-r"></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
-              <th className="px-4 py-2 border-r">Column names</th>
+              <th className="px-4 py-2 border-r">Column Names</th>
               <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Identifier Type</th>
               <th className="px-4 py-2 border-r">Match Attribute</th>
