@@ -7,9 +7,7 @@ import { CircularProgress } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
-  jsonToCsv,
   handleDate,
-  downloadFileInCSV,
 } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
@@ -141,26 +139,26 @@ const Publisherform = () => {
     }
   }, [TableData]);
 
-  const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
-    axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
-        responseType: "json",
-        params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
-        },
-      })
-      .then((response) => {
-        if (response?.data) {
-          const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
-          downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
-        } else {
-          console.log("File cannnot be downloaded...");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+  // const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
+  //   axios
+  //     .get(`http://127.0.0.1:5000/${user?.name}`, {
+  //       responseType: "json",
+  //       params: {
+  //         query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (response?.data) {
+  //         const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
+  //         downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
+  //       } else {
+  //         console.log("File cannnot be downloaded...");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
   const handleCustomerFormData = (e) => {
     setFormData({
@@ -181,7 +179,7 @@ const Publisherform = () => {
   //   return regex.test(inputString); // returns true if inputString matches the regex pattern, false otherwise
   // };
 
-  const sendEmail = () => {
+  // const sendEmail = () => {
     // create reusable transporter object using the default SMTP transport
     // let transporter = nodemailer.createTransport({
     //     host: 'smtp.gmail.com',
@@ -209,8 +207,8 @@ const Publisherform = () => {
     //     }
     //     console.log('Message sent: %s', info.messageId);
     // });
-    console.log("into send email method");
-  };
+  //   console.log("into send email method");
+  // };
 
   const callByPassAPI = () => {
     setByPassAPICalled(true);
@@ -439,11 +437,13 @@ const Publisherform = () => {
         <table className="table-auto w-full text-left text-sm">
           <thead>
             <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
-              <th className="px-4 py-2 w-4 "></th>
+              <th className="px-4 py-2 border-r"></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
               <th className="px-4 py-2 border-r">Column names</th>
               <th className="px-4 py-2 border-r">Provider</th>
+              <th className="px-4 py-2 border-r">Identifier Type</th>
+              <th className="px-4 py-2 border-r">Match Attribute</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
             </tr>
@@ -481,11 +481,13 @@ const Publisherform = () => {
                 <td className="border   px-4 py-2">{item.RUN_ID}</td>
                 <td className="border px-4 py-2">{item.COLOUMNS}</td>
                 <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
+                <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
+                <td className="border px-4 py-2">{item.ATTRIBUTE}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
                   {handleDate(item.RUN_ID)}
                 </td>
-                <td className="border border-r-0 px-4 py-2">
+                <td className="border px-4 py-2">
                   <button
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)

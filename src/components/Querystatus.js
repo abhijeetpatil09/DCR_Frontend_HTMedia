@@ -55,10 +55,12 @@ const Querystatus = () => {
         <table className="table-auto w-full text-left text-sm">
           <thead>
             <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
-              <th className="px-4 py-2 w-4 ">Request ID</th>
+              <th className="px-4 py-2 border-r">Request ID</th>
               <th className="px-4 py-2 border-r">Template Name</th>
               <th className="px-4 py-2 border-r">Provider Name</th>
               <th className="px-4 py-2 border-r">Column Names</th>
+              <th className="px-4 py-2 border-r">Identifier Type</th>
+              <th className="px-4 py-2 border-r">Match Attribute</th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
@@ -78,7 +80,8 @@ const Querystatus = () => {
                   {item.PROVIDER_NAME}
                 </td>
                 <td className="border border-l-0 px-4 py-2">{item.COLOUMNS}</td>
-
+                <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
+                <td className="border px-4 py-2">{item.ATTRIBUTE}</td>
                 <td className="border border-l-0 px-4 py-2">
                   <span
                     className={`${
