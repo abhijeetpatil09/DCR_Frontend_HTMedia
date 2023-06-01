@@ -6,8 +6,8 @@ const Requestinfo = () => {
 
   return (
 
-    <div className="flex flex-col  w-full h-[calc(100vh - 60px)] bg-gray-100 " style={{height: "calc(100vh - 90px)"}}>
-      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+    <div className="flex flex-col  w-full h-full bg-gray-100 ">
+      <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Request reports</h3>
       </div>
       <div className="flex flex-col px-5 mt-4 hidden">

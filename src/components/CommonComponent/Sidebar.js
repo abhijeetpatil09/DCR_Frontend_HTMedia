@@ -212,9 +212,9 @@ const Sidebar = ({ children }) => {
           </ul>
         </aside>
 
-        <div className="flex flex-col flex-grow w-full  overflow-auto">
+        <div className="flex flex-col flex-grow w-full  overflow-hidden">
           {/* HEADER */}
-          <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[45px] bg-white drop-shadow-sm">
+          <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
             <div className=" px-4">
                     {/* OPTION FOR PARTNER LOGO */}
               
@@ -299,9 +299,9 @@ const Sidebar = ({ children }) => {
             {/* <!-- end user --> */}
           </div>
           {/* CONTAINER */}
-          <main className="flex flex-col w-full ">
-            <div className="flex flex-grow w-full">{children}</div>
-            <div className="bg-white  h-10 flex flex-row items-center justify-end text-xs sticky bottom-0 px-10 py-2 z-30 border-l border-gray-100">
+          <main className="flex flex-col w-full overflow-auto h-full">
+            <div className="flex flex-grow w-full h-full">{children}</div>
+            <div className="bg-white h-10 flex flex-row items-center justify-end text-xs sticky bottom-0 px-10 py-2 z-30 border-l border-gray-100">
               &copy; 2023 Hoonar Tekwurks Private Ltd.
             </div>
           </main>

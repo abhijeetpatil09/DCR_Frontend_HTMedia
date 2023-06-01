@@ -47,12 +47,13 @@ const Querystatus = () => {
   };
 
   return (
-    <div className="flex flex-col w-full ">
-      <div className="flex h-12 sticky top-12 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+    <div className="flex flex-col w-full h-full ">
+      <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Query status</h3>
       </div>
-      <div className="flex flex-col w-full px-5 mt-4">
-        <table className="table-auto w-full text-left text-sm">
+      <div className="flex flex-col w-full px-5 mt-4 ">
+        
+        <table className="table-fixed w-full text-left text-sm">
           <thead>
             <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
               <th className="px-4 py-2 border-r">Request ID</th>
