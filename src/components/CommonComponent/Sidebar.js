@@ -258,12 +258,12 @@ const Sidebar = ({ children }) => {
             <div className="dropdown relative md:static pr-4">
 
               <button className="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
-                <div className="w-8 h-8 overflow-hidden rounded-full">
+                {/* <div className="w-8 h-8 overflow-hidden rounded-full">
                   <img className="w-full h-full object-cover" src="https://moesaid.github.io/cleopatra/img/user.svg" />
-                </div>
+                </div> */}
 
-                <div className="ml-2 capitalize flex ">
-                  <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">Aditi Tripathi</h1>
+                <div className="capitalize flex ">
+                  <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">{user?.name}</h1>
                   <i className="fad fa-chevron-down ml-2 text-xs leading-none" onClick={() => setMenuIsOpened(!menuOpen)}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                       <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -284,7 +284,7 @@ const Sidebar = ({ children }) => {
                   edit my profile
                 </a>
 
-                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                {/* <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
                   <i className="fad fa-inbox-in text-xs mr-1"></i>
                   my inbox
                 </a>
@@ -297,7 +297,7 @@ const Sidebar = ({ children }) => {
                 <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
                   <i className="fad fa-comment-alt-dots text-xs mr-1"></i>
                   chats
-                </a>
+                </a> */}
 
 
 

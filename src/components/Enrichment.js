@@ -6,7 +6,6 @@ import { CircularProgress } from "@mui/material";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import QueryModal from "./CommonComponent/QueryModal";
 import * as actions from "../redux/actions/index";
 
 import {
@@ -436,11 +435,12 @@ const Queryform = () => {
         <table className="table-auto w-full text-left text-sm">
           <thead>
             <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
-              <th className="px-4 py-2 w-4 "></th>
+              <th className="px-4 py-2 border-r"></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
               <th className="px-4 py-2 border-r">Column names</th>
               <th className="px-4 py-2 border-r">Provider</th>
+              <th className="px-4 py-2 border-r">Identifier Type</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
             </tr>
@@ -477,6 +477,7 @@ const Queryform = () => {
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
                 <td className="border px-4 py-2">{item.COLOUMNS}</td>
                 <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
+                <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
                   {handleDate(item.RUN_ID)}
