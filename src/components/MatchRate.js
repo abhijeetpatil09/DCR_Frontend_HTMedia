@@ -409,8 +409,8 @@ const Publisherform = () => {
   };
 
   return (
-    <div className="flex flex-col  w-full h-screen  ">
-      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+    <div className="flex flex-col  w-full h-full  ">
+      <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Match rate</h3>
 
         <button

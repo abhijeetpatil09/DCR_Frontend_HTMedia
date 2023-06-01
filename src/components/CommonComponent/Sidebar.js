@@ -43,10 +43,10 @@ const Sidebar = ({ children }) => {
                flex flex-col items-start  text-amaranth-900 shadow h-[calc(100vh)] sticky top-0  `}
         >
           {/* <!-- Side Nav Bar--> */}
-          {isOpened ? <div className="flex flex-row items-center justify-around gap-1 h-10 w-full mb-2">
+          {isOpened ? <div className="flex flex-row items-center justify-around gap-1 h-10 w-full mb-2 pt-1">
             <a
               href={"/#"}
-              className="flex pl-6 items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
+              className="flex pl-6  items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
             >
               <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
                 DataHaven<span className="text-amaranth-600">.</span>
@@ -212,23 +212,11 @@ const Sidebar = ({ children }) => {
           </ul>
         </aside>
 
-        <div className="flex flex-col flex-grow w-full  overflow-auto">
+        <div className="flex flex-col flex-grow w-full  overflow-hidden">
           {/* HEADER */}
-          <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50  bg-white drop-shadow-sm">
+          <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
             <div className=" px-4">
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/">
-                  Home
-                </Link>
-                <Link
-                  underline="hover"
-                  color="inherit"
-                // href="/material-ui/getting-started/installation/"
-                >
-
-                </Link>
-                {/* <Typography color="text.primary">Breadcrumbs</Typography> */}
-              </Breadcrumbs>
+                    {/* OPTION FOR PARTNER LOGO */}
               
             </div>
             {/* <button
@@ -262,8 +250,8 @@ const Sidebar = ({ children }) => {
                   <img className="w-full h-full object-cover" src="https://moesaid.github.io/cleopatra/img/user.svg" />
                 </div> */}
 
-                <div className="capitalize flex ">
-                  <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">{user?.name}</h1>
+                <div className="capitalize flex items-center ">
+                  <h1 className="text-sm text-gray-800 font-semibold  leading-none">{user?.name}</h1>
                   <i className="fad fa-chevron-down ml-2 text-xs leading-none" onClick={() => setMenuIsOpened(!menuOpen)}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                       <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -311,9 +299,9 @@ const Sidebar = ({ children }) => {
             {/* <!-- end user --> */}
           </div>
           {/* CONTAINER */}
-          <main className="flex flex-col w-full ">
-            <div className="flex flex-grow w-full">{children}</div>
-            <div className="bg-white  h-10 flex flex-row items-center justify-end text-xs sticky bottom-0 px-10 py-2 z-30 border-l border-gray-100">
+          <main className="flex flex-col w-full overflow-auto h-full">
+            <div className="flex flex-grow w-full h-full">{children}</div>
+            <div className="bg-white h-10 flex flex-row items-center justify-end text-xs sticky bottom-0 px-10 py-2 z-30 border-l border-gray-100">
               &copy; 2023 Hoonar Tekwurks Private Ltd.
             </div>
           </main>

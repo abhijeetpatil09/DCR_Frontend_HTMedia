@@ -6,8 +6,8 @@ const Requestinfo = () => {
 
   return (
 
-    <div className="flex flex-col  w-full h-screen bg-gray-100 ">
-      <div className="flex h-12 sticky top-12 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+    <div className="flex flex-col  w-full h-full bg-gray-100 ">
+      <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Request reports</h3>
       </div>
       <div className="flex flex-col px-5 mt-4 hidden">
@@ -51,10 +51,10 @@ const Requestinfo = () => {
               <div className="flex flex-wrap -mx-3">
                 <div className="flex-none w-2/3 max-w-full px-3">
                   <div>
-                    <p className="mb-0 font-sans font-semibold leading-normal text-sm dark:opacity-60">This month's enrichment requests</p>
+                    <p className="mb-0 font-sans font-semibold leading-normal text-sm dark:opacity-60 text-gray-400">This month's enrichment requests</p>
                     <h5 className="mb-0 font-bold dark:text-white">
                       530
-                      <span className="leading-normal text-sm font-weight-bolder text-lime-500">+2%</span>
+                      <span className="leading-normal text-sm font-weight-bolder text-lime-500 pl-2">+2%</span>
                     </h5>
                   </div>
                 </div>
@@ -78,10 +78,10 @@ const Requestinfo = () => {
               <div className="flex flex-wrap -mx-3">
                 <div className="flex-none w-2/3 max-w-full px-3">
                   <div>
-                    <p className="mb-0 font-sans font-semibold leading-normal text-sm dark:opacity-60">This months's Match requests</p>
+                    <p className="mb-0 font-sans font-semibold leading-normal text-sm dark:opacity-60 text-gray-400">This months's Match requests</p>
                     <h5 className="mb-0 font-bold dark:text-white">
                       +3,462
-                      <span className="leading-normal text-red-600 text-sm font-weight-bolder">-2%</span>
+                      <span className="leading-normal text-red-600 text-sm font-weight-bolder pl-0">-2%</span>
                     </h5>
                   </div>
                 </div>
