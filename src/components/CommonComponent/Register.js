@@ -513,7 +513,7 @@ const Register = () => {
         </div>
         <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">
             {/* <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2> */}
-            <h1 class="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">Secure data collaboration with DataHaven<span className="font-bold text-4xl text-amaranth-500">.</span></h1>
+            <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">Secure data collaboration with DataHaven<span className="font-bold text-4xl text-amaranth-500">.</span></h1>
             {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
            {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
         </div>

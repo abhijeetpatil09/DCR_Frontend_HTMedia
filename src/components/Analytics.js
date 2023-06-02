@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { Tabs, Tab } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress } from "@mui/material";
+
 import BarChartAnalytics from "./CommonComponent/Charts/BarChart";
 import PieChartAnalytics from "./CommonComponent/Charts/PieChart";
+import * as actions from "../redux/actions/index";
 
 const ChartPage = () => {
+  const dispatch = useDispatch();
+
   const state = useSelector((state) => state);
   const user = state && state.user;
+
+  const RequestId =
+    state && state.AnalyticsData && state.AnalyticsData.RequestId;
+  const loader = state && state.AnalyticsData && state.AnalyticsData.loader;
 
   const [activeTab, setActiveTab] = useState("gender");
   const [chartData, setChartData] = useState({
@@ -15,24 +24,22 @@ const ChartPage = () => {
     genderData: [],
     total: null,
   });
+
   const [chartDetails, setChartDetails] = useState({
     runId: "",
-    templateName: "",
-    chartType: "",
   });
 
-  const handleSelectRunId = (e) => {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
-    setChartDetails({ ...chartDetails, [inputName]: inputValue });
-  };
-
-  const onSubmitRunId = () => {
-    if (chartDetails?.runId !== "") {
+  useEffect(() => {
+    dispatch(
+      actions.AnalyticsData({
+        loader: true,
+      })
+    );
+    if (RequestId !== "") {
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
-            query: `select advertiser_match,age_0_6, age_7_16, age_17_25, age_26_40, age_41_above, male, female from DCR_SAMP_CONSUMER1.PUBLIC.advertiser_match_${chartDetails?.runId}_insights;`,
+            query: `select advertiser_match,age_0_6, age_7_16, age_17_25, age_26_40, age_41_above, male, female from DCR_SAMP_CONSUMER1.PUBLIC.advertiser_match_${RequestId}_insights;`,
           },
         })
         .then((response) => {
@@ -56,6 +63,11 @@ const ChartPage = () => {
               genderData: gender_data,
               total: total,
             });
+            dispatch(
+              actions.AnalyticsData({
+                loader: false,
+              })
+            );
           } else {
             setChartData({
               ...chartData,
@@ -64,6 +76,11 @@ const ChartPage = () => {
               total: null,
             });
           }
+          dispatch(
+            actions.AnalyticsData({
+              loader: false,
+            })
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -73,23 +90,40 @@ const ChartPage = () => {
             genderData: [],
             total: null,
           });
+          dispatch(
+            actions.AnalyticsData({
+              loader: false,
+            })
+          );
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [RequestId, user?.name]);
+
+  const handleSelectRunId = (e) => {
+    const inputName = e.target.name;
+    const inputValue = e.target.value;
+    setChartDetails({ ...chartDetails, [inputName]: inputValue });
+  };
+
+  const onSubmitRunId = () => {
+    dispatch(
+      actions.AnalyticsData({
+        RequestId: chartDetails?.runId,
+      })
+    );
   };
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
-  console.log("activeTab", activeTab);
-
   return (
     <div className="flex flex-col w-full h-full dark:bg-slate-950 bg-gray-50">
-       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+      <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Analytics</h3>
-
       </div>
-      
+
       <div className="flex flex-row justify-start items-center w-full px-4 my-1">
         <div className="w-1/3">
           <label
@@ -100,7 +134,6 @@ const ChartPage = () => {
           </label>
           <div className="mt-2 flex">
             <input
-              id="runId"
               type="number"
               name="runId"
               placeholder="e.g. 1691891590873"
@@ -113,53 +146,81 @@ const ChartPage = () => {
               onClick={onSubmitRunId}
               className="px-4 ml-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-amaranth-600 border border-transparent rounded-md active:bg-amaranth-700 focus:outline-none focus:shadow-outline-amaranth hover:bg-amaranth-700"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
               </svg>
-
             </button>
           </div>
         </div>
       </div>
 
+      <span className="text-amaranth-600 flex m-4">
+        We are showing the charts for the Request Id -
+        <strong>{RequestId}</strong>
+      </span>
       <div className="flex flex-row px-4">
-        {chartData?.genderData?.length > 0 && <Tabs value={activeTab} onChange={handleTabChange} centered>
-          <Tab
-            className="text-amaranth-600 !important"
-            label="Gender distribution"
-            value="gender"
-          />
-          <Tab
-            className="text-amaranth-600 !important"
-            label="Age distribution"
-            value="age"
-          />
-        </Tabs>}
+        {chartData?.genderData?.length > 0 && (
+          <Tabs value={activeTab} onChange={handleTabChange} centered>
+            <Tab
+              className="text-amaranth-600 !important"
+              label="Gender distribution"
+              value="gender"
+            />
+            <Tab
+              className="text-amaranth-600 !important"
+              label="Age distribution"
+              value="age"
+            />
+          </Tabs>
+        )}
       </div>
-     
-     
 
-      {activeTab === "gender"
-        ? chartData?.genderData?.length > 0 && (
-            <div className="flex  flex-row  w-full px-4">
-              <div className="w-1/2">
-                <BarChartAnalytics data={chartData?.genderData} />
-              </div>
-              <div className="w-1/2">
-                <PieChartAnalytics data={chartData?.genderData} />
-              </div>
+      {loader ? (
+        <div className="w-full text-center mt-4">
+          <CircularProgress
+            size={60}
+            color="secondary"
+            thickness={4}
+            className="text-amaranth-600 !important"
+          />
+        </div>
+      ) : chartData?.genderData?.length > 0 &&
+        chartData?.ageData?.length > 0 ? (
+        activeTab === "gender" ? (
+          <div className="flex  flex-row  w-full px-4">
+            <div className="w-1/2">
+              <BarChartAnalytics data={chartData?.genderData} />
             </div>
-          )
-        : chartData?.ageData?.length > 0 && (
-            <div className="flex  flex-row  w-full px-4">
-              <div className="w-1/2">
-                <BarChartAnalytics data={chartData?.ageData} />
-              </div>
-              <div className="w-1/2">
-                <PieChartAnalytics data={chartData?.ageData} />
-              </div>
+            <div className="w-1/2">
+              <PieChartAnalytics data={chartData?.genderData} total={chartData?.total} />
             </div>
-          )}
+          </div>
+        ) : (
+          <div className="flex  flex-row  w-full px-4">
+            <div className="w-1/2">
+              <BarChartAnalytics data={chartData?.ageData} />
+            </div>
+            <div className="w-1/2">
+              <PieChartAnalytics data={chartData?.ageData} total={chartData?.total} />
+            </div>
+          </div>
+        )
+      ) : (
+        <span className="text-amaranth-600 flex flex-grow m-4">
+          Currently we don't have data to display the charts...
+        </span>
+      )}
     </div>
   );
 };

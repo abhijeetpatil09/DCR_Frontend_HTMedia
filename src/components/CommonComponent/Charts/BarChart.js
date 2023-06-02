@@ -3,15 +3,13 @@ import {
   Bar,
   BarChart,
   Cell,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
   CartesianGrid
 } from "recharts";
-import Paper from "@mui/material/Paper";
 
-const COLORS = ["#c40c4f", "#ff6d94", "#FFBB28", "#FF8042", "red", "pink"];
+const COLORS = ["#3700FF", "#FB13F3", "#FB0007", "#FED60A", "#44FF07"];
 
 const BarChartAnalytics = ({ data }) => {
   const getPath = (x, y, width, height) => {
