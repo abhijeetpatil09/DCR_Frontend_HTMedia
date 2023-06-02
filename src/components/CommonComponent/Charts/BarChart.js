@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import Paper from "@mui/material/Paper";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "red", "pink"];
+const COLORS = ["#c40c4f", "#ff6d94", "#FFBB28", "#FF8042", "red", "pink"];
 
 const BarChartAnalytics = ({ data }) => {
   const getPath = (x, y, width, height) => {
@@ -32,9 +32,13 @@ const BarChartAnalytics = ({ data }) => {
   };
 
   return (
-    <ResponsiveContainer height="100%" width="100%">
-      <Paper elevation={3} className="w-full">
-        <BarChart
+    <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
+      <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative mt-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
+          <div className="p-4 pb-0 rounded-t-4">
+              <h5 className="mb-0 dark:text-white text-amaranth-700">Bar Chart</h5>
+          </div>
+          <div className="flex flex-row p-4">
+          <BarChart
           width={520}
           height={300}
           data={data}
@@ -90,9 +94,10 @@ const BarChartAnalytics = ({ data }) => {
             background={{ fill: "rgba(5, 100, 51, 0.05)", radius: 5 }}
           ></Bar> */}
         </BarChart>
-      </Paper>
-    </ResponsiveContainer>
-  );
+        </div>
+        </div>
+        </div>
+   );
 };
 
 export default BarChartAnalytics;
