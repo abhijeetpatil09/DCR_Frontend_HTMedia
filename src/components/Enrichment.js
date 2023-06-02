@@ -71,7 +71,7 @@ const Queryform = () => {
     transform: "translate(-50%, -50%)",
     width: 500,
     bgcolor: "background.paper",
-    p: 4,
+    p: 2,
     borderRadius: 5
   };
   // Create query Modal
@@ -531,23 +531,37 @@ const Queryform = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg ">
+          <div className="flex flex-row justify-between items-start ">
+              <div className="flex flex-row items-start justify-center text-amaranth-500 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mt-1 mr-2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                </svg>
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-red-600 to-amaranth-800 uppercase">New enrichment request</h3>
+                  <span className="text-sm mb-4 font-light text-coal"> Please fill in the following details.</span>
+                </div>
+              </div>
+              <button className="mt-1" onClick={handleClose}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           <form
-            className=" my-4 px-4 py-2   w-80 max-w-xs"
+            className=" my-1 px-7      "
             name="myForm"
             onSubmit={handleSubmit}
           >
-            <span className="text-sm mb-4 font-light text-coal">
-              Query request
-            </span>
+            
             <div>
-              <div className="mt-2 pb-2 flex flex-col">
-                <label>Provider name</label>
+              <div className="  pb-2 flex flex-col">
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 " className="block text-sm font-medium leading-6 text-amaranth-600 ">Provider name</label>
                 <select
                   id="provider"
                   name="Provider_Name"
                   required
-                  className="w-full"
+                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                   value={formData["Provider_Name"]}
                   onChange={handleSelectProvider}
                 >
@@ -565,13 +579,13 @@ const Queryform = () => {
               </div>
 
               <div className="mt-2 pb-2 flex flex-col">
-                <label>Query name </label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 " className="block text-sm font-medium leading-6 text-amaranth-600 ">Query name </label>
                 <select
                   id="selectedTemp"
                   required
                   name="Query_Name"
                   value={formData["Query_Name"]}
-                  className="w-full"
+                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                   onChange={handleSelectedTemp}
                 >
                   <option value="">Select a template</option>
@@ -588,9 +602,9 @@ const Queryform = () => {
               </div>
 
               <div className="mt-2 pb-2 flex flex-col">
-                <label>Column name</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Column name</label>
                 <select
-                  className="w-full"
+                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                   multiple
                   name="Column_Names"
                   required
@@ -606,12 +620,12 @@ const Queryform = () => {
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label>Identifier type</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Identifier type</label>
                 <select
                   name="Attribute_Value"
                   onChange={handleCustomerFormData}
                   required
-                  className="w-full"
+                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                 >
                   <option value="">Please select</option>
                   <option value="email">Email</option>
@@ -621,12 +635,12 @@ const Queryform = () => {
               </div>
 
               <div className="mt-2 pb-2 flex flex-col">
-                <label>Consumer name</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Consumer name</label>
                 <select
                   name="Consumer_Name"
                   onChange={handleCustomerFormData}
                   required
-                  className="w-full"
+                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                 >
                   <option value="">--Select--</option>
                   {user["name"] === "Hoonartekcons1" && (
@@ -672,15 +686,8 @@ const Queryform = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={resultstyle}>
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-              </svg>
-              <h3 className="text-3xl font-bold">Create new enrichment request</h3>
-            </div>
-             
-          </div>
+          
+         
           {!fetchData ? (
             <div className=" flex flex-col flex-grow w-full">
               <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
