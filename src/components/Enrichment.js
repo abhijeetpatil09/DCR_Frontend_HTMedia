@@ -69,9 +69,10 @@ const Queryform = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 500,
     bgcolor: "background.paper",
     p: 4,
+    borderRadius: 5
   };
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -672,6 +673,15 @@ const Queryform = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={resultstyle}>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+              </svg>
+              <h3 className="text-3xl font-bold">Create new enrichment request</h3>
+            </div>
+             
+          </div>
           {!fetchData ? (
             <div className=" flex flex-col flex-grow w-full">
               <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
