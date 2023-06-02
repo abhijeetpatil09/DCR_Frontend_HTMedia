@@ -337,6 +337,107 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      {/* Section USECASE */}
+      
+      <section class="relative pt-16 bg-blueGray-50">
+        <div class="container mx-auto">
+          <div class="flex flex-wrap items-center">
+            <div class="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-78">
+              <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-amaranth-700">
+                <img alt="..." src={"https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=700&amp;q=80"} class="w-full align-middle rounded-t-lg"/>
+                  <blockquote class="relative p-8 mb-4">
+                    <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 583 95" class="absolute left-0 w-full block h-95-px -top-[64px]">
+                      <polygon points="-30,95 583,95 583,65" class="text-amaranth-700 fill-current"></polygon>
+                    </svg>
+                    <h4 class="text-xl font-bold text-white">
+                      Data Monetization
+                    </h4>
+                    <p class="text-md font-light mt-2 text-white">
+                        Unlock the hidden value of your data with Data Monetization. Transform your organization's data into a revenue-generating asset by leveraging insights, analytics, and partnerships. Monetize data through targeted marketing campaigns, data-as-a-service offerings, and strategic collaborations, driving business growth and unlocking new revenue streams.  
+                    </p>
+                  </blockquote>
+              </div>
+            </div>
+
+            <div class="w-full md:w-6/12 px-4">
+              <div class="flex flex-wrap">
+                <div class="w-full md:w-6/12 px-4">
+                  <div class="relative flex flex-col mt-4">
+                    <div class="px-4 py-5 flex-auto">
+                      <div class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                        <i class="fas fa-sitemap text-amaranth-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                          </svg>
+                        </i>
+                      </div>
+                      <h6 class="text-xl mb-1 font-semibold">Match Rate Efficiency</h6>
+                      <p class="mb-4 text-blueGray-500 text-sm">
+                          Achieve superior data matching with our advanced matching rate capabilities. Increase data quality and accuracy by efficiently identifying and linking related records. Maximize operational efficiency and decision-making by leveraging a high matching rate, enabling precise data analysis and insights. 
+                      </p>
+                    </div>
+                  </div>
+                  <div class="relative flex flex-col min-w-0">
+                    <div class="px-4 py-5 flex-auto">
+                      <div class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                        <i class="fas fa-drafting-compass text-amaranth-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                          </svg>
+                        </i>
+                      </div>
+                      <h6 class="text-xl mb-1 font-semibold">
+                        Customer Enrichment & Customer Overlap 
+                      </h6>
+                      <p class="mb-4 text-blueGray-500 text-sm">
+                        Unlock a deeper understanding of your customer base with customer enrichment and overlap analysis. Enhance customer profiles by appending additional data attributes, such as demographics, preferences, and purchasing behavior. Identify customer overlap across various datasets to uncover cross-selling and upselling opportunities. Utilize enriched customer insights to personalize marketing campaigns, improve customer segmentation, and boost overall customer engagement and retention. Maximize the value of your customer data through effective enrichment and overlap analysis. 
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-full md:w-6/12 px-4">
+                  <div class="relative flex flex-col min-w-0 mt-4">
+                    <div class="px-4 py-5 flex-auto">
+                      <div class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                        <i class="fas fa-newspaper text-amaranth-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z" />
+                          </svg>
+                        </i>
+                      </div>
+                      <h6 class="text-xl mb-1 font-semibold">Run an AD Campaign </h6>
+                      <p class="mb-4 text-blueGray-500 text-sm">
+                      Launch a targeted advertising campaign to reach your desired audience with precision. Utilize advanced audience segmentation and data analytics to identify the most relevant customer segments for your products or services. Deliver personalized messages and advertisements across multiple channels to maximize campaign effectiveness. Measure campaign performance in real-time, optimize ad placements, and achieve higher engagement and conversion rates. Run an AD campaign that drives results and maximizes your return on investment. 
+                      </p>
+                    </div>
+                  </div>
+                  <div class="relative flex flex-col min-w-0">
+                    <div class="px-4 py-5 flex-auto">
+                      <div class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                        <i class="fas fa-file-alt text-amaranth-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                          </svg>
+
+                        </i>
+                      </div>
+                      <h6 class="text-xl mb-1 font-semibold">Integrations with Facebook and meta-ads</h6>
+                      <p class="mb-4 text-blueGray-500 text-sm">
+                      Seamlessly integrate your marketing efforts with Facebook and Meta Ads platforms for enhanced reach and impact. Connect your customer data and insights to create highly targeted ad campaigns. Leverage the powerful targeting capabilities and extensive user base of Facebook and Meta Ads to expand your brand's visibility and engage with the right audience. Optimize ad placements, track campaign performance, and refine your strategies based on real-time analytics. Drive conversions, increase brand awareness, and maximize ROI through seamless integrations with Facebook and Meta Ads. 
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     
+      </section>
+
+
+
+
       {/* Section 5 */}
       <section className="flex items-center justify-center py-20 bg-white min-w-screen">
         <div className="px-16 bg-white">
