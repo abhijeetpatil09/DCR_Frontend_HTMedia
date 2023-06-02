@@ -11,3 +11,7 @@ export {
 export {
   PublisherForm
 } from './PublisherFormAction';
+
+export {
+  AnalyticsData
+} from './AnalyticsPageAction';

@@ -80,7 +80,7 @@ const Home = () => {
                 </div>
                 <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
                     <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative mt-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-                        <div class="p-4 pb-0 rounded-t-4"><h5 class="mb-0 dark:text-white text-amaranth-700">Recent requests</h5></div>
+                        <div className="p-4 pb-0 rounded-t-4"><h5 className="mb-0 dark:text-white text-amaranth-700">Recent requests</h5></div>
                         <div className="flex-auto p-4">
 
                             <table className="table-auto w-full text-left text-xs">

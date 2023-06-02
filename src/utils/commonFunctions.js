@@ -1,25 +1,26 @@
+// Function used for Convert Json Into CSV format
 
-
-// Convert Json Into CSV format
 export const jsonToCsv = (jsonData) => {
-    let tempData = jsonData?.data;
-    const csvRows = [];
-    const headers = Object.keys(tempData[0]); // Add the headers as the first row
+  let tempData = jsonData?.data;
+  const csvRows = [];
+  const headers = Object.keys(tempData[0]);
 
-    csvRows.push(headers.join(",")); // Iterate over each JSON object and convert it to CSV row
+  csvRows.push(headers.join(","));
 
-    for (const row of tempData) {
-      const values = headers.map((header) => {
-        const escapedValue = row[header].toString().replace(/"/g, '\\"');
-        return `"${escapedValue}"`;
-      });
-      csvRows.push(values.join(","));
-    } // Join the CSV rows with newlines
+  for (const row of tempData) {
+    const values = headers.map((header) => {
+      const escapedValue = row[header].toString().replace(/"/g, '\\"');
+      return `"${escapedValue}"`;
+    });
+    csvRows.push(values.join(","));
+  }
 
-    return csvRows.join("\n");
-  };
+  return csvRows.join("\n");
+};
 
- export const handleDate = (date) => {
+// Function for Handle the date as per DD-MM-YYYY format
+
+export const handleDate = (date) => {
   const dateObj = new Date(date);
 
   const year = dateObj.getFullYear();
@@ -34,23 +35,40 @@ export const jsonToCsv = (jsonData) => {
 
 const getMonthName = (monthIndex) => {
   const monthNames = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   return monthNames[monthIndex];
 };
 
-  export const downloadFileInCSV = (csvData, TEMPLATE_NAME, RUN_ID) => {
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" }); // Create a temporary URL for the Blob
+// Function for Download the file in the CSV format
 
-    const csvUrl = URL.createObjectURL(blob); // Create a link element
+export const downloadFileInCSV = (csvData, TEMPLATE_NAME, RUN_ID) => {
+  const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
 
-    const link = document.createElement("a");
-    link.setAttribute("href", csvUrl);
-    link.setAttribute("download", `${TEMPLATE_NAME}_${RUN_ID}.csv`); // Append the link to the document body and click it
+  const csvUrl = URL.createObjectURL(blob);
 
-    document.body.appendChild(link);
-    link.click(); // Clean up by removing the link from the document body
+  const link = document.createElement("a");
+  link.setAttribute("href", csvUrl);
+  link.setAttribute("download", `${TEMPLATE_NAME}_${RUN_ID}.csv`);
 
-    document.body.removeChild(link);
-  };
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+};
+
+// Function for Calculating the percentage
+export const calculatePercentage = (value, total) => {
+  return Math.round((value * 100) / total);
+};

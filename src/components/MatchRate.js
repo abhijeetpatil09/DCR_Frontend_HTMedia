@@ -4,8 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   handleDate,
 } from "../utils/commonFunctions";
@@ -399,7 +398,6 @@ const Publisherform = () => {
       .then((response) => {
         if (response?.data?.data) {
           fetchTable(response?.data?.data, runId);
-          toast.success(`Data fetched successfully. Request Id: ${runId}`);
           handleResultModalOpen();
         }
       })
@@ -430,7 +428,7 @@ const Publisherform = () => {
       </div>
 
       <div className="flex flex-col w-full px-5">
-        <h1 class=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
+        <h1 className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
           Recent requests
         </h1>
 
@@ -452,13 +450,13 @@ const Publisherform = () => {
             {data.map((item, index) => (
               <tr className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="border   px-4 py-2">
-                  <span class="relative flex h-3 w-3 mr-2">
+                  <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" ? (
-                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
                     ) : (
                       <>
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amaranth-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amaranth-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
                       </>
                     )}
                   </span>
@@ -540,7 +538,7 @@ const Publisherform = () => {
                       }  px-1 hover:text-amaranth-600 cursor-pointer`}
                     title="Upload match records into client ecospace"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                     </svg>
 

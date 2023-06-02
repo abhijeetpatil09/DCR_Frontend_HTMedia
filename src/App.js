@@ -7,7 +7,7 @@ import Register from "./components/CommonComponent/Register";
 import QueryResultTable from './components/CommonComponent/Table';
 
 import Enrichment from "./components/Enrichment";
-import Querystatus from "./components/Querystatus";
+import QueryStatus from "./components/QueryStatus";
 import Sidebar from "./components/CommonComponent/Sidebar";
 import Requestinfo from "./components/Requestinfo";
 import Home from "./components/Home";
@@ -38,7 +38,7 @@ function App() {
                 <Routes>
                   <Route path="/home" element={<Home />} />
                   <Route path="/queryform" element={<Enrichment />} />
-                  <Route path="/querystatus" element={<Querystatus />} />
+                  <Route path="/querystatus" element={<QueryStatus />} />
                   <Route path="/requestinfo" element={<Requestinfo />} />
                   <Route path="/publisherform" element={<MatchRate />} />
                   <Route path="/s3fileupload" element={<S3fileupload />} />
