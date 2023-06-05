@@ -7,7 +7,7 @@ import Register from "./components/CommonComponent/Register";
 import QueryResultTable from './components/CommonComponent/Table';
 
 import Enrichment from "./components/Enrichment";
-import QueryStatus from "./components/QueryStatus";
+import QueryStatus from "./components/Querystatus";
 import Sidebar from "./components/CommonComponent/Sidebar";
 import Requestinfo from "./components/Requestinfo";
 import Home from "./components/Home";
