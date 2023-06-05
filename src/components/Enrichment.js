@@ -3,14 +3,7 @@ import AWS from "aws-sdk";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
+import SelectDropdown from "./CommonComponent/SelectDropdown";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -25,7 +18,7 @@ import {
 import Table from "./CommonComponent/Table";
 import "./styles.css";
 import "./pure-react.css";
-import { Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 const initialState = {
   Query_Name: "",
@@ -177,7 +170,14 @@ const Enrichment = () => {
               return item?.split(".")[1];
             });
 
-            setColumns(col_name);
+            let temp = [];
+            temp.push({ value: "all", name: "All" });
+            col_name?.map((value) => {
+              let xyz = {};
+              xyz = { value: value, name: value };
+              return temp.push(xyz);
+            });
+            setColumns(temp);
           }
         })
         .catch((error) => console.log(error));
@@ -226,14 +226,23 @@ const Enrichment = () => {
     });
   };
 
-  const handleChange = (event) => {
-    const {
-      target: { value, name },
-    } = event;
-
+  const handleSelectChange = (event) => {
+    const selectedOptions = Array.from(event.target.selectedOptions).map(
+      (option) => option.value
+    );
+    const delimiter = "&";
+    const selectedOptionsString = `#${selectedOptions.join(delimiter)}#`;
     setFormData({
       ...formData,
-      [name]: typeof value === "string" ? value.split(",") : value,
+      [event.target.name]: selectedOptionsString,
+    });
+    // setSelectedColumns(selectedOptions);
+  };
+
+  const handleChange = (event, name) => {
+    setFormData({
+      ...formData,
+      [name]: event,
     });
   };
 
@@ -303,9 +312,6 @@ const Enrichment = () => {
     event.preventDefault();
     setLoading(true);
 
-    const delimiter = "&";
-    const selectedColumns = `#${formData.Column_Names?.join(delimiter)}#`;
-
     if (byPassAPICalled) {
       toast.error(
         "We are fetching the data for current request. Please wait..."
@@ -359,7 +365,7 @@ const Enrichment = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id, attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${selectedColumns}','${formData.Consumer_Name}','${formData.RunId}', '${formData.Attribute_Value}');`,
+          query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id, attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.Attribute_Value}');`,
         },
       })
       .then((response) => {
@@ -565,7 +571,7 @@ const Enrichment = () => {
       >
         <Box
           sx={style}
-          className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg "
+          className="bg-white  bg-opacity-15 backdrop-filter backdrop-blur-lg "
         >
           <div className="flex flex-row justify-between items-start ">
             <div className="flex flex-row items-start justify-center text-amaranth-500 ">
@@ -666,33 +672,34 @@ const Enrichment = () => {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Column name
-                </label>
-                <FormControl sx={{ m: 1, width: 300 }}>
-                  <InputLabel>Columns</InputLabel>
-                  <Select
-                    multiple
-                    name="Column_Names"
-                    value={formData?.Column_Names}
-                    onChange={handleChange}
-                    input={<OutlinedInput label="Columns" />}
-                    renderValue={(selected) => (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {selected?.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))}
-                      </Box>
-                    )}
-                  >
-                    {colunms?.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        {name}
-                      </MenuItem>
+              <div className="mt-2 pb-2 flex flex-col">
+                <SelectDropdown
+                  title="Columns"
+                  mode="multiple"
+                  name="Column_Names"
+                  value={formData?.Column_Names}
+                  placeholder="Select Columns"
+                  data={colunms}
+                  setValue={(e, value) => {
+                    handleChange(e, value);
+                  }}
+                />
+
+                {/* <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Column name</label>
+                <select
+                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+                  multiple
+                  name="Column_Names"
+                  required
+                  onChange={handleSelectChange}
+                >
+                  {colunms &&
+                    colunms.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
                     ))}
-                  </Select>
-                </FormControl>
+                </select> */}
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
