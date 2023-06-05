@@ -31,7 +31,7 @@ const initialState = {
   Match_Attribute_Value: "",
 };
 
-const Publisherform = () => {
+const MatchRate = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -765,4 +765,4 @@ const Publisherform = () => {
   );
 };
 
-export default Publisherform;
+export default MatchRate;

@@ -4,6 +4,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
+import Box from "@mui/material/Box";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Chip from "@mui/material/Chip";
+
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import * as actions from "../redux/actions/index";
@@ -17,12 +25,12 @@ import {
 import Table from "./CommonComponent/Table";
 import "./styles.css";
 import "./pure-react.css";
-import { Box, Modal } from "@mui/material";
+import { Modal } from "@mui/material";
 
 const initialState = {
   Query_Name: "",
   Provider_Name: "",
-  Column_Names: "",
+  Column_Names: [],
   Consumer_Name: "",
   Attribute_Value: "",
 };
@@ -35,7 +43,7 @@ const s3 = new AWS.S3({
   // region: 'ap-south-1',
 });
 
-const Queryform = () => {
+const Enrichment = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -72,7 +80,7 @@ const Queryform = () => {
     width: 500,
     bgcolor: "background.paper",
     p: 2,
-    borderRadius: 5
+    borderRadius: 5,
   };
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -147,7 +155,6 @@ const Queryform = () => {
         })
         .then((response) => {
           if (response?.data) {
-            console.log("Template list", response?.data);
             setTemplateList(response.data.data);
           }
         })
@@ -165,12 +172,10 @@ const Queryform = () => {
         })
         .then((response) => {
           if (response?.data) {
-            console.log("response?.data", response?.data);
             let col_name = response?.data?.data[0]?.ALLOWED_COLUMNS?.split("|");
             col_name = col_name?.map((item) => {
               return item?.split(".")[1];
             });
-            console.log("col_name", col_name);
 
             setColumns(col_name);
           }
@@ -221,17 +226,15 @@ const Queryform = () => {
     });
   };
 
-  const handleSelectChange = (event) => {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(
-      (option) => option.value
-    );
-    const delimiter = "&";
-    const selectedOptionsString = `#${selectedOptions.join(delimiter)}#`;
+  const handleChange = (event) => {
+    const {
+      target: { value, name },
+    } = event;
+
     setFormData({
       ...formData,
-      [event.target.name]: selectedOptionsString,
+      [name]: typeof value === "string" ? value.split(",") : value,
     });
-    // setSelectedColumns(selectedOptions);
   };
 
   const callByPassAPI = () => {
@@ -300,6 +303,9 @@ const Queryform = () => {
     event.preventDefault();
     setLoading(true);
 
+    const delimiter = "&";
+    const selectedColumns = `#${formData.Column_Names?.join(delimiter)}#`;
+
     if (byPassAPICalled) {
       toast.error(
         "We are fetching the data for current request. Please wait..."
@@ -353,7 +359,7 @@ const Queryform = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id, attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.Attribute_Value}');`,
+          query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id, attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${selectedColumns}','${formData.Consumer_Name}','${formData.RunId}', '${formData.Attribute_Value}');`,
         },
       })
       .then((response) => {
@@ -411,7 +417,6 @@ const Queryform = () => {
     <div className="flex flex-col w-full h-full ">
       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Customer enrichment</h3>
-
         <button
           onClick={handleOpen}
           className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
@@ -462,16 +467,17 @@ const Queryform = () => {
                 </td>
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${item.STATUS === "true"
-                      ? "bg-green-200 text-green-700"
-                      : "bg-amaranth-200 text-amaranth-700 "
-                      }   py-1 px-3 rounded-full text-xs`}
+                    className={`${
+                      item.STATUS === "true"
+                        ? "bg-green-200 text-green-700"
+                        : "bg-amaranth-200 text-amaranth-700 "
+                    }   py-1 px-3 rounded-full text-xs`}
                   >
                     {item.STATUS === "true"
                       ? "Approved"
                       : item.STATUS === "false"
-                        ? "Rejected"
-                        : "In Progress"}
+                      ? "Rejected"
+                      : "In Progress"}
                   </span>
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -487,36 +493,62 @@ const Queryform = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${item.STATUS === "false"
-                      ? "disabled opacity-10 hover:text-inherit"
-                      : item.STATUS === "pending"
+                    className={`${
+                      item.STATUS === "false"
+                        ? "disabled opacity-10 hover:text-inherit"
+                        : item.STATUS === "pending"
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
-                      }  px-2 hover:text-amaranth-600`}
+                    }  px-2 hover:text-amaranth-600`}
                     title="View File"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
-
                   </button>
                   <button
                     onClick={() =>
                       downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${item.STATUS === "false"
-                      ? "disabled opacity-10 hover:text-inherit"
-                      : item.STATUS === "pending"
+                    className={`${
+                      item.STATUS === "false"
+                        ? "disabled opacity-10 hover:text-inherit"
+                        : item.STATUS === "pending"
                         ? "disabled opacity-10 hover:text-inherit"
                         : " "
-                      }  px-2 hover:text-amaranth-600 cursor-pointer`}
+                    }  px-2 hover:text-amaranth-600 cursor-pointer`}
                     title="Download file"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-
                   </button>
                 </td>
               </tr>
@@ -531,32 +563,63 @@ const Queryform = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg ">
+        <Box
+          sx={style}
+          className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg "
+        >
           <div className="flex flex-row justify-between items-start ">
-              <div className="flex flex-row items-start justify-center text-amaranth-500 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mt-1 mr-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                </svg>
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-red-600 to-amaranth-800 uppercase">New enrichment request</h3>
-                  <span className="text-sm mb-4 font-light text-coal"> Please fill in the following details.</span>
-                </div>
+            <div className="flex flex-row items-start justify-center text-amaranth-500 ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 mt-1 mr-2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                />
+              </svg>
+              <div className="flex flex-col">
+                <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-red-600 to-amaranth-800 uppercase">
+                  New enrichment request
+                </h3>
+                <span className="text-sm mb-4 font-light text-coal">
+                  {" "}
+                  Please fill in the following details.
+                </span>
               </div>
-              <button className="mt-1" onClick={handleClose}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
+            <button className="mt-1" onClick={handleClose}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
           <form
             className=" my-1 px-7      "
             name="myForm"
             onSubmit={handleSubmit}
           >
-            
             <div>
               <div className="  pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 " className="block text-sm font-medium leading-6 text-amaranth-600 ">Provider name</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Provider name
+                </label>
                 <select
                   id="provider"
                   name="Provider_Name"
@@ -579,7 +642,9 @@ const Queryform = () => {
               </div>
 
               <div className="mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 " className="block text-sm font-medium leading-6 text-amaranth-600 ">Query name </label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Query name{" "}
+                </label>
                 <select
                   id="selectedTemp"
                   required
@@ -601,26 +666,39 @@ const Queryform = () => {
                 </select>
               </div>
 
-              <div className="mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Column name</label>
-                <select
-                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-                  multiple
-                  name="Column_Names"
-                  required
-                  onChange={handleSelectChange}
-                >
-                  {colunms &&
-                    colunms.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
+              <div>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Column name
+                </label>
+                <FormControl sx={{ m: 1, width: 300 }}>
+                  <InputLabel>Columns</InputLabel>
+                  <Select
+                    multiple
+                    name="Column_Names"
+                    value={formData?.Column_Names}
+                    onChange={handleChange}
+                    input={<OutlinedInput label="Columns" />}
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {selected?.map((value) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}
+                  >
+                    {colunms?.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        {name}
+                      </MenuItem>
                     ))}
-                </select>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Identifier type</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Identifier type
+                </label>
                 <select
                   name="Attribute_Value"
                   onChange={handleCustomerFormData}
@@ -635,7 +713,9 @@ const Queryform = () => {
               </div>
 
               <div className="mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">Consumer name</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Consumer name
+                </label>
                 <select
                   name="Consumer_Name"
                   onChange={handleCustomerFormData}
@@ -686,8 +766,6 @@ const Queryform = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={resultstyle}>
-          
-         
           {!fetchData ? (
             <div className=" flex flex-col flex-grow w-full">
               <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
@@ -725,4 +803,4 @@ const Queryform = () => {
   );
 };
 
-export default Queryform;
+export default Enrichment;
