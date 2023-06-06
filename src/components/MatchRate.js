@@ -354,10 +354,11 @@ const MatchRate = () => {
   };
 
   const fetchcsvTableData = async (templateName, runId) => {
+    templateName = templateName.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.ADVERTISER_MATCH_${runId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
         },
       })
       .then((response) => {
@@ -413,7 +414,7 @@ const MatchRate = () => {
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {data.map((item, index) => (
-              <tr className="border-b border-gray-200 hover:bg-gray-100">
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="border   px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" ? (

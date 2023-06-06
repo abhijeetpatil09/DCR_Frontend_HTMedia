@@ -288,18 +288,19 @@ const Enrichment = () => {
     }, 2000);
   };
 
-  const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
+  const downloadFile = (templateName, runId) => {
+    templateName = templateName.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         responseType: "json", // Set the response type to JSON
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.CUSTOMER_ENRICHMENT_${RUN_ID};`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId};`,
         },
       })
       .then((response) => {
         if (response?.data) {
           const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
-          downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
+          downloadFileInCSV(csvData, templateName, runId);
         } else {
           console.log("File cannnot be downloaded...");
         }
@@ -406,10 +407,11 @@ const Enrichment = () => {
   };
 
   const fetchcsvTableData = async (templateName, runId) => {
+    templateName = templateName.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.CUSTOMER_ENRICHMENT_${runId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
         },
       })
       .then((response) => {
