@@ -343,7 +343,7 @@ const LandingPage = () => {
         <div class="container mx-auto">
           <div class="flex flex-wrap items-center">
             <div class="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-78">
-              <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-amaranth-700">
+              <div class="relative flex flex-col min-w-0 break-word w-full mb-6 shadow-lg rounded-lg bg-amaranth-700">
                 <img alt="..." src={"https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=700&amp;q=80"} class="w-full align-middle rounded-t-lg"/>
                   <blockquote class="relative p-8 mb-4">
                     <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 583 95" class="absolute left-0 w-full block h-95-px -top-[64px]">
@@ -353,7 +353,7 @@ const LandingPage = () => {
                       Data Monetization
                     </h4>
                     <p class="text-md font-light mt-2 text-white">
-                        Unlock the hidden value of your data with Data Monetization. Transform your organization's data into a revenue-generating asset by leveraging insights, analytics, and partnerships. Monetize data through targeted marketing campaigns, data-as-a-service offerings, and strategic collaborations, driving business growth and unlocking new revenue streams.  
+                    Unlock the hidden value of your data with Data Monetization. Transform your organization's data into a revenue-generating asset by leveraging insights, analytics, and partnerships. Monetize data through targeted marketing campaigns, data-as-a-service offerings, and strategic collaborations.    
                     </p>
                   </blockquote>
               </div>
@@ -373,8 +373,7 @@ const LandingPage = () => {
                       </div>
                       <h6 class="text-xl mb-1 font-semibold">Match Rate Efficiency</h6>
                       <p class="mb-4 text-blueGray-500 text-sm">
-                          Achieve superior data matching with our advanced matching rate capabilities. Increase data quality and accuracy by efficiently identifying and linking related records. Maximize operational efficiency and decision-making by leveraging a high matching rate, enabling precise data analysis and insights. 
-                      </p>
+                      Achieve superior data matching with our advanced matching rate capabilities. Increase data quality and accuracy by efficiently identifying and linking related records. Maximize operational efficiency and decision-making by leveraging a high matching rate, enabling precise data analysis and insights.                       </p>
                     </div>
                   </div>
                   <div class="relative flex flex-col min-w-0">
@@ -390,8 +389,9 @@ const LandingPage = () => {
                         Customer Enrichment & Customer Overlap 
                       </h6>
                       <p class="mb-4 text-blueGray-500 text-sm">
-                        Unlock a deeper understanding of your customer base with customer enrichment and overlap analysis. Enhance customer profiles by appending additional data attributes, such as demographics, preferences, and purchasing behavior. Identify customer overlap across various datasets to uncover cross-selling and upselling opportunities. Utilize enriched customer insights to personalize marketing campaigns, improve customer segmentation, and boost overall customer engagement and retention. Maximize the value of your customer data through effective enrichment and overlap analysis. 
-                      </p>
+                      Unlock a deeper understanding of your customer base with customer enrichment and overlap analysis. Enhance customer profiles by appending additional data attributes, such as demographics, preferences, and purchasing behavior.  
+
+</p>
                     </div>
                   </div>
                 </div>
@@ -407,8 +407,7 @@ const LandingPage = () => {
                       </div>
                       <h6 class="text-xl mb-1 font-semibold">Run an AD Campaign </h6>
                       <p class="mb-4 text-blueGray-500 text-sm">
-                      Launch a targeted advertising campaign to reach your desired audience with precision. Utilize advanced audience segmentation and data analytics to identify the most relevant customer segments for your products or services. Deliver personalized messages and advertisements across multiple channels to maximize campaign effectiveness. Measure campaign performance in real-time, optimize ad placements, and achieve higher engagement and conversion rates. Run an AD campaign that drives results and maximizes your return on investment. 
-                      </p>
+                      Launch a targeted advertising campaign to reach your desired audience with precision. Utilize advanced audience segmentation and data analytics to identify the most relevant customer segments for your products or services.                        </p>
                     </div>
                   </div>
                   <div class="relative flex flex-col min-w-0">
@@ -423,8 +422,7 @@ const LandingPage = () => {
                       </div>
                       <h6 class="text-xl mb-1 font-semibold">Integrations with Facebook and meta-ads</h6>
                       <p class="mb-4 text-blueGray-500 text-sm">
-                      Seamlessly integrate your marketing efforts with Facebook and Meta Ads platforms for enhanced reach and impact. Connect your customer data and insights to create highly targeted ad campaigns. Leverage the powerful targeting capabilities and extensive user base of Facebook and Meta Ads to expand your brand's visibility and engage with the right audience. Optimize ad placements, track campaign performance, and refine your strategies based on real-time analytics. Drive conversions, increase brand awareness, and maximize ROI through seamless integrations with Facebook and Meta Ads. 
-                      </p>
+                      Seamlessly integrate your marketing efforts with Facebook and Meta Ads platforms for enhanced reach and impact. Connect your customer data and insights to create highly targeted ad campaigns.                        </p>
                     </div>
                   </div>
                 </div>
