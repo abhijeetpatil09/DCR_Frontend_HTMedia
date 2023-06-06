@@ -107,7 +107,7 @@ const QueryStatus = () => {
                     backgroundColor: "#fff1f4",
                     borderRadius: 0,
                     borderTop: 1,
-                    borderRight: 1,
+                    borderLeft: 1,
                     borderColor: "#d6d3d1",
                   },
                   "& th:first-child": { borderLeft: 1, borderColor: "#d6d3d1" },

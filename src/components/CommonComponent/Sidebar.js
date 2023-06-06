@@ -280,7 +280,7 @@ const Sidebar = ({ children }) => {
                 } text-gray-500 menu    md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}>
 
 
-                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="/">
                   <i className="fad fa-user-edit text-xs mr-1"></i>
                   edit my profile
                 </a>
@@ -302,7 +302,7 @@ const Sidebar = ({ children }) => {
 
 
 
-                <a onClick={handleSignOut} className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                <a onClick={handleSignOut} className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="/">
                   <i className="fad fa-user-times text-xs mr-1"></i>
                   log out
                 </a>

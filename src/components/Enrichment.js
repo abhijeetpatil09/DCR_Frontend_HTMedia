@@ -3,14 +3,7 @@ import AWS from "aws-sdk";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
+import SelectDropdown from "./CommonComponent/SelectDropdown";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -25,7 +18,7 @@ import {
 import Table from "./CommonComponent/Table";
 import "./styles.css";
 import "./pure-react.css";
-import { Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 const initialState = {
   Query_Name: "",
@@ -98,7 +91,7 @@ const Enrichment = () => {
   const [providerList, setProviderList] = useState([]);
   const [templateList, setTemplateList] = useState("");
   const [databaseName, setDatabaseName] = useState("");
-  const [colunms, setColumns] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
   const [data, setData] = useState([]);
 
@@ -114,7 +107,7 @@ const Enrichment = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
-            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'customer_enrichment' order by RUN_ID desc limit 10;",
+            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'CUSTOMER ENRICHMENT' order by RUN_ID desc limit 10;",
         },
       })
       .then((response) => {
@@ -177,7 +170,14 @@ const Enrichment = () => {
               return item?.split(".")[1];
             });
 
-            setColumns(col_name);
+            let temp = [];
+            temp.push({ value: "all", name: "All" });
+            col_name?.map((value) => {
+              let xyz = {};
+              xyz = { value: value, name: value };
+              return temp.push(xyz);
+            });
+            setColumns(temp);
           }
         })
         .catch((error) => console.log(error));
@@ -226,15 +226,27 @@ const Enrichment = () => {
     });
   };
 
-  const handleChange = (event) => {
-    const {
-      target: { value, name },
-    } = event;
+  const handleChange = (event, name) => {
+    const element = "all";
+    const index = event?.indexOf(element);
 
-    setFormData({
-      ...formData,
-      [name]: typeof value === "string" ? value.split(",") : value,
-    });
+    if (event?.includes("all")) {
+      let allSelect = columns?.map((obj) => {
+        return obj.value;
+      });
+      if (index !== -1) {
+        allSelect?.splice(index, 1);
+      }
+      setFormData({
+        ...formData,
+        [name]: allSelect,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: event,
+      });
+    }
   };
 
   const callByPassAPI = () => {
@@ -666,33 +678,18 @@ const Enrichment = () => {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Column name
-                </label>
-                <FormControl sx={{ m: 1, width: 300 }}>
-                  <InputLabel>Columns</InputLabel>
-                  <Select
-                    multiple
-                    name="Column_Names"
-                    value={formData?.Column_Names}
-                    onChange={handleChange}
-                    input={<OutlinedInput label="Columns" />}
-                    renderValue={(selected) => (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {selected?.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))}
-                      </Box>
-                    )}
-                  >
-                    {colunms?.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+              <div className="mt-2 pb-2 flex flex-col">
+                <SelectDropdown
+                  title="Columns"
+                  mode="multiple"
+                  name="Column_Names"
+                  value={formData?.Column_Names}
+                  placeholder="Select Columns"
+                  data={columns}
+                  setValue={(e, value) => {
+                    handleChange(e, value);
+                  }}
+                />
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
