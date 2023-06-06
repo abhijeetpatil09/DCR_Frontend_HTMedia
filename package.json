@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ag-grid-community": "^29.3.5",
     "ag-grid-react": "^29.3.5",
+    "antd": "^5.5.2",
     "aws-sdk": "^2.1321.0",
     "http-proxy-middleware": "^2.0.6",
     "jszip": "^3.10.1",

@@ -30,12 +30,13 @@ const ChartPage = () => {
   });
 
   useEffect(() => {
-    dispatch(
-      actions.AnalyticsData({
-        loader: true,
-      })
-    );
+    
     if (RequestId !== "") {
+      dispatch(
+        actions.AnalyticsData({
+          loader: true,
+        })
+      );
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {

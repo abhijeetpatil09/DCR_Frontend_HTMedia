@@ -68,8 +68,6 @@ const MatchRate = () => {
     width: "95%",
     maxHeight: "90%",
     bgcolor: "background.paper",
-    // p: 4,
-    // pt:8\,
     overflow: "scroll",
   };
   const style = {
@@ -119,12 +117,11 @@ const MatchRate = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log("UseEffect called");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
-            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'advertiser_match' order by RUN_ID desc limit 10;",
+            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 10;",
         },
       })
       .then((response) => setData(response.data.data))
@@ -176,37 +173,6 @@ const MatchRate = () => {
   // const isValidInput = (inputString) => {
   //   const regex = /^[0-9][0-9,-]*[0-9]$/; // regex pattern to match only comma, hyphen, and numeric values and start and end with numeric values
   //   return regex.test(inputString); // returns true if inputString matches the regex pattern, false otherwise
-  // };
-
-  // const sendEmail = () => {
-    // create reusable transporter object using the default SMTP transport
-    // let transporter = nodemailer.createTransport({
-    //     host: 'smtp.gmail.com',
-    //     port: 465,
-    //     secure: true, // true for 465, false for other ports
-    //     auth: {
-    //         user: 'atulkhot07@gmail.com', // your email address
-    //         pass: '9975334797' // your email password or app password if using 2-factor authentication
-    //     }
-    // });
-
-    // // setup email data with unicode symbols
-    // let mailOptions = {
-    //     from: '"Atul Khot" atulkhot07@gmail.com', // sender address
-    //     to: 'atulkhot07@example.com', // list of receivers
-    //     subject: 'Hello', // Subject line
-    //     text: 'Hello world?', // plain text body
-    //     // html: '<b>Hello world?</b>' // html body
-    // };
-
-    // // send mail with defined transport object
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //     if (error) {
-    //         return console.log(error);
-    //     }
-    //     console.log('Message sent: %s', info.messageId);
-    // });
-  //   console.log("into send email method");
   // };
 
   const callByPassAPI = () => {
