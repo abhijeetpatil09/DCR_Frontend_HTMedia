@@ -30,7 +30,6 @@ const ChartPage = () => {
   });
 
   useEffect(() => {
-    
     if (RequestId !== "") {
       dispatch(
         actions.AnalyticsData({
@@ -166,24 +165,26 @@ const ChartPage = () => {
         </div>
       </div>
 
-      <span className="text-amaranth-600 flex m-4">
-        We are showing the charts for the Request Id -
-        <strong>{RequestId}</strong>
-      </span>
-      <div className="flex flex-row px-4">
+      <div className="p-4">
         {chartData?.genderData?.length > 0 && (
-          <Tabs value={activeTab} onChange={handleTabChange} centered>
-            <Tab
-              className="text-amaranth-600 !important"
-              label="Gender distribution"
-              value="gender"
-            />
-            <Tab
-              className="text-amaranth-600 !important"
-              label="Age distribution"
-              value="age"
-            />
-          </Tabs>
+          <>
+            <span className="text-amaranth-600">
+              We are showing the charts for the Request Id -
+              <strong>{RequestId}</strong>
+            </span>
+            <Tabs value={activeTab} onChange={handleTabChange} className="mt-4">
+              <Tab
+                className="text-amaranth-600 !important"
+                label="Gender distribution"
+                value="gender"
+              />
+              <Tab
+                className="text-amaranth-600 !important"
+                label="Age distribution"
+                value="age"
+              />
+            </Tabs>
+          </>
         )}
       </div>
 
@@ -204,7 +205,10 @@ const ChartPage = () => {
               <BarChartAnalytics data={chartData?.genderData} />
             </div>
             <div className="w-1/2">
-              <PieChartAnalytics data={chartData?.genderData} total={chartData?.total} />
+              <PieChartAnalytics
+                data={chartData?.genderData}
+                total={chartData?.total}
+              />
             </div>
           </div>
         ) : (
@@ -213,7 +217,10 @@ const ChartPage = () => {
               <BarChartAnalytics data={chartData?.ageData} />
             </div>
             <div className="w-1/2">
-              <PieChartAnalytics data={chartData?.ageData} total={chartData?.total} />
+              <PieChartAnalytics
+                data={chartData?.ageData}
+                total={chartData?.total}
+              />
             </div>
           </div>
         )
