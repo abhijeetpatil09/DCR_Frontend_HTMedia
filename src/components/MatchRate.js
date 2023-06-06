@@ -75,9 +75,10 @@ const MatchRate = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 500,
     bgcolor: "background.paper",
-    p: 4,
+    p: 2,
+    borderRadius: 5,
   };
 
   // Create query Modal
@@ -379,7 +380,7 @@ const MatchRate = () => {
 
         <button
           onClick={handleOpen}
-          className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
+          className="flex items-center px-3 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -389,7 +390,7 @@ const MatchRate = () => {
           >
             <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
           </svg>
-          New Request
+          New request
         </button>
       </div>
 
@@ -522,23 +523,70 @@ const MatchRate = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box 
+          sx={style}
+          className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg "
+
+        >
+        <div className="flex flex-row justify-between items-start ">
+            <div className="flex flex-row items-start justify-center text-amaranth-500 ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 mt-1 mr-2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                />
+              </svg>
+              <div className="flex flex-col">
+                <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-red-600 to-amaranth-800 uppercase">
+                  New request
+                </h3>
+                <span className="text-sm mb-4 font-light text-coal">
+                  {" "}
+                  Please fill in the following details.
+                </span>
+              </div>
+            </div>
+            <button className="mt-1" onClick={handleClose}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
           <form
-            className="  my-4 px-4 py-2 h-auto  w-80 max-w-xs"
+            className=" my-1 px-7      "
             name="myForm"
             onSubmit={handleSubmit}
           >
-            <span className="text-sm mb-4 font-light text-coal">
-              Advertiser record match
-            </span>
             <div>
               <div className=" mt-2 pb-2 flex flex-col">
-                <label>Query Name</label>
+                <label 
+                  className="block text-sm font-medium leading-6 text-amaranth-600 "
+                >Query Name</label>
                 <select
                   name="Query_Name"
                   onChange={handleCustomerFormData}
                   required
-                  className="w-full"
+                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+
                 >
                   <option value="">Please select</option>
                   <option value="advertiser_match">Advertiser Match</option>
@@ -546,23 +594,54 @@ const MatchRate = () => {
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label>Upload File</label>
+                <label
+                  className="block text-sm font-medium leading-6 text-amaranth-600 "
+                >Upload File</label>
                 <input
-                  className="w-full "
+                  // className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
+                  className=""
                   type="file"
                   id="myFileInput"
                   onChange={handleFileInput}
                   required
                 />
+
+                {/* Drag and Drop */}
+                {/* <div class="max-w-xl">
+                  <label
+                    class="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                    <span class="flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                      <span class="font-medium text-gray-600">
+                        Drop files to Attach, or &nbsp;
+                        <span class="text-blue-600 underline">browse</span>
+                      </span>
+                    </span>
+                    <input 
+                        type="file"
+                        id="myFileInput"
+                        onChange={handleFileInput}
+                        required
+                        class="hidden"
+                      />
+                  </label>
+                </div> */}
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label>Identifier Type</label>
+                <label
+                    className="block text-sm font-medium leading-6 text-amaranth-600 "
+                >Identifier Type</label>
                 <select
                   name="Column_Names"
                   onChange={handleCustomerFormData}
                   required
-                  className="w-full"
+                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+
                 >
                   <option value="">Please select</option>
                   <option value="email">Email</option>
@@ -572,12 +651,15 @@ const MatchRate = () => {
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label>Match Attribute</label>
+                <label
+                    className="block text-sm font-medium leading-6 text-amaranth-600 "
+                >Match Attribute</label>
                 <select
                   name="Match_Attribute"
                   onChange={handleCustomerFormData}
                   required
-                  className="w-full"
+                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+
                 >
                   <option value="">Please select</option>
                   <option value="overall">Overall</option>
@@ -586,7 +668,8 @@ const MatchRate = () => {
                 </select>
                 {formData["Match_Attribute"] === "gender" && (
                   <div className="mt-2 pb-21 flex flex-col">
-                    Select Gender
+                    <span className="block text-sm font-medium leading-6 text-amaranth-600 "
+>Select Gender</span>
                     <label>
                       <input
                         type="radio"
@@ -609,7 +692,8 @@ const MatchRate = () => {
                 )}
                 {formData["Match_Attribute"] === "age" && (
                   <div className="mt-2 pb-21 flex flex-col">
-                    Select Age
+                   <span className="block text-sm font-medium leading-6 text-amaranth-600 "
+>Select Age</span>
                     <label>
                       <input
                         type="radio"
@@ -652,6 +736,7 @@ const MatchRate = () => {
                         value="age_41_above"
                         checked={age === "age_41_above"}
                         onChange={(e) => setAge(e.target.value)}
+                        
                       />
                       <span className="pl-2">41-above</span>
                     </label>
