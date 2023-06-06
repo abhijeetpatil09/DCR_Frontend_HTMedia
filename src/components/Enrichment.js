@@ -293,7 +293,7 @@ const Enrichment = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         responseType: "json", // Set the response type to JSON
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.CUSTOMER_ENRICHMENT_${RUN_ID};`,
         },
       })
       .then((response) => {
@@ -409,7 +409,7 @@ const Enrichment = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.CUSTOMER_ENRICHMENT_${runId} limit 1000;`,
         },
       })
       .then((response) => {

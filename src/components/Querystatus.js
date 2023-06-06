@@ -48,7 +48,7 @@ const QueryStatus = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         responseType: "json",
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.CUSTOMER_ENRICHMENT_${RUN_ID};`,
         },
       })
       .then((response) => {
@@ -167,7 +167,7 @@ const QueryStatus = () => {
                         <TableCell align="center">
                           {row.PROVIDER_NAME}
                         </TableCell>
-                        <TableCell  align="center">
+                        <TableCell align="center">
                           {row.COLOUMNS}
                         </TableCell>
                         <TableCell align="center">
@@ -178,57 +178,56 @@ const QueryStatus = () => {
                         </TableCell>
                         <TableCell align="center">
                           <span
-                            className={`${
-                              row.STATUS === "true"
-                                ? "bg-green-200 text-green-700"
-                                : "bg-amaranth-200 text-amaranth-700 "
-                            }   py-1 px-3 rounded-full text-xs`}
+                            className={`${row.STATUS === "true"
+                              ? "bg-green-200 text-green-700"
+                              : "bg-amaranth-200 text-amaranth-700 "
+                              }   py-1 px-3 rounded-full text-xs`}
                           >
                             {row.STATUS === "true"
                               ? "Approved"
                               : row.STATUS === "false"
-                              ? "Rejected"
-                              : "In Progress"}
+                                ? "Rejected"
+                                : "In Progress"}
                           </span>
                         </TableCell>
                         <TableCell align="center">
                           {handleDate(row.RUN_ID)}
                         </TableCell>
                         <TableCell key={"actions"} align="center">
-                          <button
-                            onClick={() =>
-                              downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
-                            }
-                            className={`${
-                              row.STATUS === "false"
+                          {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
+                            row.TEMPLATE_NAME === "customer_enrichment" ? (
+                            <button
+                              onClick={() =>
+                                downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
+                              }
+                              className={`${row.STATUS === "false"
                                 ? "disabled opacity-10 hover:text-inherit"
                                 : ""
-                            }  px-1 hover:text-amaranth-600`}
-                            disabled={row.STATUS === "false"}
-                            title="Download file"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              className="w-4 h-4"
+                                }  px-1 hover:text-amaranth-600`}
+                              disabled={row.STATUS === "false"}
+                              title="Download file"
                             >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </button>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                className="w-4 h-4"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>) : null}
                           {row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                          row.TEMPLATE_NAME === "advertiser_match" ? (
+                            row.TEMPLATE_NAME === "advertiser_match" ? (
                             <button
                               onClick={() => showAnalyticsPage(row.RUN_ID)}
-                              className={`${
-                                row.STATUS === "false"
-                                  ? "disabled opacity-10 hover:text-inherit"
-                                  : ""
-                              }  px-1 hover:text-amaranth-600`}
+                              className={`${row.STATUS === "false"
+                                ? "disabled opacity-10 hover:text-inherit"
+                                : ""
+                                }  px-1 hover:text-amaranth-600`}
                               disabled={row.STATUS === "false"}
                               title="Show Analytics"
                             >
@@ -251,6 +250,23 @@ const QueryStatus = () => {
                               </svg>
                             </button>
                           ) : null}
+                          {row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
+                            row.TEMPLATE_NAME === "advertiser_match" ? (
+                            <button
+                              // onClick={() => showAnalyticsPage(row.RUN_ID)}
+                              className={`${row.STATUS === "false"
+                                ? "disabled opacity-10 hover:text-inherit"
+                                : ""
+                                }  px-1 hover:text-amaranth-600`}
+                              disabled={row.STATUS === "false"}
+                              title="Upload match records into client ecospace"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z" clip-rule="evenodd" />
+                              </svg>
+
+                            </button>
+                          ) : null}
                         </TableCell>
                       </TableRow>
                     );
@@ -267,7 +283,7 @@ const QueryStatus = () => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        
+
       </div>
     </div>
   );
