@@ -411,7 +411,7 @@ const Enrichment = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.CUSTOMER_ENRICHMENT_${runId} limit 1000;`,
         },
       })
       .then((response) => {

@@ -358,7 +358,7 @@ const MatchRate = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.ADVERTISER_MATCH_${runId} limit 1000;`,
         },
       })
       .then((response) => {
