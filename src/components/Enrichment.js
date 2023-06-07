@@ -173,9 +173,7 @@ const Enrichment = () => {
             let temp = [];
             temp.push({ value: "all", name: "All" });
             col_name?.map((value) => {
-              let xyz = {};
-              xyz = { value: value, name: value };
-              return temp.push(xyz);
+              return temp.push({ value: value, name: value });
             });
             setColumns(temp);
           }
@@ -290,18 +288,19 @@ const Enrichment = () => {
     }, 2000);
   };
 
-  const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
+  const downloadFile = (templateName, runId) => {
+    templateName = templateName.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         responseType: "json", // Set the response type to JSON
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId};`,
         },
       })
       .then((response) => {
         if (response?.data) {
           const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
-          downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
+          downloadFileInCSV(csvData, templateName, runId);
         } else {
           console.log("File cannnot be downloaded...");
         }
@@ -408,6 +407,7 @@ const Enrichment = () => {
   };
 
   const fetchcsvTableData = async (templateName, runId) => {
+    templateName = templateName.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -431,7 +431,7 @@ const Enrichment = () => {
         <h3 className="  text-lg font-light text-white">Customer enrichment</h3>
         <button
           onClick={handleOpen}
-          className="flex items-center px-3 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
+          className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -441,7 +441,7 @@ const Enrichment = () => {
           >
             <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
           </svg>
-          New request
+          New Request
         </button>
       </div>
       <div className="flex flex-col w-full px-5">
@@ -629,9 +629,7 @@ const Enrichment = () => {
           >
             <div>
               <div className="  pb-2 flex flex-col">
-                <label 
-                  className="block text-sm font-medium leading-6 text-amaranth-600 "
-                >
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                   Provider name
                 </label>
                 <select
@@ -656,9 +654,7 @@ const Enrichment = () => {
               </div>
 
               <div className="mt-2 pb-2 flex flex-col">
-                <label 
-                className="block text-sm font-medium leading-6 text-amaranth-600 "
-                >
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                   Query name{" "}
                 </label>
                 <select

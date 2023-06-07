@@ -5,9 +5,7 @@ import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  handleDate,
-} from "../utils/commonFunctions";
+import { handleDate } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
@@ -356,6 +354,7 @@ const MatchRate = () => {
   };
 
   const fetchcsvTableData = async (templateName, runId) => {
+    templateName = templateName.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -415,7 +414,7 @@ const MatchRate = () => {
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {data.map((item, index) => (
-              <tr className="border-b border-gray-200 hover:bg-gray-100">
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 <td className="border   px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" ? (
@@ -430,17 +429,17 @@ const MatchRate = () => {
                 </td>
                 <td className="border  px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${item.STATUS === "true"
+                    className={`${
+                      item.STATUS === "true"
                         ? "bg-green-200 text-green-600"
                         : "bg-amaranth-200 text-amaranth-600 "
-                      }   py-1 px-3 rounded-full text-xs`}
-
+                    }   py-1 px-3 rounded-full text-xs`}
                   >
                     {item.STATUS === "true"
                       ? "Approved"
                       : item.STATUS === "false"
-                        ? "Rejected"
-                        : "In Progress"}
+                      ? "Rejected"
+                      : "In Progress"}
                   </span>
                 </td>
                 <td className="border   px-4 py-2">{item.RUN_ID}</td>
@@ -457,17 +456,33 @@ const MatchRate = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${item.STATUS === "false"
+                    className={`${
+                      item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                          ? "disabled opacity-10 hover:text-inherit"
-                          : " "
-                      }  px-1 hover:text-amaranth-600`}
+                        ? "disabled opacity-10 hover:text-inherit"
+                        : " "
+                    }  px-1 hover:text-amaranth-600`}
                     title="View file"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
                   </button>
                   {/* <button
@@ -497,18 +512,29 @@ const MatchRate = () => {
                     </svg>
                   </button> */}
                   <button
-                    className={`${item.STATUS === "false"
+                    className={`${
+                      item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                          ? "disabled opacity-10 hover:text-inherit"
-                          : " "
-                      }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                        ? "disabled opacity-10 hover:text-inherit"
+                        : " "
+                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
                     title="Upload match records into client ecospace"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                      />
                     </svg>
-
                   </button>
                 </td>
               </tr>
@@ -523,12 +549,11 @@ const MatchRate = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box 
+        <Box
           sx={style}
           className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg "
-
         >
-        <div className="flex flex-row justify-between items-start ">
+          <div className="flex flex-row justify-between items-start ">
             <div className="flex flex-row items-start justify-center text-amaranth-500 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -578,15 +603,14 @@ const MatchRate = () => {
           >
             <div>
               <div className=" mt-2 pb-2 flex flex-col">
-                <label 
-                  className="block text-sm font-medium leading-6 text-amaranth-600 "
-                >Query Name</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Query Name
+                </label>
                 <select
                   name="Query_Name"
                   onChange={handleCustomerFormData}
                   required
                   className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-
                 >
                   <option value="">Please select</option>
                   <option value="advertiser_match">Advertiser Match</option>
@@ -594,9 +618,9 @@ const MatchRate = () => {
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label
-                  className="block text-sm font-medium leading-6 text-amaranth-600 "
-                >Upload File</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Upload File
+                </label>
                 <input
                   // className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
                   className=""
@@ -633,15 +657,14 @@ const MatchRate = () => {
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label
-                    className="block text-sm font-medium leading-6 text-amaranth-600 "
-                >Identifier Type</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Identifier Type
+                </label>
                 <select
                   name="Column_Names"
                   onChange={handleCustomerFormData}
                   required
                   className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-
                 >
                   <option value="">Please select</option>
                   <option value="email">Email</option>
@@ -651,15 +674,14 @@ const MatchRate = () => {
               </div>
 
               <div className="mt-2 pb-21 flex flex-col">
-                <label
-                    className="block text-sm font-medium leading-6 text-amaranth-600 "
-                >Match Attribute</label>
+                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                  Match Attribute
+                </label>
                 <select
                   name="Match_Attribute"
                   onChange={handleCustomerFormData}
                   required
                   className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-
                 >
                   <option value="">Please select</option>
                   <option value="overall">Overall</option>
@@ -668,8 +690,9 @@ const MatchRate = () => {
                 </select>
                 {formData["Match_Attribute"] === "gender" && (
                   <div className="mt-2 pb-21 flex flex-col">
-                    <span className="block text-sm font-medium leading-6 text-amaranth-600 "
->Select Gender</span>
+                    <span className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                      Select Gender
+                    </span>
                     <label>
                       <input
                         type="radio"
@@ -692,8 +715,9 @@ const MatchRate = () => {
                 )}
                 {formData["Match_Attribute"] === "age" && (
                   <div className="mt-2 pb-21 flex flex-col">
-                   <span className="block text-sm font-medium leading-6 text-amaranth-600 "
->Select Age</span>
+                    <span className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                      Select Age
+                    </span>
                     <label>
                       <input
                         type="radio"
@@ -736,7 +760,6 @@ const MatchRate = () => {
                         value="age_41_above"
                         checked={age === "age_41_above"}
                         onChange={(e) => setAge(e.target.value)}
-                        
                       />
                       <span className="pl-2">41-above</span>
                     </label>
