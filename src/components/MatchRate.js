@@ -43,6 +43,7 @@ const MatchRate = () => {
 
   const [formData, setFormData] = useState({
     ...initialState,
+    Query_Name: "advertiser_match",
     Provider_Name: user?.name,
     Consumer_Name: "Hoonartek",
   });
@@ -54,9 +55,11 @@ const MatchRate = () => {
   const [tableRows, setTableRows] = useState([]);
 
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
+  // const [byPassUploadCalled, setByPassUploadCalled] = useState(false);
 
   const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
+
   // Modal style
   const resultstyle = {
     position: "absolute",
@@ -165,8 +168,8 @@ const MatchRate = () => {
   const handleFileInput = (event) => {
     event.preventDefault();
     var fileInput = document.getElementById("myFileInput");
-    var file = fileInput.files[0];
-    setFormData({ ...formData, File_Name: file.name });
+    var file = fileInput?.files[0];
+    setFormData({ ...formData, File_Name: file?.name });
   };
 
   // const isValidInput = (inputString) => {
@@ -372,6 +375,63 @@ const MatchRate = () => {
       });
   };
 
+  const callByPassUpload = () => {
+    // setByPassUploadCalled(false);
+    setTimeout(() => {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc.matched_data();`,
+          },
+        })
+        .then((response) => {
+          // if (response) {
+          //   setByPassUploadCalled(false);
+          // } else {
+          //   setByPassUploadCalled(false);
+          // }
+        })
+        .catch((error) => {
+          console.log(error);
+          // setByPassUploadCalled(false);
+        });
+      // setTimeout(() => {
+      //   handleClose();
+      // }, 2000);
+    }, 2000);
+  };
+
+  const handleUploadData = async (runId) => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let data = response?.data?.data?.[0];
+          axios
+            .get(`http://127.0.0.1:5000/${user?.name}`, {
+              params: {
+                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
+              },
+            })
+            .then((response) => {
+              if (response) {
+                callByPassUpload();
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex flex-col  w-full h-full  ">
       <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -404,17 +464,19 @@ const MatchRate = () => {
               <th className="px-4 py-2 border-r"></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
-              <th className="px-4 py-2 border-r">Column Names</th>
-              <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Identifier Type</th>
               <th className="px-4 py-2 border-r">Match Attribute</th>
+              <th className="px-4 py-2 border-r">Match count</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {data.map((item, index) => (
-              <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+              <tr
+                key={index}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
                 <td className="border   px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" ? (
@@ -443,10 +505,9 @@ const MatchRate = () => {
                   </span>
                 </td>
                 <td className="border   px-4 py-2">{item.RUN_ID}</td>
-                <td className="border px-4 py-2">{item.COLOUMNS}</td>
-                <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
                 <td className="border px-4 py-2">{item.ATTRIBUTE}</td>
+                <td className="border px-4 py-2">{item.MATCH_COUNT}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
                   {handleDate(item.RUN_ID)}
@@ -512,6 +573,7 @@ const MatchRate = () => {
                     </svg>
                   </button> */}
                   <button
+                    onClick={() => handleUploadData(item.RUN_ID)}
                     className={`${
                       item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
@@ -602,21 +664,6 @@ const MatchRate = () => {
             onSubmit={handleSubmit}
           >
             <div>
-              <div className=" mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Query Name
-                </label>
-                <select
-                  name="Query_Name"
-                  onChange={handleCustomerFormData}
-                  required
-                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-                >
-                  <option value="">Please select</option>
-                  <option value="advertiser_match">Advertiser Match</option>
-                </select>
-              </div>
-
               <div className="mt-2 pb-21 flex flex-col">
                 <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                   Upload File
@@ -632,26 +679,34 @@ const MatchRate = () => {
 
                 {/* Drag and Drop */}
                 {/* <div class="max-w-xl">
-                  <label
-                    class="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                  <label class="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
                     <span class="flex items-center space-x-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-6 h-6 text-gray-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
                       </svg>
                       <span class="font-medium text-gray-600">
                         Drop files to Attach, or &nbsp;
                         <span class="text-blue-600 underline">browse</span>
                       </span>
                     </span>
-                    <input 
-                        type="file"
-                        id="myFileInput"
-                        onChange={handleFileInput}
-                        required
-                        class="hidden"
-                      />
+                    <input
+                      type="file"
+                      id="myFileInput"
+                      onChange={handleFileInput}
+                      required
+                      class="hidden"
+                    />
                   </label>
                 </div> */}
               </div>

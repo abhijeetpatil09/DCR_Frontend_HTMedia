@@ -7,7 +7,6 @@ const SelectDropdown = ({
   name,
   value,
   setValue,
-  width,
   mode,
   placeholder,
   defaultValue,
@@ -32,8 +31,10 @@ const SelectDropdown = ({
   };
 
   return (
-    <div className="flex flex-col w-full" id="dateFilter">
-      <label className="bg-transparent block w-full text-amaranth-600  bg-blend-darken sm:text-sm sm:leading-6">{title}</label>
+    <div className="flex flex-col w-full">
+      <label className="bg-transparent block w-full text-amaranth-600  bg-blend-darken sm:text-sm sm:leading-6">
+        {title}
+      </label>
       <Select
         defaultValue={defaultValue}
         value={value}

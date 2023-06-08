@@ -36,12 +36,40 @@ const s3 = new AWS.S3({
   // region: 'ap-south-1',
 });
 
+// Modal style
+const resultstyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "95%",
+  maxHeight: "90%",
+  bgcolor: "background.paper",
+  // p: 4,
+  // pt:8\,
+  overflow: "scroll",
+};
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  p: 2,
+  borderRadius: 5,
+};
+
 const Enrichment = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const user = state && state.user;
   const TableData = state && state.ConsumerForm && state.ConsumerForm.TableData;
+  const SampleFileData =
+    state && state.ConsumerForm && state.ConsumerForm.SampleFileData;
+
   const requestId = state && state.ConsumerForm && state.ConsumerForm.RequestId;
   const fetchData = state && state.ConsumerForm && state.ConsumerForm.fetchData;
 
@@ -52,29 +80,6 @@ const Enrichment = () => {
   const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Modal style
-  const resultstyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "95%",
-    maxHeight: "90%",
-    bgcolor: "background.paper",
-    // p: 4,
-    // pt:8\,
-    overflow: "scroll",
-  };
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 500,
-    bgcolor: "background.paper",
-    p: 2,
-    borderRadius: 5,
-  };
   // Create query Modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -87,6 +92,12 @@ const Enrichment = () => {
   const [isResultModalOpen, toggleResultModal] = React.useState(false);
   const handleResultModalOpen = () => toggleResultModal(true);
   const handleResultModalClose = () => toggleResultModal(false);
+
+  // Sample Data Modal
+  const [sampleData, setOpenSampleData] = useState(false);
+  const handleSampleDataClose = () => {
+    setOpenSampleData(!sampleData);
+  };
 
   const [providerList, setProviderList] = useState([]);
   const [templateList, setTemplateList] = useState("");
@@ -169,13 +180,16 @@ const Enrichment = () => {
             col_name = col_name?.map((item) => {
               return item?.split(".")[1];
             });
-
+            let finalArr = [{ value: "all", name: "All" }];
             let temp = [];
-            temp.push({ value: "all", name: "All" });
             col_name?.map((value) => {
               return temp.push({ value: value, name: value });
             });
-            setColumns(temp);
+            temp = temp?.sort((a, b) => {
+              return a?.name?.localeCompare(b?.name);
+            });
+            finalArr.push(...temp);
+            setColumns(finalArr);
           }
         })
         .catch((error) => console.log(error));
@@ -212,6 +226,35 @@ const Enrichment = () => {
           setDatabaseName(db_name[0]?.DATABASE);
         } else {
           setDatabaseName("");
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleViewSample = () => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let head = [];
+          let row = [];
+          let data = response?.data?.data;
+          if (data?.length > 0) {
+            head = data && Object.keys(data[0]);
+            data?.map((obj) => {
+              return row.push(head?.map((key) => obj[key]));
+            });
+          }
+          setOpenSampleData(true);
+          dispatch(
+            actions.ConsumerQueryForm({
+              SampleFileData: { head: head, rows: row },
+            })
+          );
         }
       })
       .catch((error) => console.log(error));
@@ -429,20 +472,42 @@ const Enrichment = () => {
     <div className="flex flex-col w-full h-full ">
       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Customer enrichment</h3>
-        <button
-          onClick={handleOpen}
-          className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-4 h-4"
+        <div className="flex">
+          <button
+            onClick={handleOpen}
+            className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
           >
-            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-          </svg>
-          New Request
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4"
+            >
+              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+            </svg>
+            New Request
+          </button>
+          <button
+            onClick={handleViewSample}
+            className="flex items-center ml-4 px-2 py-2 text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5"
+              />
+            </svg>
+            View Sample Data
+          </button>
+        </div>
       </div>
       <div className="flex flex-col w-full px-5">
         <h1 className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
@@ -456,8 +521,8 @@ const Enrichment = () => {
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
               <th className="px-4 py-2 border-r">Column names</th>
-              <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Identifier Type</th>
+              <th className="px-4 py-2 border-r">Match count</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
             </tr>
@@ -494,8 +559,8 @@ const Enrichment = () => {
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
                 <td className="border px-4 py-2">{item.COLOUMNS}</td>
-                <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
+                <td className="border px-4 py-2">{item.MATCH_COUNT}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
                   {handleDate(item.RUN_ID)}
@@ -794,6 +859,39 @@ const Enrichment = () => {
               <strong>{requestId}</strong>
             </span>
           )}
+        </Box>
+      </Modal>
+      <Modal
+        open={sampleData}
+        onClose={handleSampleDataClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={resultstyle}>
+          <div className=" flex flex-col flex-grow w-full">
+            <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
+              <h3 className="font-bold text-white">Sample Data</h3>
+              <button onClick={handleSampleDataClose}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-4">
+              {SampleFileData?.head?.length > 0 &&
+              SampleFileData?.rows?.length > 0 ? (
+                <Table
+                  head={SampleFileData?.head}
+                  rows={SampleFileData?.rows}
+                />
+              ) : null}
+            </div>
+          </div>
         </Box>
       </Modal>
     </div>

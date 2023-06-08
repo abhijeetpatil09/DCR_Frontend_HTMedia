@@ -166,3 +166,7 @@ th, td {
   border: 1px solid #E91F64 !important;
   background-color: transparent !important;
 }
+
+.ant-select-selection-search-input {
+  min-width: 0px !important;
+}

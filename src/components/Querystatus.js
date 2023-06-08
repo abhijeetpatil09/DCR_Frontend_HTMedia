@@ -177,16 +177,16 @@ const QueryStatus = () => {
                   Template Name
                 </TableCell>
                 <TableCell key={2} align="center">
-                  Provider Name
-                </TableCell>
-                <TableCell key={3} align="center">
                   Column Names
                 </TableCell>
-                <TableCell key={4} align="center">
+                <TableCell key={3} align="center">
                   Identifier Type
                 </TableCell>
-                <TableCell key={5} align="center">
+                <TableCell key={4} align="center">
                   Match Attribute
+                </TableCell>
+                <TableCell key={5} align="center">
+                  Match Count
                 </TableCell>
                 <TableCell key={6} align="center">
                   Status
@@ -219,14 +219,12 @@ const QueryStatus = () => {
                         <TableCell align="center">
                           {row.TEMPLATE_NAME}
                         </TableCell>
-                        <TableCell align="center">
-                          {row.PROVIDER_NAME}
-                        </TableCell>
                         <TableCell align="center">{row.COLOUMNS}</TableCell>
                         <TableCell align="center">
                           {row.IDENTIFIER_TYPE}
                         </TableCell>
                         <TableCell align="center">{row.ATTRIBUTE}</TableCell>
+                        <TableCell align="center">{row.MATCH_COUNT}</TableCell>
                         <TableCell align="center">
                           <span
                             className={`${
