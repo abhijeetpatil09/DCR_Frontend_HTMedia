@@ -381,7 +381,7 @@ const MatchRate = () => {
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
-            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc.matched_data();`,
+            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
           },
         })
         .then((response) => {
@@ -587,13 +587,13 @@ const MatchRate = () => {
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                       stroke="currentColor"
                       className="w-5 h-5"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
                       />
                     </svg>
@@ -678,26 +678,26 @@ const MatchRate = () => {
                 />
 
                 {/* Drag and Drop */}
-                {/* <div class="max-w-xl">
-                  <label class="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-                    <span class="flex items-center space-x-2">
+                {/* <div className="max-w-xl">
+                  <label className="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                    <span className="flex items-center space-x-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-6 h-6 text-gray-600"
+                        className="w-6 h-6 text-gray-600"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
-                        stroke-width="2"
+                        strokeWidth="2"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                         />
                       </svg>
-                      <span class="font-medium text-gray-600">
+                      <span className="font-medium text-gray-600">
                         Drop files to Attach, or &nbsp;
-                        <span class="text-blue-600 underline">browse</span>
+                        <span className="text-blue-600 underline">browse</span>
                       </span>
                     </span>
                     <input
@@ -705,7 +705,7 @@ const MatchRate = () => {
                       id="myFileInput"
                       onChange={handleFileInput}
                       required
-                      class="hidden"
+                      className="hidden"
                     />
                   </label>
                 </div> */}
