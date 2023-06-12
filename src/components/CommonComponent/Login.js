@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import HTWLogo from '../../Assets/hoonartek-logo.png';
+import HTWLogo from "../../Assets/hoonartek-logo.png";
 
 import * as actions from "../../redux/actions/index";
 
@@ -53,7 +53,7 @@ const Login = () => {
       } else {
         setErrors({ ...errors, password: null });
       }
-    } 
+    }
     setLoginDetails({ ...loginDetails, [inputName]: inputValue });
   };
 
@@ -67,7 +67,6 @@ const Login = () => {
       setErrors({ ...errors, password: "Please enter password" });
       return;
     }
-    
 
     if (loginDetails?.userName !== "") {
       setLoading(true);
@@ -77,7 +76,6 @@ const Login = () => {
             query: `select * from DCR_PROVIDER2.CLEANROOM.CONSUMER_ATTRIBUTES_VW WHERE USER = '${loginDetails?.userName}';`,
           },
         })
-
         .then((response) => {
           if (response?.data?.data) {
             let data = response?.data?.data; // Find user login info
@@ -105,12 +103,27 @@ const Login = () => {
                 }
                 setIsSubmitted(true);
 
-                dispatch(
-                  actions.loginRequest({
-                    name: loginDetails?.userName,
-                    role: userRole,
+                axios
+                  .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
+                    params: {
+                      query: `select user from DCR_PROVIDER2.CLEANROOM.CONSUMER_ATTRIBUTES_VW where consumer_admin = 'TRUE';`,
+                    },
                   })
-                );
+                  .then((response) => {
+                    if (response?.data?.data) {
+                      let data = response?.data?.data?.[0];
+                      dispatch(
+                        actions.loginRequest({
+                          name: loginDetails?.userName,
+                          role: userRole,
+                          Consumer: data?.USER,
+                        })
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
                 navigate("/home");
               }
             } else {
@@ -176,7 +189,7 @@ const Login = () => {
             <span className="text-[#f44336] text-sm">{errors.password}</span>
           ) : null}
         </div>
-      </div >
+      </div>
 
       <div className=" w-full">
         <button
@@ -196,15 +209,16 @@ const Login = () => {
   );
 
   return (
-    <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen " >
+    <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen ">
       <div className="flex flex-row mx-auto max-w-[70%] max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
         <div className="w-1/2 px-6 py-4">
           <div className=" flex flex-row items-start justify-start py-4 ">
-            <a href="#_"
+            <a
+              href="#_"
               className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
             >
               <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                <img src={HTWLogo} className='w-12 mr-2' alt="" />
+                <img src={HTWLogo} className="w-12 mr-2" alt="" />
                 DataHaven<span className="text-amaranth-600">.</span>
               </span>
             </a>
@@ -213,18 +227,27 @@ const Login = () => {
             <h2 className="mt-10 mb-2 text-center text-6xl font-extrabold  tracking-tight    leading-9 text-amaranth-600 ">
               Hi there!
             </h2>
-            <span className="text-center font-normal text-stone-800 text-sm">Welcome to DataHaven. Your trusted partner.</span>
+            <span className="text-center font-normal text-stone-800 text-sm">
+              Welcome to DataHaven. Your trusted partner.
+            </span>
           </div>
-        
-        <div className="flex items-start justify-center my-auto"> 
-            {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
-        </div>
+
+          <div className="flex items-start justify-center my-auto">
+            {isSubmitted ? (
+              <div>User is successfully logged in</div>
+            ) : (
+              renderForm
+            )}
+          </div>
         </div>
         <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">
-            {/* <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2> */}
-            <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">Secure data collaboration with DataHaven<span className="font-bold text-4xl text-amaranth-500">.</span></h1>
-            {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
-           {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
+          {/* <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2> */}
+          <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">
+            Secure data collaboration with DataHaven
+            <span className="font-bold text-4xl text-amaranth-500">.</span>
+          </h1>
+          {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
+          {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
         </div>
       </div>
     </div>

@@ -47,9 +47,10 @@ const ConsumerAdmin = () => {
       .catch((error) => console.log(error));
   }, [user, UserRole]);
 
+  console.log("data", data)
   return (
     <div className="flex flex-col w-full px-5">
-      <span class=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
+      <span className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
         <strong>Consumer List</strong>
       </span>
       <TableContainer>

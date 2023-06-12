@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import AWS from "aws-sdk";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { CircularProgress } from "@mui/material";
-import SelectDropdown from "./CommonComponent/SelectDropdown";
+import { Box, CircularProgress, Modal } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import SelectDropdown from "./CommonComponent/SelectDropdown";
 import * as actions from "../redux/actions/index";
 import enrichment  from '../Assets/Personal data _Monochromatic.svg';
 
@@ -14,20 +13,13 @@ import {
   jsonToCsv,
   handleDate,
   downloadFileInCSV,
+  isObjectEmpty,
 } from "../utils/commonFunctions";
 
 import Table from "./CommonComponent/Table";
+
 import "./styles.css";
 import "./pure-react.css";
-import { Box, Modal } from "@mui/material";
-
-const initialState = {
-  Query_Name: "",
-  Provider_Name: "",
-  Column_Names: [],
-  Consumer_Name: "",
-  Attribute_Value: "",
-};
 
 const s3 = new AWS.S3({
   accessKeyId: "AKIA57AGVWXYVR36XIEC",
@@ -37,45 +29,60 @@ const s3 = new AWS.S3({
   // region: 'ap-south-1',
 });
 
+// Modal style
+const resultstyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "95%",
+  maxHeight: "90%",
+  bgcolor: "background.paper",
+  overflow: "scroll",
+};
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  p: 2,
+  borderRadius: 5,
+};
+
 const Enrichment = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const user = state && state.user;
   const TableData = state && state.ConsumerForm && state.ConsumerForm.TableData;
+  const SampleFileData =
+    state && state.ConsumerForm && state.ConsumerForm.SampleFileData;
+
   const requestId = state && state.ConsumerForm && state.ConsumerForm.RequestId;
   const fetchData = state && state.ConsumerForm && state.ConsumerForm.fetchData;
 
-  const [formData, setFormData] = useState(initialState);
+  const [formData, setFormData] = useState({
+    Query_Name: "customer_enrichment",
+    Provider_Name: "",
+    Column_Names: [],
+    Consumer_Name: user?.Consumer,
+    Attribute_Value: "",
+  });
+
+  const [databaseName, setDatabaseName] = useState("");
+  const [columns, setColumns] = useState([]);
+  const [byPassAPICalled, setByPassAPICalled] = useState(false);
+  const [data, setData] = useState([]);
+
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
 
   const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Modal style
-  const resultstyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "95%",
-    maxHeight: "90%",
-    bgcolor: "background.paper",
-    // p: 4,
-    // pt:8\,
-    overflow: "scroll",
-  };
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 500,
-    bgcolor: "background.paper",
-    p: 2,
-    borderRadius: 5,
-  };
   // Create query Modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -89,12 +96,11 @@ const Enrichment = () => {
   const handleResultModalOpen = () => toggleResultModal(true);
   const handleResultModalClose = () => toggleResultModal(false);
 
-  const [providerList, setProviderList] = useState([]);
-  const [templateList, setTemplateList] = useState("");
-  const [databaseName, setDatabaseName] = useState("");
-  const [columns, setColumns] = useState([]);
-  const [byPassAPICalled, setByPassAPICalled] = useState(false);
-  const [data, setData] = useState([]);
+  // Sample Data Modal
+  const [sampleData, setOpenSampleData] = useState(false);
+  const handleSampleDataClose = () => {
+    setOpenSampleData(!sampleData);
+  };
 
   useEffect(() => {
     if (TableData) {
@@ -102,6 +108,8 @@ const Enrichment = () => {
       setTableRows(TableData?.rows || []);
     }
   }, [TableData]);
+
+  // UseEffect used for Calling API for the table if request...
 
   useEffect(() => {
     axios
@@ -122,6 +130,8 @@ const Enrichment = () => {
       .catch((error) => console.log(error));
   }, [user?.name, callTable]);
 
+  // UseEffect used for Inserting the Provider...
+
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
@@ -130,31 +140,17 @@ const Enrichment = () => {
         },
       })
       .then((response) => {
-        if (response?.data) {
-          setProviderList(response?.data?.data);
-        } else {
-          setProviderList([]);
+        if (response?.data?.data) {
+          let provider_name = response?.data?.data?.[0];
+          setFormData({ ...formData, Provider_Name: provider_name.PROVIDER });
+          getDatabaseName(provider_name.PROVIDER);
         }
       })
       .catch((error) => console.log(error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.name]);
 
-  useEffect(() => {
-    if (databaseName !== "") {
-      axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
-          params: {
-            query: `select template_name from ${databaseName}.CLEANROOM.TEMPLATES where template_name <> 'advertiser_match';`,
-          },
-        })
-        .then((response) => {
-          if (response?.data) {
-            setTemplateList(response.data.data);
-          }
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [databaseName, user?.name]);
+  // UseEffect to call API for get the Colums list
 
   useEffect(() => {
     if (databaseName !== "" && formData["Query_Name"] !== "") {
@@ -170,13 +166,16 @@ const Enrichment = () => {
             col_name = col_name?.map((item) => {
               return item?.split(".")[1];
             });
-
+            let finalArr = [{ value: "all", name: "All" }];
             let temp = [];
-            temp.push({ value: "all", name: "All" });
             col_name?.map((value) => {
               return temp.push({ value: value, name: value });
             });
-            setColumns(temp);
+            temp = temp?.sort((a, b) => {
+              return a?.name?.localeCompare(b?.name);
+            });
+            finalArr.push(...temp);
+            setColumns(finalArr);
           }
         })
         .catch((error) => console.log(error));
@@ -184,21 +183,7 @@ const Enrichment = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [databaseName, formData["Query_Name"]]);
 
-  const handleSelectProvider = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-    setTemplateList([]);
-    getDatabaseName(event.target.value);
-  };
-
-  const handleSelectedTemp = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  };
+  /// Get database name for other API's..
 
   const getDatabaseName = (selectedProvider) => {
     axios
@@ -218,12 +203,56 @@ const Enrichment = () => {
       .catch((error) => console.log(error));
   };
 
-  const handleCustomerFormData = (e) => {
+  /// View the sample data...
+
+  const handleViewSample = () => {
+    console.log("isObjectEmpty(SampleFileData)", typeof SampleFileData);
+    if (
+      SampleFileData &&
+      SampleFileData !== "undefined" &&
+      !isObjectEmpty(SampleFileData)
+    ) {
+      setOpenSampleData(true);
+    } else {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
+          },
+        })
+        .then((response) => {
+          if (response?.data?.data) {
+            let head = [];
+            let row = [];
+            let data = response?.data?.data;
+            if (data?.length > 0) {
+              head = data && Object.keys(data[0]);
+              data?.map((obj) => {
+                return row.push(head?.map((key) => obj[key]));
+              });
+            }
+            setOpenSampleData(true);
+            dispatch(
+              actions.ConsumerQueryForm({
+                SampleFileData: { head: head, rows: row },
+              })
+            );
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
+  /// Handle the dropdown data...
+
+  const handleEnrichmentFormData = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+
+  /// Handle Multiselct select box...
 
   const handleChange = (event, name) => {
     const element = "all";
@@ -247,6 +276,8 @@ const Enrichment = () => {
       });
     }
   };
+
+  /// Calling Store procedure...
 
   const callByPassAPI = () => {
     setByPassAPICalled(true);
@@ -289,6 +320,8 @@ const Enrichment = () => {
     }, 2000);
   };
 
+  // For download the file from Table...
+
   const downloadFile = (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
     axios
@@ -310,6 +343,8 @@ const Enrichment = () => {
         console.error("Error:", error);
       });
   };
+
+  // For Submit the Request...
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -342,6 +377,7 @@ const Enrichment = () => {
     // document.body.appendChild(link);
     // link.click();
 
+    console.log("formData", formData);
     const params = {
       // Bucket: 'dcr-poc/query_request',
       Bucket: "dcr-poc",
@@ -390,6 +426,8 @@ const Enrichment = () => {
       });
   };
 
+  // FetchTable function logic and inserting data to the Redux store for table...
+
   const fetchTable = (data, runId) => {
     let head = [];
     let row = [];
@@ -406,6 +444,8 @@ const Enrichment = () => {
       })
     );
   };
+
+  // fetchcsvTableData function fetching the table data...
 
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
@@ -429,21 +469,43 @@ const Enrichment = () => {
   return (
     <div className="flex flex-col w-full h-full ">
       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
-        <h3 className="  text-lg font-light text-white">Customer enrichment</h3>
-        <button
-          onClick={handleOpen}
-          className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-4 h-4"
+        <h3 className="  text-lg font-light text-white">Customer Enrichment</h3>
+        <div className="flex">
+          <button
+            onClick={handleOpen}
+            className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
           >
-            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-          </svg>
-          New request
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4"
+            >
+              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+            </svg>
+            <span className="ml-2">New Request</span>
+          </button>
+          <button
+            onClick={handleViewSample}
+            className="flex items-center ml-4 px-2 py-2 text-sm text-white bg-amaranth-600 rounded-md hover:bg-amaranth-700  "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5"
+              />
+            </svg>
+            <span className="ml-2">View Sample Data</span>
+          </button>
+        </div>
       </div>
       <div className="relative flex flex-col px-6 py-8   bg-amaranth-50">
           <div className="flex w-2/3 text-gray-500 ">
@@ -474,9 +536,8 @@ const Enrichment = () => {
       <div className="flex flex-col w-full px-5">
        
         <h1 className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
-          Recent requests
+          Recent Requests
         </h1>
-
         <table className="table-auto w-full text-left text-sm">
           <thead>
             <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
@@ -484,15 +545,18 @@ const Enrichment = () => {
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
               <th className="px-4 py-2 border-r">Column names</th>
-              <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Identifier Type</th>
+              <th className="px-4 py-2 border-r">Match count</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {data.map((item, index) => (
-              <tr className="border-b border-gray-200 hover:bg-gray-100">
+              <tr
+                key={index}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
                 <td className="border  px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" ? (
@@ -522,8 +586,8 @@ const Enrichment = () => {
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
                 <td className="border px-4 py-2">{item.COLOUMNS}</td>
-                <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
+                <td className="border px-4 py-2">{item.MATCH_COUNT}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
                   {handleDate(item.RUN_ID)}
@@ -533,12 +597,11 @@ const Enrichment = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
+                    disabled={item.STATUS !== "true"}
                     className={`${
-                      item.STATUS === "false"
+                      item.STATUS !== "true"
                         ? "disabled opacity-10 hover:text-inherit"
-                        : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
+                        : "opacity-1 hover:text-inherit"
                     }  px-2 hover:text-amaranth-600`}
                     title="View File"
                   >
@@ -566,26 +629,25 @@ const Enrichment = () => {
                     onClick={() =>
                       downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                     }
+                    disabled={item.STATUS !== "true"}
                     className={`${
-                      item.STATUS === "false"
+                      item.STATUS !== "true"
                         ? "disabled opacity-10 hover:text-inherit"
-                        : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-2 hover:text-amaranth-600 cursor-pointer`}
+                        : "opacity-1 hover:text-inherit"
+                    }  px-2 hover:text-amaranth-600`}
                     title="Download file"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                       stroke="currentColor"
                       className="w-5 h-5"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
@@ -656,56 +718,6 @@ const Enrichment = () => {
             onSubmit={handleSubmit}
           >
             <div>
-              <div className="  pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Provider name
-                </label>
-                <select
-                  id="provider"
-                  name="Provider_Name"
-                  required
-                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-                  value={formData["Provider_Name"]}
-                  onChange={handleSelectProvider}
-                >
-                  <option value="">Select a provider</option>
-                  {providerList?.length > 0 ? (
-                    providerList.map((item, index) => (
-                      <option key={index} value={item.PROVIDER}>
-                        <span className="capitalize"> {item.PROVIDER}</span>
-                      </option>
-                    ))
-                  ) : (
-                    <option value="">Loading...</option>
-                  )}
-                </select>
-              </div>
-
-              <div className="mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Query name{" "}
-                </label>
-                <select
-                  id="selectedTemp"
-                  required
-                  name="Query_Name"
-                  value={formData["Query_Name"]}
-                  className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-                  onChange={handleSelectedTemp}
-                >
-                  <option value="">Select a template</option>
-                  {templateList?.length > 0 ? (
-                    templateList.map((item, index) => (
-                      <option key={index} value={item.TEMPLATE_NAME}>
-                        {item.TEMPLATE_NAME}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="">Loading...</option>
-                  )}
-                </select>
-              </div>
-
               <div className="mt-2 pb-2 flex flex-col">
                 <SelectDropdown
                   title="Columns"
@@ -726,7 +738,7 @@ const Enrichment = () => {
                 </label>
                 <select
                   name="Attribute_Value"
-                  onChange={handleCustomerFormData}
+                  onChange={handleEnrichmentFormData}
                   required
                   className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                 >
@@ -737,32 +749,7 @@ const Enrichment = () => {
                 </select>
               </div>
 
-              <div className="mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Consumer name
-                </label>
-                <select
-                  name="Consumer_Name"
-                  onChange={handleCustomerFormData}
-                  required
-                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-                >
-                  <option value="">--Select--</option>
-                  {user["name"] === "Hoonartekcons1" && (
-                    <option value="Hoonartek">Hoonartek</option>
-                  )}
-                  {user["name"] === "Hoonartek" && (
-                    <option value="Hoonartek">Hoonartek</option>
-                  )}
-                  {user["name"] === "Hoonartekcons2" && (
-                    <option value="Hoonartek">Hoonartek</option>
-                  )}
-                  {user["name"] === "admin" && (
-                    <option value="hoonartek">Hoonartek</option>
-                  )}
-                </select>
-              </div>
-              <div className="flex justify-end">
+              <div className="mt-2 flex justify-end">
                 <button
                   className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
                   type="submit"
@@ -822,6 +809,39 @@ const Enrichment = () => {
               <strong>{requestId}</strong>
             </span>
           )}
+        </Box>
+      </Modal>
+      <Modal
+        open={sampleData}
+        onClose={handleSampleDataClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={resultstyle}>
+          <div className=" flex flex-col flex-grow w-full">
+            <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
+              <h3 className="font-bold text-white">Sample Data</h3>
+              <button onClick={handleSampleDataClose}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-4">
+              {SampleFileData?.head?.length > 0 &&
+              SampleFileData?.rows?.length > 0 ? (
+                <Table
+                  head={SampleFileData?.head}
+                  rows={SampleFileData?.rows}
+                />
+              ) : null}
+            </div>
+          </div>
         </Box>
       </Modal>
     </div>

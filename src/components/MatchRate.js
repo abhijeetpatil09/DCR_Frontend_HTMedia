@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { handleDate } from "../utils/commonFunctions";
+import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
@@ -40,9 +40,12 @@ const MatchRate = () => {
     state && state.PublisherForm && state.PublisherForm.RequestId;
   const fetchData =
     state && state.PublisherForm && state.PublisherForm.fetchData;
+  const SampleFileData =
+    state && state.ConsumerForm && state.ConsumerForm.SampleFileData;
 
   const [formData, setFormData] = useState({
     ...initialState,
+    Query_Name: "advertiser_match",
     Provider_Name: user?.name,
     Consumer_Name: "Hoonartek",
   });
@@ -54,9 +57,11 @@ const MatchRate = () => {
   const [tableRows, setTableRows] = useState([]);
 
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
+  // const [byPassUploadCalled, setByPassUploadCalled] = useState(false);
 
   const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
+
   // Modal style
   const resultstyle = {
     position: "absolute",
@@ -91,6 +96,12 @@ const MatchRate = () => {
   const [isResultModalOpen, toggleResultModal] = React.useState(false);
   const handleResultModalOpen = () => toggleResultModal(true);
   const handleResultModalClose = () => toggleResultModal(false);
+
+  // Sample Data Modal
+  const [sampleData, setOpenSampleData] = useState(false);
+  const handleSampleDataClose = () => {
+    setOpenSampleData(!sampleData);
+  };
 
   // useEffect for set match attribute values..
   useEffect(() => {
@@ -165,8 +176,8 @@ const MatchRate = () => {
   const handleFileInput = (event) => {
     event.preventDefault();
     var fileInput = document.getElementById("myFileInput");
-    var file = fileInput.files[0];
-    setFormData({ ...formData, File_Name: file.name });
+    var file = fileInput?.files[0];
+    setFormData({ ...formData, File_Name: file?.name });
   };
 
   // const isValidInput = (inputString) => {
@@ -372,25 +383,143 @@ const MatchRate = () => {
       });
   };
 
+  const callByPassUpload = () => {
+    // setByPassUploadCalled(false);
+    setTimeout(() => {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
+          },
+        })
+        .then((response) => {
+          // if (response) {
+          //   setByPassUploadCalled(false);
+          // } else {
+          //   setByPassUploadCalled(false);
+          // }
+        })
+        .catch((error) => {
+          console.log(error);
+          // setByPassUploadCalled(false);
+        });
+      // setTimeout(() => {
+      //   handleClose();
+      // }, 2000);
+    }, 2000);
+  };
+
+  const handleUploadData = async (runId) => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let data = response?.data?.data?.[0];
+          axios
+            .get(`http://127.0.0.1:5000/${user?.name}`, {
+              params: {
+                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
+              },
+            })
+            .then((response) => {
+              if (response) {
+                callByPassUpload();
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  /// View the sample data...
+
+  const handleViewSample = () => {
+    console.log("isObjectEmpty(SampleFileData)", typeof SampleFileData);
+    if (
+      SampleFileData &&
+      SampleFileData !== "undefined" &&
+      !isObjectEmpty(SampleFileData)
+    ) {
+      setOpenSampleData(true);
+    } else {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
+          },
+        })
+        .then((response) => {
+          if (response?.data?.data) {
+            let head = [];
+            let row = [];
+            let data = response?.data?.data;
+            if (data?.length > 0) {
+              head = data && Object.keys(data[0]);
+              data?.map((obj) => {
+                return row.push(head?.map((key) => obj[key]));
+              });
+            }
+            setOpenSampleData(true);
+            dispatch(
+              actions.ConsumerQueryForm({
+                SampleFileData: { head: head, rows: row },
+              })
+            );
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
+
   return (
     <div className="flex flex-col  w-full h-full  ">
       <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Match rate</h3>
-
-        <button
-          onClick={handleOpen}
-          className="flex items-center px-3 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-4 h-4"
+        <div className="flex">
+          <button
+            onClick={handleOpen}
+            className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
           >
-            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-          </svg>
-          New request
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4"
+            >
+              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+            </svg>
+            <span className="ml-2">New Request</span>
+          </button>
+          <button
+            onClick={handleViewSample}
+            className="flex items-center ml-4 px-2 py-2 text-sm text-white bg-amaranth-600 rounded-md hover:bg-amaranth-700  "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5"
+              />
+            </svg>
+            <span className="ml-2">View Sample Data</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col w-full px-5">
@@ -404,17 +533,19 @@ const MatchRate = () => {
               <th className="px-4 py-2 border-r"></th>
               <th className="px-4 py-2 border-r">Status</th>
               <th className="px-4 py-2 border-r">Request ID</th>
-              <th className="px-4 py-2 border-r">Column Names</th>
-              <th className="px-4 py-2 border-r">Provider</th>
               <th className="px-4 py-2 border-r">Identifier Type</th>
               <th className="px-4 py-2 border-r">Match Attribute</th>
+              <th className="px-4 py-2 border-r">Match count</th>
               <th className="px-4 py-2 border-r">Requested</th>
               <th className="px-4 py-2 border-r">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {data.map((item, index) => (
-              <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+              <tr
+                key={index}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
                 <td className="border   px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" ? (
@@ -429,24 +560,22 @@ const MatchRate = () => {
                 </td>
                 <td className="border  px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${
-                      item.STATUS === "true"
+                    className={`${item.STATUS === "true"
                         ? "bg-green-200 text-green-600"
                         : "bg-amaranth-200 text-amaranth-600 "
-                    }   py-1 px-3 rounded-full text-xs`}
+                      }   py-1 px-3 rounded-full text-xs`}
                   >
                     {item.STATUS === "true"
                       ? "Approved"
                       : item.STATUS === "false"
-                      ? "Rejected"
-                      : "In Progress"}
+                        ? "Rejected"
+                        : "In Progress"}
                   </span>
                 </td>
                 <td className="border   px-4 py-2">{item.RUN_ID}</td>
-                <td className="border px-4 py-2">{item.COLOUMNS}</td>
-                <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
                 <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
                 <td className="border px-4 py-2">{item.ATTRIBUTE}</td>
+                <td className="border px-4 py-2">{item.MATCH_COUNT}</td>
                 <td className="border px-4 py-2">
                   <span className="num-2"></span>
                   {handleDate(item.RUN_ID)}
@@ -456,13 +585,12 @@ const MatchRate = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${
-                      item.STATUS === "false"
+                    className={`${item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600`}
+                          ? "disabled opacity-10 hover:text-inherit"
+                          : " "
+                      }  px-1 hover:text-amaranth-600`}
                     title="View file"
                   >
                     <svg
@@ -512,26 +640,26 @@ const MatchRate = () => {
                     </svg>
                   </button> */}
                   <button
-                    className={`${
-                      item.STATUS === "false"
+                    onClick={() => handleUploadData(item.RUN_ID)}
+                    className={`${item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                          ? "disabled opacity-10 hover:text-inherit"
+                          : " "
+                      }  px-1 hover:text-amaranth-600 cursor-pointer`}
                     title="Upload match records into client ecospace"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                       stroke="currentColor"
                       className="w-5 h-5"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
                       />
                     </svg>
@@ -602,21 +730,6 @@ const MatchRate = () => {
             onSubmit={handleSubmit}
           >
             <div>
-              <div className=" mt-2 pb-2 flex flex-col">
-                <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                  Query Name
-                </label>
-                <select
-                  name="Query_Name"
-                  onChange={handleCustomerFormData}
-                  required
-                  className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-                >
-                  <option value="">Please select</option>
-                  <option value="advertiser_match">Advertiser Match</option>
-                </select>
-              </div>
-
               <div className="mt-2 pb-21 flex flex-col">
                 <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                   Upload File
@@ -631,27 +744,35 @@ const MatchRate = () => {
                 />
 
                 {/* Drag and Drop */}
-                {/* <div class="max-w-xl">
-                  <label
-                    class="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-                    <span class="flex items-center space-x-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                {/* <div className="max-w-xl">
+                  <label className="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                    <span className="flex items-center space-x-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6 text-gray-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
                       </svg>
-                      <span class="font-medium text-gray-600">
+                      <span className="font-medium text-gray-600">
                         Drop files to Attach, or &nbsp;
-                        <span class="text-blue-600 underline">browse</span>
+                        <span className="text-blue-600 underline">browse</span>
                       </span>
                     </span>
-                    <input 
-                        type="file"
-                        id="myFileInput"
-                        onChange={handleFileInput}
-                        required
-                        class="hidden"
-                      />
+                    <input
+                      type="file"
+                      id="myFileInput"
+                      onChange={handleFileInput}
+                      required
+                      className="hidden"
+                    />
                   </label>
                 </div> */}
               </div>
@@ -833,6 +954,39 @@ const MatchRate = () => {
               <strong>{requestId}</strong>
             </span>
           )}
+        </Box>
+      </Modal>
+      <Modal
+        open={sampleData}
+        onClose={handleSampleDataClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={resultstyle}>
+          <div className=" flex flex-col flex-grow w-full">
+            <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
+              <h3 className="font-bold text-white">Sample Data</h3>
+              <button onClick={handleSampleDataClose}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-4">
+              {SampleFileData?.head?.length > 0 &&
+                SampleFileData?.rows?.length > 0 ? (
+                <Table
+                  head={SampleFileData?.head}
+                  rows={SampleFileData?.rows}
+                />
+              ) : null}
+            </div>
+          </div>
         </Box>
       </Modal>
     </div>

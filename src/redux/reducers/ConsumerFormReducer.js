@@ -4,6 +4,7 @@ import { updateObject } from '../utility/utility';
 const initialState = {
     RequestId: '',
     TableData: {},
+    SampleFileData: {},
     fetchData: false
 };
 
