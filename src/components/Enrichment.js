@@ -530,7 +530,7 @@ const Enrichment = () => {
               Create new request
             </button>
           </div>
-          <img className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400" src= {enrichment} />
+          <img className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400" src= {enrichment} alt =''/>
 
         </div>
       <div className="flex flex-col w-full px-5">

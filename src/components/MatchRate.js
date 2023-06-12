@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AWS from "aws-sdk";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +9,7 @@ import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
 import { Box, Modal } from "@mui/material";
-import match  from '../Assets/enrichment.svg';
+import match from "../Assets/enrichment.svg";
 
 const s3 = new AWS.S3({
   accessKeyId: "AKIA57AGVWXYVR36XIEC",
@@ -19,16 +18,6 @@ const s3 = new AWS.S3({
   region: "ap-south-1",
   // region: 'ap-south-1',
 });
-
-const initialState = {
-  Query_Name: "",
-  Provider_Name: "",
-  Column_Names: "",
-  Consumer_Name: "",
-  File_Name: "",
-  Match_Attribute: "",
-  Match_Attribute_Value: "",
-};
 
 const MatchRate = () => {
   const state = useSelector((state) => state);
@@ -45,10 +34,13 @@ const MatchRate = () => {
     state && state.ConsumerForm && state.ConsumerForm.SampleFileData;
 
   const [formData, setFormData] = useState({
-    ...initialState,
     Query_Name: "advertiser_match",
-    Provider_Name: user?.name,
-    Consumer_Name: "Hoonartek",
+    Provider_Name: "",
+    Consumer_Name: user?.Consumer,
+    Column_Names: "",
+    File_Name: "",
+    Match_Attribute: "",
+    Match_Attribute_Value: "",
   });
 
   const [gender, setGender] = useState("male");
@@ -57,10 +49,6 @@ const MatchRate = () => {
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
 
-  const [byPassAPICalled, setByPassAPICalled] = useState(false);
-  // const [byPassUploadCalled, setByPassUploadCalled] = useState(false);
-
-  const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Modal style
@@ -127,7 +115,26 @@ const MatchRate = () => {
 
   const [data, setData] = useState([]);
 
+  // UseEffect used for Inserting the Provider...
+
   useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: "select provider from DCR_SAMP_CONSUMER1.PUBLIC.PROV_DETAILS;",
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let provider_name = response?.data?.data?.[0];
+          setFormData({ ...formData, Provider_Name: provider_name.PROVIDER });
+        }
+      })
+      .catch((error) => console.log(error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.name]);
+
+  const fetchMainTable = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -137,7 +144,12 @@ const MatchRate = () => {
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
-  }, [user?.name, callTable]);
+  };
+
+  useEffect(() => {
+    fetchMainTable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (TableData) {
@@ -187,9 +199,8 @@ const MatchRate = () => {
   // };
 
   const callByPassAPI = () => {
-    setByPassAPICalled(true);
     setTimeout(() => {
-      setCallTable(true);
+      fetchMainTable();
       handleClose();
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
@@ -199,12 +210,9 @@ const MatchRate = () => {
         })
         .then((response) => {
           if (response) {
-            // fetchcsvTableData();
-            setByPassAPICalled(false);
-            setCallTable(false);
+            fetchMainTable();
           } else {
-            setByPassAPICalled(false);
-            setCallTable(false);
+            fetchMainTable();
             dispatch(
               actions.PublisherForm({
                 fetchData: false,
@@ -214,8 +222,7 @@ const MatchRate = () => {
         })
         .catch((error) => {
           console.log(error);
-          setByPassAPICalled(false);
-          setCallTable(false);
+          fetchMainTable();
           dispatch(
             actions.PublisherForm({
               fetchData: false,
@@ -223,7 +230,7 @@ const MatchRate = () => {
           );
         });
       setTimeout(() => {
-        setCallTable(true);
+        fetchMainTable();
         handleClose();
       }, 2000);
     }, 2000);
@@ -233,12 +240,6 @@ const MatchRate = () => {
     event.preventDefault();
 
     setLoading(true);
-    if (byPassAPICalled) {
-      toast.error(
-        "We are fetching the data for current request. Please wait..."
-      );
-      return;
-    }
 
     formData.RunId = Date.now();
 
@@ -385,8 +386,8 @@ const MatchRate = () => {
   };
 
   const callByPassUpload = () => {
-    // setByPassUploadCalled(false);
     setTimeout(() => {
+      fetchMainTable();
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
@@ -394,19 +395,14 @@ const MatchRate = () => {
           },
         })
         .then((response) => {
-          // if (response) {
-          //   setByPassUploadCalled(false);
-          // } else {
-          //   setByPassUploadCalled(false);
-          // }
+          if (response) {
+            fetchMainTable();
+          }
         })
         .catch((error) => {
           console.log(error);
-          // setByPassUploadCalled(false);
+          fetchMainTable();
         });
-      // setTimeout(() => {
-      //   handleClose();
-      // }, 2000);
     }, 2000);
   };
 
@@ -480,7 +476,6 @@ const MatchRate = () => {
     }
   };
 
-
   return (
     <div className="flex flex-col  w-full h-full  ">
       <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -523,32 +518,36 @@ const MatchRate = () => {
         </div>
       </div>
       <div className="relative flex flex-col px-6 py-8   bg-amaranth-50">
-          <div className="flex w-2/3 text-gray-500 ">
-            <p>
-            Find the Match rate between your's and Provider's data based on a data point(Email/Phone No. etc.,) to run an AD campaign on provider's Ecospace.
-Select additional Match Atrribute to get more insights on your matched data.
-            </p>
-        
-          </div>
-          <div className="flex flex-grow-0 mt-4">
-            <button
-              onClick={handleOpen}
-              className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-4 h-4"
-              >
-                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-              </svg>
-              Create new request
-            </button>
-          </div>
-          <img className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400" src= {match} />
-
+        <div className="flex w-2/3 text-gray-500 ">
+          <p>
+            Find the Match rate between your's and Provider's data based on a
+            data point(Email/Phone No. etc.,) to run an AD campaign on
+            provider's Ecospace. Select additional Match Atrribute to get more
+            insights on your matched data.
+          </p>
         </div>
+        <div className="flex flex-grow-0 mt-4">
+          <button
+            onClick={handleOpen}
+            className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4"
+            >
+              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+            </svg>
+            Create new request
+          </button>
+        </div>
+        <img
+          className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400"
+          src={match}
+          alt=""
+        />
+      </div>
       <div className="flex flex-col w-full px-5">
         <h1 className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
           Recent requests
