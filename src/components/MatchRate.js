@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { handleDate } from "../utils/commonFunctions";
+import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
@@ -40,6 +40,8 @@ const MatchRate = () => {
     state && state.PublisherForm && state.PublisherForm.RequestId;
   const fetchData =
     state && state.PublisherForm && state.PublisherForm.fetchData;
+  const SampleFileData =
+    state && state.ConsumerForm && state.ConsumerForm.SampleFileData;
 
   const [formData, setFormData] = useState({
     ...initialState,
@@ -94,6 +96,12 @@ const MatchRate = () => {
   const [isResultModalOpen, toggleResultModal] = React.useState(false);
   const handleResultModalOpen = () => toggleResultModal(true);
   const handleResultModalClose = () => toggleResultModal(false);
+
+  // Sample Data Modal
+  const [sampleData, setOpenSampleData] = useState(false);
+  const handleSampleDataClose = () => {
+    setOpenSampleData(!sampleData);
+  };
 
   // useEffect for set match attribute values..
   useEffect(() => {
@@ -431,26 +439,87 @@ const MatchRate = () => {
         console.log(error);
       });
   };
+  /// View the sample data...
+
+  const handleViewSample = () => {
+    console.log("isObjectEmpty(SampleFileData)", typeof SampleFileData);
+    if (
+      SampleFileData &&
+      SampleFileData !== "undefined" &&
+      !isObjectEmpty(SampleFileData)
+    ) {
+      setOpenSampleData(true);
+    } else {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
+          },
+        })
+        .then((response) => {
+          if (response?.data?.data) {
+            let head = [];
+            let row = [];
+            let data = response?.data?.data;
+            if (data?.length > 0) {
+              head = data && Object.keys(data[0]);
+              data?.map((obj) => {
+                return row.push(head?.map((key) => obj[key]));
+              });
+            }
+            setOpenSampleData(true);
+            dispatch(
+              actions.ConsumerQueryForm({
+                SampleFileData: { head: head, rows: row },
+              })
+            );
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
 
   return (
     <div className="flex flex-col  w-full h-full  ">
       <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Match rate</h3>
-
-        <button
-          onClick={handleOpen}
-          className="flex items-center px-3 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-4 h-4"
+        <div className="flex">
+          <button
+            onClick={handleOpen}
+            className="flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
           >
-            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-          </svg>
-          New request
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4"
+            >
+              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+            </svg>
+            <span className="ml-2">New Request</span>
+          </button>
+          <button
+            onClick={handleViewSample}
+            className="flex items-center ml-4 px-2 py-2 text-sm text-white bg-amaranth-600 rounded-md hover:bg-amaranth-700  "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5"
+              />
+            </svg>
+            <span className="ml-2">View Sample Data</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col w-full px-5">
@@ -491,17 +560,16 @@ const MatchRate = () => {
                 </td>
                 <td className="border  px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${
-                      item.STATUS === "true"
+                    className={`${item.STATUS === "true"
                         ? "bg-green-200 text-green-600"
                         : "bg-amaranth-200 text-amaranth-600 "
-                    }   py-1 px-3 rounded-full text-xs`}
+                      }   py-1 px-3 rounded-full text-xs`}
                   >
                     {item.STATUS === "true"
                       ? "Approved"
                       : item.STATUS === "false"
-                      ? "Rejected"
-                      : "In Progress"}
+                        ? "Rejected"
+                        : "In Progress"}
                   </span>
                 </td>
                 <td className="border   px-4 py-2">{item.RUN_ID}</td>
@@ -517,13 +585,12 @@ const MatchRate = () => {
                     onClick={() =>
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
-                    className={`${
-                      item.STATUS === "false"
+                    className={`${item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600`}
+                          ? "disabled opacity-10 hover:text-inherit"
+                          : " "
+                      }  px-1 hover:text-amaranth-600`}
                     title="View file"
                   >
                     <svg
@@ -574,13 +641,12 @@ const MatchRate = () => {
                   </button> */}
                   <button
                     onClick={() => handleUploadData(item.RUN_ID)}
-                    className={`${
-                      item.STATUS === "false"
+                    className={`${item.STATUS === "false"
                         ? "disabled opacity-10 hover:text-inherit"
                         : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
+                          ? "disabled opacity-10 hover:text-inherit"
+                          : " "
+                      }  px-1 hover:text-amaranth-600 cursor-pointer`}
                     title="Upload match records into client ecospace"
                   >
                     <svg
@@ -888,6 +954,39 @@ const MatchRate = () => {
               <strong>{requestId}</strong>
             </span>
           )}
+        </Box>
+      </Modal>
+      <Modal
+        open={sampleData}
+        onClose={handleSampleDataClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={resultstyle}>
+          <div className=" flex flex-col flex-grow w-full">
+            <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full bg-amaranth-800 text-white">
+              <h3 className="font-bold text-white">Sample Data</h3>
+              <button onClick={handleSampleDataClose}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-4">
+              {SampleFileData?.head?.length > 0 &&
+                SampleFileData?.rows?.length > 0 ? (
+                <Table
+                  head={SampleFileData?.head}
+                  rows={SampleFileData?.rows}
+                />
+              ) : null}
+            </div>
+          </div>
         </Box>
       </Modal>
     </div>
