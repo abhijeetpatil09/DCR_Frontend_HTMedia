@@ -8,6 +8,7 @@ import SelectDropdown from "./CommonComponent/SelectDropdown";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import * as actions from "../redux/actions/index";
+import enrichment  from '../Assets/Personal data _Monochromatic.svg';
 
 import {
   jsonToCsv,
@@ -441,10 +442,37 @@ const Enrichment = () => {
           >
             <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
           </svg>
-          New Request
+          New request
         </button>
       </div>
+      <div className="relative flex flex-col px-6 py-8   bg-amaranth-50">
+          <div className="flex w-2/3 text-gray-500 ">
+            <p>Enrich your first hand data with more data points from the provider's Data. 
+                Make it easier for selecting data points / identifier type by exploring sample data from provider's data set.
+            </p>
+        
+          </div>
+          <div className="flex flex-grow-0 mt-4">
+            <button
+              onClick={handleOpen}
+              className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-4 h-4"
+              >
+                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+              </svg>
+              Create new request
+            </button>
+          </div>
+          <img className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400" src= {enrichment} />
+
+        </div>
       <div className="flex flex-col w-full px-5">
+       
         <h1 className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
           Recent requests
         </h1>

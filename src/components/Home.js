@@ -49,7 +49,7 @@ const Home = () => {
                     <p className="text-gray-600 text-sm pb-2 mb-1">Welcome to DataHaven, a certified snowflake partner product.</p>
                 </div>
                 <div className="flex flex-row gap-4 mt-6 mx-3">
-                    <div className="relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
+                    <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
                         <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
                             <div className=" ">
                                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
@@ -57,7 +57,7 @@ const Home = () => {
                                 </h3>
 
                                 <p className="mt-2 text-sm text-gray-500">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, adipisci.
+                                Enrich your first hand data with more data points from the provider's Data.
                                 </p>
                                 <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
                                     Explore
@@ -72,7 +72,7 @@ const Home = () => {
 
 
                     </div>
-                    <div className="relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+                    <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
                      <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
                             <div className=" ">
                                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
@@ -80,7 +80,7 @@ const Home = () => {
                                 </h3>
 
                                 <p className="mt-2 text-sm text-gray-500">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, adipisci.
+                                Find the Match rate between your's and Provider's data based on a data point(Email/Phone No. etc.,) to run an AD campaign on provider's Ecospace.
                                 </p>
                                 <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
                                     Explore
@@ -95,7 +95,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="flex flex-row gap-4 mt-6 mx-3">
-                    <div className="relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                    <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-red-500 to-yellow-500 p-1 shadow-xl">
                         <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
                             <div className=" ">
                                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
@@ -103,8 +103,8 @@ const Home = () => {
                                 </h3>
 
                                 <p className="mt-2 text-sm text-gray-500">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, adipisci.
-                                </p>
+                                Analyze the Match Rate on various Data oints for deeper insights on the Provider's Data.
+                                                                </p>
                                 <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
                                     Explore
                                     {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
@@ -118,7 +118,7 @@ const Home = () => {
 
 
                     </div>
-                    <div className="relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+                    <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
                      <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
                             <div className=" ">
                                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
@@ -126,7 +126,7 @@ const Home = () => {
                                 </h3>
 
                                 <p className="mt-2 text-sm text-gray-500">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, adipisci.
+                                To Manage Users for your Account, View Itemised Bills, Snowflake Account Credit consumption details etc.
                                 </p>
                                 <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
                                     Explore
