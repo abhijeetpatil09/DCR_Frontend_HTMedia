@@ -8,7 +8,10 @@ import { useSelector } from "react-redux";
 
 import bgimage from '../Assets/pexel.jpg';
 import lvideo  from '../Assets/DataCleanRoom_video.mp4';
-
+import enrichment  from '../Assets/Personal data _Monochromatic.svg';
+import match  from '../Assets/enrichment.svg';
+import analyticsIllustration  from '../Assets/Pie chart _Monochromatic.svg';
+import adminConsole  from '../Assets/Settings_Monochromatic.svg';
 
 const Home = () => {
 
@@ -39,46 +42,106 @@ const Home = () => {
 
 
     return (
-        <div className="flex flex-row flex-wrap w-full px-5 dark:bg-slate-950 bg-gray-50 pb-10" style={{height: 'calc[100vh - 90px]'}}>
+        <div className="flex flex-row flex-wrap w-full h-full px-5 dark:bg-slate-950 bg-gray-50 pb-10">
             <div className="flex flex-col  text-coal w-2/3  ">
-                <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-4/12 lg:w-full mt-6">
-                    <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border p-4">
-                        <div className="relative h-full overflow-hidden rounded-xl   bg-cover" style={{backgroundImage: `url(${bgimage})`}}>
-                            <span className="absolute top-0 left-0 w-full h-full bg-center bg-cover bg-gradient-to-tl from-gray-900 to-slate-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 opacity-80"></span>
-                            <div className="relative z-10 flex-auto h-full p-4">
-                                <h6 className="mb-4 font-bold text-white">Hey John!</h6>
-                                <p className="mb-4 text-white dark:opacity-60">Welcome to DataHaven. It is built on Snowflake. Snowflake Data Clean Room is a secure multi-party collaboration environment to share data without revealing PII or compromising privacy. </p>
-                                <div className="flex">
-                                <a className=" flex items-center align-middle active:shadow-soft-xs active:opacity-85 leading-pro text-xs ease-soft-in rounded-full hover:scale-102 mb-0 inline-block cursor-pointer border border-solid border-white/75 bg-white/10 py-3 px-6 text-center align-middle font-bold uppercase text-white shadow-none transition-all hover:border-white hover:bg-transparent hover:text-white hover:opacity-75 hover:shadow-none active:border-white active:bg-white active:text-black hover:active:bg-transparent hover:active:text-white hover:active:opacity-75 hover:active:shadow-none" href="javascript:;">
-                                    <span className="text-center">Read More</span>
-                                    <i className="ml-1 inline-block text-center leading-normal text-sm fas fa-arrow-right" aria-hidden="true">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                                            <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z" clipRule="evenodd" />
-                                        </svg>
+                <div className="flex flex-col mt-9 px-6">
+                    <h1 className="text-3xl font-bold text-amaranth-600">Hi John, <span className="font-light italic">Good afternoon!</span></h1>
+                    <p className="text-gray-600 text-sm pb-2 mb-1">Welcome to DataHaven, a certified snowflake partner product.</p>
+                </div>
+                <div className="flex flex-row gap-4 mt-6 mx-3">
+                    <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
+                        <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
+                            <div className=" ">
+                                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                                    Customer Enrichment
+                                </h3>
 
-                                    </i>
-                                </a></div>
+                                <p className="mt-2 text-sm text-gray-500">
+                                Enrich your first hand data with more data points from the provider's Data.
+                                </p>
+                                <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
+                                    Explore
+                                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                    </svg> */}
+                                </button>
                             </div>
-                        </div>
+                              
+                        </a>
+                        <img className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400" src= {enrichment} />
+
+
+                    </div>
+                    <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+                     <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
+                            <div className=" ">
+                                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                                    Match Rate
+                                </h3>
+
+                                <p className="mt-2 text-sm text-gray-500">
+                                Find the Match rate between your's and Provider's data based on a data point(Email/Phone No. etc.,) to run an AD campaign on provider's Ecospace.
+                                </p>
+                                <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
+                                    Explore
+                                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                    </svg> */}
+                                </button>
+                            </div>
+                              
+                        </a>
+                        <img className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400" src= {match} />
                     </div>
                 </div>
-                <div className="card w-auto border rounded-xl border-stone-300 mt-4 py-2 px-4 hidden">
-                    <h1 className="   text-2xl font-bold text-amaranth-600 pb-2 ">What is Snowflake Data Clean Room?</h1>
-                    <section className="pb-2 mb-2 text-gray-500 border-b border-gray-300">
-                        <p>Snowflake Data Clean Room is a secure multi-party collaboration
-                            environment to share data without revealing PII or compromising privacy.
-                        </p>
-                    </section>
-                    <section className="pb-2 mb-2 text-gray-500">
-                        <p>
-                            Build your DCR in Snowflake for use cases like a <strong className=" italic">marketing campaign</strong>,<strong className=" italic"> optimizing ad placement</strong>,
-                            identifying common transaction patterns to improve fraud detection, etc.
-                        </p>
-                    </section>
+                <div className="flex flex-row gap-4 mt-6 mx-3">
+                    <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                        <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
+                            <div className=" ">
+                                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                                    Analytics
+                                </h3>
+
+                                <p className="mt-2 text-sm text-gray-500">
+                                Analyze the Match Rate on various Data oints for deeper insights on the Provider's Data.
+                                                                </p>
+                                <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
+                                    Explore
+                                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                    </svg> */}
+                                </button>
+                            </div>
+                              
+                        </a>
+                        <img className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400" src= {analyticsIllustration} />
 
 
+                    </div>
+                    <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+                     <a className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8" href="">
+                            <div className=" ">
+                                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                                    Admin Console
+                                </h3>
+
+                                <p className="mt-2 text-sm text-gray-500">
+                                To Manage Users for your Account, View Itemised Bills, Snowflake Account Credit consumption details etc.
+                                </p>
+                                <button className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2">
+                                    Explore
+                                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                    </svg> */}
+                                </button>
+                            </div>
+                              
+                        </a>
+                        <img className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400" src= {adminConsole} />
+                    </div>
                 </div>
-                <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
+                
+                <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full hidden">
                     <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative mt-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
                         <div className="p-4 pb-0 rounded-t-4"><h5 className="mb-0 dark:text-white text-amaranth-700">Recent requests</h5></div>
                         <div className="flex-auto p-4">
