@@ -18,6 +18,7 @@ import PrivacyPolicy from "./components/CommonComponent/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/TermsAndConditions";
 import Analytics from "./components/Analytics";
 import ConsumerAdmin from "./components/ConsumerAdmin";
+import ProviderAdmin from "./components/ProviderAdmin";
 
 // import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -47,7 +48,7 @@ function App() {
                   <Route path="/query-result-table" element={<QueryResultTable />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/consumer-admin" element={<ConsumerAdmin />} />
-
+                  <Route path="/provider-admin" element={<ProviderAdmin />} />
                 </Routes>
               </Sidebar>
             }

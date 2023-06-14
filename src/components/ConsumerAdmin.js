@@ -37,7 +37,7 @@ const ConsumerAdmin = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
-            "select * from DCR_PROVIDER2.CLEANROOM.CONSUMER_ATTRIBUTES_VW;",
+            "select * from CONSUMER_ATTRIBUTES_VW order by admin desc;",
         },
       })
       .then((response) => {
@@ -50,13 +50,13 @@ const ConsumerAdmin = () => {
       .catch((error) => console.log(error));
   }, [user, UserRole]);
 
-  console.log("data", data)
+  console.log("data", data);
   return (
     <div className="flex flex-col w-full px-5">
-      <span className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
-        <strong>Consumer List</strong>
-      </span>
-      <TableContainer>
+      <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
+        <h3 className="  text-lg font-light text-white">Consumer List</h3>
+      </div>
+      <TableContainer className = "mt-6">
         <Table
           sx={{ minWidth: 650, borderRadius: 0 }}
           stickyHeader

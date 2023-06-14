@@ -73,7 +73,7 @@ const Login = () => {
       axios
         .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
           params: {
-            query: `select * from DCR_PROVIDER2.CLEANROOM.CONSUMER_ATTRIBUTES_VW WHERE USER = '${loginDetails?.userName}';`,
+            query: `select * from CONSUMER_ATTRIBUTES_VW WHERE USER = '${loginDetails?.userName}';`,
           },
         })
         .then((response) => {
@@ -89,24 +89,25 @@ const Login = () => {
                 setErrors({ ...errors, password: "Invalid Password" });
               } else {
                 const userRole = [];
-                if (userData.PUBLISHER?.toLowerCase() === "true") {
+                if (userData?.PUBLISHER?.toLowerCase() === "true") {
                   userRole.push("Publisher");
                 }
-                if (userData.PROVIDER?.toLowerCase() === "true") {
+                if (userData?.PROVIDER?.toLowerCase() === "true" && userData?.ADMIN?.toLowerCase() === "true") {
                   userRole.push("Provider");
+                  userRole.push("Provider_Admin");
+
                 }
-                if (userData.CONSUMER?.toLowerCase() === "true") {
+                if (userData?.CONSUMER?.toLowerCase() === "true" && userData?.ADMIN?.toLowerCase() === "true") {
                   userRole.push("Consumer");
-                }
-                if (userData.ADMIN?.toLowerCase() === "true") {
                   userRole.push("Consumer_Admin");
                 }
+               
                 setIsSubmitted(true);
 
                 axios
                   .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
                     params: {
-                      query: `select user from DCR_PROVIDER2.CLEANROOM.CONSUMER_ATTRIBUTES_VW where admin = 'true';`,
+                      query: `select user from CONSUMER_ATTRIBUTES_VW where admin = 'true';`,
                     },
                   })
                   .then((response) => {
