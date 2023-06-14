@@ -24,7 +24,10 @@ const ConsumerAdmin = () => {
     const index = UserRole?.indexOf(element);
 
     if (index !== -1) {
-      const newArray = [...UserRole.slice(0, index), ...UserRole.slice(index + 1)];
+      const newArray = [
+        ...UserRole.slice(0, index),
+        ...UserRole.slice(index + 1),
+      ];
       setRole(newArray?.join(", "));
     } else {
       setRole(UserRole?.join(", "));
@@ -77,13 +80,25 @@ const ConsumerAdmin = () => {
                 "& th:first-child": { borderLeft: 1, borderColor: "#d6d3d1" },
               }}
             >
-              <TableCell key={0} align="center">
+              <TableCell
+                className="bg-amaranth-50 text-amaranth-900"
+                key={0}
+                align="center"
+              >
                 User
               </TableCell>
-              <TableCell key={1} align="center">
+              <TableCell
+                className="bg-amaranth-50 text-amaranth-900"
+                key={1}
+                align="center"
+              >
                 Role
               </TableCell>
-              <TableCell key={2} align="center">
+              <TableCell
+                className="bg-amaranth-50 text-amaranth-900"
+                key={2}
+                align="center"
+              >
                 Auth role
               </TableCell>
             </TableRow>
@@ -101,9 +116,13 @@ const ConsumerAdmin = () => {
                     "& td": { borderLeft: 1, borderColor: "#d6d3d1" },
                   }}
                 >
-                  <TableCell align="center">{row.USER}</TableCell>
-                  <TableCell align="center">{role}</TableCell>
-                  <TableCell align="center">
+                  <TableCell className="text-amaranth-900" align="center">
+                    {row.USER}
+                  </TableCell>
+                  <TableCell className="text-amaranth-900" align="center">
+                    {role}
+                  </TableCell>
+                  <TableCell className="text-amaranth-900" align="center">
                     {row.CONSUMER_ADMIN === "TRUE" ? "ADMIN" : "CONSUMER"}
                   </TableCell>
                 </TableRow>

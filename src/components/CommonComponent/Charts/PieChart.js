@@ -24,8 +24,8 @@ const PieChartAnalytics = ({ data, total }) => {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={80}
-                innerRadius={40}
+                // outerRadius={80}
+                // innerRadius={40}
                 fill="#8884d8"
                 // paddingAngle={5}
               >

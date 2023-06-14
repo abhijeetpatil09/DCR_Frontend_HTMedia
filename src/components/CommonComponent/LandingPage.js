@@ -596,7 +596,7 @@ const LandingPage = () => {
           <nav className="flex flex-wrap justify-center -mx-5 -my-2">
             <div className="px-5 py-2">
               <a
-                href="#"
+                href="/"
                 className="text-base leading-6 text-gray-500 hover:text-gray-900"
               >
                 Privacy policy
@@ -604,7 +604,7 @@ const LandingPage = () => {
             </div>
             <div className="px-5 py-2">
               <a
-                href="#"
+                href="/"
                 className="text-base leading-6 text-gray-500 hover:text-gray-900"
               >
                 Terms of services
@@ -612,7 +612,7 @@ const LandingPage = () => {
             </div>
           </nav>
           <div className="flex justify-center mt-8 space-x-6">
-            <img src={HTWLogo} className="w-14" />
+            <img src={HTWLogo} className="w-14" alt='' />
           </div>
           <p className="mt-8 text-base leading-6 text-center text-gray-400">
             © 2023 Hoonartek. All rights reserved.
