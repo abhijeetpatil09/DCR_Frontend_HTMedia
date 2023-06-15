@@ -100,7 +100,7 @@ const ProviderAdmin = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
-          query: `select distinct TEMPLATE_NAME from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES;`,
+          query: `select distinct TEMPLATE_NAME from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${queryData.consumer}';`,
         },
       })
       .then((response) => {
@@ -111,7 +111,7 @@ const ProviderAdmin = () => {
         }
       })
       .catch((error) => console.log(error));
-  }, [user?.name]);
+  }, [user?.name, queryData.consumer]);
 
   useEffect(() => {
     if (queryData.consumer !== "" && queryData.template !== "") {
@@ -171,9 +171,9 @@ const ProviderAdmin = () => {
       return;
     } else {
       setMessage(
-        `Are you sure want to ${
+        `Are you sure, you want to ${
           queryData.status === true ? "Disable" : "Enable"
-        } ?`
+        } this template?`
       );
       setOpenModal(!openModal);
     }

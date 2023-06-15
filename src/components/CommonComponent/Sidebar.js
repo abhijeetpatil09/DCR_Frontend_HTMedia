@@ -25,14 +25,12 @@ const Sidebar = ({ children }) => {
       setTab(3);
     } else if (pathname?.includes("querystatus")) {
       setTab(4);
-    } else if (pathname?.includes("requestinfo")) {
-      setTab(5);
     } else if (pathname?.includes("analytics")) {
-      setTab(6);
+      setTab(5);
     } else if (pathname?.includes("consumer-admin")) {
-      setTab(7);
+      setTab(6);
     } else if (pathname?.includes("provider-admin")) {
-      setTab(8);
+      setTab(7);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.location.pathname]);
@@ -260,33 +258,6 @@ const Sidebar = ({ children }) => {
               } hover:bg-amaranth-200 transition ease-in-out duration-500`}
             >
               <button
-                onClick={() => navigateTo("/requestinfo")}
-                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
-              >
-                <i className="text-xs mr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path d="M8 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
-                    <path
-                      fillRule="evenodd"
-                      d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm5 5a3 3 0 101.524 5.585l1.196 1.195a.75.75 0 101.06-1.06l-1.195-1.196A3 3 0 009.5 7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </i>
-                <span className={`${isOpened ? "" : "hidden"} `}>Requests</span>
-              </button>
-            </li>
-            <li
-              className={`${
-                tab === 6 ? "bg-amaranth-200" : ""
-              } hover:bg-amaranth-200 transition ease-in-out duration-500`}
-            >
-              <button
                 onClick={() => navigateTo("/analytics")}
                 className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
               >
@@ -313,7 +284,7 @@ const Sidebar = ({ children }) => {
             {user["role"] && user["role"].includes("Consumer_Admin") && (
               <li
                 className={`${
-                  tab === 7 ? "bg-amaranth-200" : ""
+                  tab === 6 ? "bg-amaranth-200" : ""
                 } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
                 <button
@@ -344,7 +315,7 @@ const Sidebar = ({ children }) => {
             )}
             {user["role"] && user["role"].includes("Provider_Admin") && (
               <li className={`${
-                tab === 8 ? "bg-amaranth-200" : ""
+                tab === 7 ? "bg-amaranth-200" : ""
               } hover:bg-amaranth-200 transition ease-in-out duration-500`}>
                 <button
                   onClick={() => navigateTo("/provider-admin")}

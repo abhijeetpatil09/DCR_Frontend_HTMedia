@@ -4,12 +4,11 @@ import { ToastContainer } from "react-toastify";
 import LandingPage from "./components/CommonComponent/LandingPage";
 import Login from "./components/CommonComponent/Login";
 import Register from "./components/CommonComponent/Register";
-import QueryResultTable from './components/CommonComponent/Table';
+import Profile from './components/CommonComponent/MyPofile';
 
 import Enrichment from "./components/Enrichment";
 import QueryStatus from "./components/QueryStatus";
 import Sidebar from "./components/CommonComponent/Sidebar";
-import Requestinfo from "./components/Requestinfo";
 import Home from "./components/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MatchRate from "./components/MatchRate";
@@ -42,11 +41,13 @@ function App() {
                   <Route path="/home" element={<Home />} />
                   <Route path="/queryform" element={<Enrichment />} />
                   <Route path="/querystatus" element={<QueryStatus />} />
-                  <Route path="/requestinfo" element={<Requestinfo />} />
                   <Route path="/publisherform" element={<MatchRate />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/consumer-admin" element={<ConsumerAdmin />} />
                   <Route path="/provider-admin" element={<ProviderAdmin />} />
+
+                  <Route path="/my-profile" element={<Profile />} />
+
                 </Routes>
               </Sidebar>
             }

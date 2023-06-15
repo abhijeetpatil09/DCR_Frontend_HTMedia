@@ -85,7 +85,6 @@ const Enrichment = () => {
 
   // Create query Modal
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setLoading(false);
     setOpen(false);
@@ -100,6 +99,11 @@ const Enrichment = () => {
   const [sampleData, setOpenSampleData] = useState(false);
   const handleSampleDataClose = () => {
     setOpenSampleData(!sampleData);
+  };
+
+  const [disableTemplate, setDisableTemplate] = useState(false);
+  const handleCloseDisableTemplate = () => {
+    setDisableTemplate(!disableTemplate);
   };
 
   useEffect(() => {
@@ -201,6 +205,33 @@ const Enrichment = () => {
         }
       })
       .catch((error) => console.log(error));
+  };
+
+  const createNewRequest = () => {
+    if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
+      axios
+        .get(`http://127.0.0.1:5000/Hoonartekprov`, {
+          params: {
+            query: `select TEMPLATE_STATUS from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
+          },
+        })
+        .then((response) => {
+          if (response?.data?.data?.length > 0) {
+            let status = response?.data?.data[0]?.TEMPLATE_STATUS;
+            if (status) {
+              setOpen(!open);
+            } else {
+              setDisableTemplate(!disableTemplate);
+            }
+          } else {
+            setDisableTemplate(!disableTemplate);
+          }
+        })
+        .catch((error) => {
+          setDisableTemplate(!disableTemplate);
+          console.log(error);
+        });
+    }
   };
 
   /// View the sample data...
@@ -501,7 +532,7 @@ const Enrichment = () => {
         </div>
         <div className="flex flex-grow-0 mt-4">
           <button
-            onClick={handleOpen}
+            onClick={createNewRequest}
             className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
           >
             <svg
@@ -828,6 +859,47 @@ const Enrichment = () => {
                 />
               ) : null}
             </div>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={disableTemplate}
+        onClose={handleCloseDisableTemplate}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="flex flex-row items-center justify-between sticky z-30 py-2 px-4 top-0 w-full text-red-600">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-16 h-16"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+              />
+            </svg>
+
+            <h3 className="font-bold text-red-600 p-4">
+              The Template has been disabled for this Consumer Account. Please
+              contact provider.
+            </h3>
+            <button onClick={handleCloseDisableTemplate}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+              </svg>
+            </button>
           </div>
         </Box>
       </Modal>
