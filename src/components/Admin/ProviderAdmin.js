@@ -12,7 +12,7 @@ import {
   TableRow,
   CircularProgress,
 } from "@mui/material";
-import CommonModal from "./CommonComponent/Modal";
+import CommonModal from "../CommonComponent/Modal";
 
 const ProviderAdmin = () => {
   const state = useSelector((state) => state);
@@ -79,7 +79,7 @@ const ProviderAdmin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/Pravin`, {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
             "select distinct CONSUMER_NAME from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES;",
@@ -98,7 +98,7 @@ const ProviderAdmin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/Pravin`, {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query: `select distinct TEMPLATE_NAME from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES;`,
         },
@@ -111,12 +111,12 @@ const ProviderAdmin = () => {
         }
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [user?.name]);
 
   useEffect(() => {
     if (queryData.consumer !== "" && queryData.template !== "") {
       axios
-        .get(`http://127.0.0.1:5000/Pravin`, {
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
             query: `select TEMPLATE_STATUS from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${queryData.consumer}' AND TEMPLATE_NAME = '${queryData.template}';`,
           },
@@ -142,13 +142,15 @@ const ProviderAdmin = () => {
     setOpenModal(!openModal);
     setLoading(true);
     axios
-      .get(`http://127.0.0.1:5000/Pravin`, {
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query: `insert into DCR_SAMP_PROVIDER_DB.TEMPLATES.JSON_TABLE select PARSE_JSON('
               {
                  "Consumer_Name": "${queryData.consumer}",
                  "Template_Name": "${queryData.template}",
-                 "Template_Status" : "${queryData.status}"
+                 "Template_Status" : ${
+                   queryData.status === true ? "false" : "true"
+                 }
               }
               ');`,
         },
@@ -180,9 +182,9 @@ const ProviderAdmin = () => {
   const callByPass = () => {
     setTimeout(() => {
       axios
-        .get(`http://127.0.0.1:5000/Pravin`, {
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
-            query: `CALL updateTemplateStatus();`,
+            query: `CALL DCR_SAMP_PROVIDER_DB.TEMPLATES.UPDATETEMPLATESTATUS();`,
           },
         })
         .then((response) => {

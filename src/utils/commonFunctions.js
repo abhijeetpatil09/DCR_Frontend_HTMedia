@@ -1,3 +1,5 @@
+import { VscCircleFilled } from "react-icons/vsc";
+
 // Function used for Convert Json Into CSV format
 
 export const jsonToCsv = (jsonData) => {
@@ -76,4 +78,57 @@ export const calculatePercentage = (value, total) => {
 /// To check the Object is empty or not...
 export const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
-}
+};
+
+/// CustomTooltip function used for Tooltip in charts...
+
+export const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  labelClassName,
+  wrapperClassName,
+  chart,
+}) => {
+  if (active) {
+    return (
+      <div
+        className="shadow rounded"
+        style={{ background: "rgba(30, 30, 30, 0.8)" }}
+      >
+        <div
+          className="px-4 py-1"
+          style={{
+            background: "rgba(0, 0, 0, 0.7)",
+            borderBottom: "1px solid #333",
+          }}
+        >
+          <div className="flex items-center">
+            {chart !== "Bar" ? (
+              <VscCircleFilled color={payload[0].payload?.fill} />
+            ) : null}
+            <p className="label text-xs roboto-medium text-white">
+              {(payload && payload.length > 0 && payload[0].payload?.name) ||
+                label}
+            </p>
+          </div>
+        </div>
+        <div className="desc px-4 py-1 text-center">
+          {payload?.map((p, index) => (
+            <div key={`${index}_${p.name}`} className={"text-xs text-white"}>
+              {labelClassName !== "undefined" ? labelClassName : ""}
+              {labelClassName === undefined && wrapperClassName === undefined
+                ? Number.isInteger(p.value) === false
+                  ? p.value || 0
+                  : p.value || 0
+                : p.value || 0}
+              {wrapperClassName !== "undefined" ? wrapperClassName : ""}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};

@@ -434,7 +434,7 @@ const Sidebar = ({ children }) => {
               >
                 <a
                   className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-amaranth-200 hover:text-amaranth-900 transition-all duration-300 ease-in-out"
-                  href="/"
+                  href="/my-profile"
                 >
                   <i className="fad fa-user-edit text-xs text-amaranth-800 mr-1"></i>
                   Edit my profile

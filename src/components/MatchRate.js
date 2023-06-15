@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import AWS from "aws-sdk";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
+
 import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
-import { Box, Modal } from "@mui/material";
 import match from "../Assets/enrichment.svg";
 
 const s3 = new AWS.S3({
