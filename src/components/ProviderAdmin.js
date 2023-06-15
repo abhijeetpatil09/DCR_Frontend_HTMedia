@@ -28,6 +28,7 @@ const ProviderAdmin = () => {
   const [publisherData, setPublisherData] = useState({
     consumer: "",
     template: "",
+    column_name: "",
     status: "",
   });
 
@@ -40,6 +41,7 @@ const ProviderAdmin = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleCloseModal = () => {
     setOpenModal(!openModal);
@@ -112,11 +114,7 @@ const ProviderAdmin = () => {
   }, []);
 
   useEffect(() => {
-    if (
-      queryData.consumer !== "" &&
-      queryData.template !== "" &&
-      queryData.status === ""
-    ) {
+    if (queryData.consumer !== "" && queryData.template !== "") {
       axios
         .get(`http://127.0.0.1:5000/Pravin`, {
           params: {
@@ -124,18 +122,20 @@ const ProviderAdmin = () => {
           },
         })
         .then((response) => {
-          if (response?.data) {
+          if (response?.data?.data?.length > 0) {
             setQueryData({
               ...queryData,
               status: response?.data?.data[0]?.TEMPLATE_STATUS,
             });
+            setError("");
           } else {
             setQueryData({ ...queryData, status: "" });
+            setError("Please select another query name");
           }
         })
         .catch((error) => console.log(error));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryData.consumer, queryData.template]);
 
   const handleClickYes = () => {
@@ -352,6 +352,9 @@ const ProviderAdmin = () => {
                 ))}
               </select>
             </div>
+            {error !== "" ? (
+              <span className="text-red-600 text-sm">{error}</span>
+            ) : null}
 
             {queryData.status !== "" ? (
               <div className="mt-4 flex justify-center">
@@ -440,6 +443,30 @@ const ProviderAdmin = () => {
                   setPublisherData({
                     ...publisherData,
                     template: e.target.value,
+                  })
+                }
+                required
+                className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+              >
+                <option value="">Please select</option>
+                {templateNames?.map((template, index) => (
+                  <option key={index} value={template?.TEMPLATE_NAME}>
+                    {template?.TEMPLATE_NAME}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mt-2 pb-21 flex flex-col">
+              <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                Column Name
+              </label>
+              <select
+                value={publisherData.column_name}
+                onChange={(e) =>
+                  setPublisherData({
+                    ...publisherData,
+                    column_name: e.target.value,
                   })
                 }
                 required
