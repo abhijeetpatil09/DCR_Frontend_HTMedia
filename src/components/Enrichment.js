@@ -616,7 +616,7 @@ const Enrichment = () => {
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
-                    {item.STATUS === "true" || item.STATUS === "Completed" ? (
+                    {item.STATUS === "true" || item.STATUS.toLowerCase() === "completed" ? (
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
                     ) :
                       item.STATUS === "false" || item.STATUS === "Failed" ? (
@@ -631,7 +631,7 @@ const Enrichment = () => {
                 </td>
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${status[index]?.STATUS === "Completed" || item.STATUS === "Completed"
+                    className={`${status[index]?.STATUS.toLowerCase() === "completed" || item.STATUS.toLowerCase() === "completed"
                       ? "bg-green-200 text-green-700"
                       : status[index]?.STATUS === "Approved" || item.STATUS === "true" ? "bg-amaranth-100 text-amaranth-700 "
                         : status[index]?.STATUS === "Waiting for Approval" || item.STATUS === "Waiting for Approval" ? "bg-amaranth-100 text-amaranth-500 "

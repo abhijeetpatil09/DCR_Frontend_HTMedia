@@ -141,6 +141,61 @@ const QueryStatus = () => {
     setPage(0);
   };
 
+  const handleUploadData = async (runId) => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let data = response?.data?.data?.[0];
+          axios
+            .get(`http://127.0.0.1:5000/${user?.name}`, {
+              params: {
+                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
+              },
+            })
+            .then((response) => {
+              if (response) {
+                callByPassUpload();
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const callByPassUpload = () => {
+    // setByPassAPICalled(true);
+    setTimeout(() => {
+      fetchTable();
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
+          },
+        })
+        .then((response) => {
+          if (response) {
+            fetchTable();
+            // setByPassAPICalled(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          fetchTable();
+          // setByPassAPICalled(false);
+        });
+    }, 2000);
+  };
+
   return (
     <div className="flex flex-col w-full h-full ">
       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -228,13 +283,12 @@ const QueryStatus = () => {
                         <TableCell className="text-amaranth-900" align="center">{row.MATCH_COUNT}</TableCell>
                         <TableCell className="text-amaranth-900" align="center">
                           <span
-                            className={`${
-                                row.STATUS === "Completed"
+                            className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
                                 ? "bg-green-200 text-green-700"
                                 : row.STATUS === "Failed"
-                                ? "bg-red-200 text-red-700"
-                                : "bg-amaranth-200 text-amaranth-700 "
-                            }   py-1 px-3 rounded-full text-xs`}
+                                  ? "bg-red-200 text-red-700"
+                                  : "bg-amaranth-200 text-amaranth-700 "
+                              }   py-1 px-3 rounded-full text-xs`}
                           >
                             {row.STATUS}
                           </span>
@@ -251,11 +305,10 @@ const QueryStatus = () => {
                               disabled={
                                 row.STATUS.toLowerCase() !== "completed"
                               }
-                              className={`${
-                                row.STATUS.toLowerCase() === "completed"
+                              className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
                                   ? "opacity-1 hover:text-inherit"
                                   : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600`}
+                                }  px-2 hover:text-amaranth-600`}
                               title="View File"
                             >
                               <svg
@@ -279,7 +332,7 @@ const QueryStatus = () => {
                               </svg>
                             </button>
                             {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                            row.TEMPLATE_NAME === "customer_enrichment" ? (
+                              row.TEMPLATE_NAME === "customer_enrichment" ? (
                               <button
                                 onClick={() =>
                                   downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
@@ -287,11 +340,10 @@ const QueryStatus = () => {
                                 disabled={
                                   row.STATUS.toLowerCase() !== "completed"
                                 }
-                                className={`${
-                                  row.STATUS.toLowerCase() === "completed"
+                                className={`${row.STATUS.toLowerCase() === "completed" 
                                     ? "opacity-1 hover:text-inherit"
                                     : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
+                                  }  px-2 hover:text-amaranth-600`}
                                 title="Download file"
                               >
                                 <svg
@@ -311,20 +363,18 @@ const QueryStatus = () => {
                               </button>
                             ) : null}
                             {row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                            row.TEMPLATE_NAME === "advertiser_match" ? (
+                              row.TEMPLATE_NAME === "advertiser_match" ? (
                               <>
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}
                                   disabled={
-                                    
+
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${
-                                    
-                                    row.STATUS.toLowerCase() === "completed"
+                                  className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
+                                    }  px-2 hover:text-amaranth-600`}
                                   title="Show Analytics"
                                 >
                                   <svg
@@ -348,15 +398,19 @@ const QueryStatus = () => {
                                   </svg>
                                 </button>
                                 <button
+                                  onClick={() => handleUploadData(row.RUN_ID)}
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${
-                                    row.STATUS.toLowerCase() === "completed"
+                                  className={`${row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
-                                  title="Upload match records into client ecospace"
+                                    }  px-2 hover:text-amaranth-600`}
+                                  title={
+                                    row.STATUS === "Uploaded into client ecospace"
+                                      ? "Already Uploaded into client ecospace"
+                                      : "Upload match records into client ecospace"
+                                  }
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
