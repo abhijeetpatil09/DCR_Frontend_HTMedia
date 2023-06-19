@@ -657,9 +657,9 @@ const Enrichment = () => {
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
                     disabled={
-                      item.STATUS !== "true" || item.STATUS !== "Completed"
+                      item.STATUS.toLowerCase() !== "completed"
                     }
-                    className={`${item.STATUS === "true" || item.STATUS === "Completed"
+                    className={`${item.STATUS.toLowerCase() === "completed"
                       ? "opacity-1 hover:text-inherit"
                       : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}
@@ -690,9 +690,9 @@ const Enrichment = () => {
                       downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                     }
                     disabled={
-                      item.STATUS !== "true" || item.STATUS !== "Completed"
+                      item.STATUS.toLowerCase() !== "completed"
                     }
-                    className={`${item.STATUS === "true" || item.STATUS === "Completed"
+                    className={`${item.STATUS.toLowerCase() === "completed"
                       ? "opacity-1 hover:text-inherit"
                       : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}

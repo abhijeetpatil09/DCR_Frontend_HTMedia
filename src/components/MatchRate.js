@@ -460,7 +460,7 @@ const MatchRate = () => {
   };
 
   const callByPassUpload = () => {
-    setByPassAPICalled(true);
+    // setByPassAPICalled(true);
     setTimeout(() => {
       fetchMainTable();
       axios
@@ -472,13 +472,13 @@ const MatchRate = () => {
         .then((response) => {
           if (response) {
             fetchMainTable();
-            setByPassAPICalled(false);
+            // setByPassAPICalled(false);
           }
         })
         .catch((error) => {
           console.log(error);
           fetchMainTable();
-          setByPassAPICalled(false);
+          // setByPassAPICalled(false);
         });
     }, 2000);
   };
@@ -635,7 +635,7 @@ const MatchRate = () => {
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
-                    {item.STATUS === "true" || item.STATUS === "Completed" ? (
+                    {item.STATUS === "Uploaded into client ecospace" || item.STATUS.toLowerCase() === "completed" ? (
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
                     ) :
                       item.STATUS === "false" || item.STATUS === "Failed" ? (
@@ -650,7 +650,7 @@ const MatchRate = () => {
                 </td>
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${status[index]?.STATUS === "Completed" || item.STATUS === "Completed"
+                    className={`${status[index]?.STATUS === "Completed" || item.STATUS === "Completed" || status[index]?.STATUS === "Uploaded into client ecospace" || item.STATUS === "Uploaded into client ecospace"
                       ? "bg-green-200 text-green-700"
                       : status[index]?.STATUS === "Approved" || item.STATUS === "true" ? "bg-amaranth-100 text-amaranth-700 "
                         : status[index]?.STATUS === "Waiting for Approval" || item.STATUS === "Waiting for Approval" ? "bg-amaranth-100 text-amaranth-500 "
@@ -677,9 +677,9 @@ const MatchRate = () => {
                     }
                     disabled={
                       item.STATUS !== "Uploaded into client ecospace" ||
-                      item.STATUS !== "Completed"
+                      item.STATUS.toLowerCase() !== "completed"
                     }
-                    className={`${item.STATUS === "Completed" ||
+                    className={`${item.STATUS.toLowerCase() === "completed" ||
                         item.STATUS === "Uploaded into client ecospace"
                         ? "opacity-1 hover:text-inherit"
                         : "disabled opacity-10 hover:text-inherit"
@@ -708,8 +708,8 @@ const MatchRate = () => {
                   </button>
                   <button
                     onClick={() => handleUploadData(item.RUN_ID)}
-                    disabled={item.STATUS !== "Completed"}
-                    className={`${item.STATUS === "Completed"
+                    disabled={item.STATUS.toLowerCase() !== "completed"}
+                    className={`${item.STATUS.toLowerCase() === "completed"
                         ? "opacity-1 hover:text-inherit"
                         : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}

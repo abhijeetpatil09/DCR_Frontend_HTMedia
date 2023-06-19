@@ -68,6 +68,7 @@ const QueryStatus = () => {
   }, [user?.name]);
 
   const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
+    TEMPLATE_NAME = TEMPLATE_NAME.replace(/\s/g, "_");
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         responseType: "json",
@@ -228,9 +229,10 @@ const QueryStatus = () => {
                         <TableCell className="text-amaranth-900" align="center">
                           <span
                             className={`${
-                              row.STATUS === "true" ||
-                              row.STATUS === "Completed"
+                                row.STATUS === "Completed"
                                 ? "bg-green-200 text-green-700"
+                                : row.STATUS === "Failed"
+                                ? "bg-red-200 text-red-700"
                                 : "bg-amaranth-200 text-amaranth-700 "
                             }   py-1 px-3 rounded-full text-xs`}
                           >
@@ -247,12 +249,10 @@ const QueryStatus = () => {
                                 fetchcsvTableData(row.TEMPLATE_NAME, row.RUN_ID)
                               }
                               disabled={
-                                row.STATUS !== "true" ||
-                                row.STATUS !== "Completed"
+                                row.STATUS.toLowerCase() !== "completed"
                               }
                               className={`${
-                                row.STATUS === "true" ||
-                                row.STATUS === "Completed"
+                                row.STATUS.toLowerCase() === "completed"
                                   ? "opacity-1 hover:text-inherit"
                                   : "disabled opacity-10 hover:text-inherit"
                               }  px-2 hover:text-amaranth-600`}
@@ -285,12 +285,10 @@ const QueryStatus = () => {
                                   downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
                                 }
                                 disabled={
-                                  row.STATUS !== "true" ||
-                                  row.STATUS !== "Completed"
+                                  row.STATUS.toLowerCase() !== "completed"
                                 }
                                 className={`${
-                                  row.STATUS === "true" ||
-                                  row.STATUS === "Completed"
+                                  row.STATUS.toLowerCase() === "completed"
                                     ? "opacity-1 hover:text-inherit"
                                     : "disabled opacity-10 hover:text-inherit"
                                 }  px-2 hover:text-amaranth-600`}
@@ -318,12 +316,12 @@ const QueryStatus = () => {
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}
                                   disabled={
-                                    row.STATUS !== "true" ||
-                                    row.STATUS !== "Completed"
+                                    
+                                    row.STATUS.toLowerCase() !== "completed"
                                   }
                                   className={`${
-                                    row.STATUS === "true" ||
-                                    row.STATUS === "Completed"
+                                    
+                                    row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600`}
@@ -351,12 +349,10 @@ const QueryStatus = () => {
                                 </button>
                                 <button
                                   disabled={
-                                    row.STATUS !== "true" ||
-                                    row.STATUS !== "Completed"
+                                    row.STATUS.toLowerCase() !== "completed"
                                   }
                                   className={`${
-                                    row.STATUS === "true" ||
-                                    row.STATUS === "Completed"
+                                    row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600`}
