@@ -14,7 +14,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MatchRate from "./components/MatchRate";
 import Analytics from "./components/Analytics";
 import ConsumerAdmin from "./components/Admin/ConsumerAdmin";
-import ProviderAdmin from "./components/Admin/ProviderAdmin";
+import ProviderAdmin from "./components/Admin/ProviderAdmin/ProviderAdmin";
 
 import PrivacyPolicy from "./components/CommonComponent/CommonPages/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/CommonPages/TermsAndConditions";

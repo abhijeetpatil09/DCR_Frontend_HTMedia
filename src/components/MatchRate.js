@@ -46,9 +46,12 @@ const MatchRate = () => {
 
   const [gender, setGender] = useState("male");
   const [age, setAge] = useState("age_0_6");
+  const [byPassAPICalled, setByPassAPICalled] = useState(false);
+  const [status, setStatus] = useState([]);
 
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
+  const [callTable, setCallTable] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -142,9 +145,9 @@ const MatchRate = () => {
   const createNewRequest = () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
       axios
-        .get(`http://127.0.0.1:5000/Hoonartekprov`, {
+        .get(`http://127.0.0.1:5000/${user.name}`, {
           params: {
-            query: `select TEMPLATE_STATUS from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
+            query: `select TEMPLATE_STATUS from DCR_PROVIDER2.CLEANROOM.TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
           },
         })
         .then((response) => {
@@ -181,7 +184,9 @@ const MatchRate = () => {
   useEffect(() => {
     fetchMainTable();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [callTable]);
+
+
 
   useEffect(() => {
     if (TableData) {
@@ -230,8 +235,39 @@ const MatchRate = () => {
   //   return regex.test(inputString); // returns true if inputString matches the regex pattern, false otherwise
   // };
 
+  const getStatusApi = () => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query:
+            "select status from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 5;",
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let res = response?.data?.data;
+          setStatus(res);
+        } else {
+          setStatus([]);
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+  useEffect(() => {
+    let intervalId;
+    if (byPassAPICalled === true) {
+      intervalId = setInterval(() => {
+        getStatusApi();
+      }, 8000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [user?.name, byPassAPICalled, callTable]);
+
   const callByPassAPI = () => {
     setTimeout(() => {
+      setByPassAPICalled(true);
       fetchMainTable();
       handleClose();
       axios
@@ -242,9 +278,13 @@ const MatchRate = () => {
         })
         .then((response) => {
           if (response) {
-            fetchMainTable();
+            setByPassAPICalled(false);
+            setCallTable(false);
+            getStatusApi();
           } else {
-            fetchMainTable();
+            setByPassAPICalled(false);
+            setCallTable(false);
+            getStatusApi();
             dispatch(
               actions.PublisherForm({
                 fetchData: false,
@@ -254,7 +294,9 @@ const MatchRate = () => {
         })
         .catch((error) => {
           console.log(error);
-          fetchMainTable();
+          setByPassAPICalled(false);
+          setCallTable(false);
+          getStatusApi();
           dispatch(
             actions.PublisherForm({
               fetchData: false,
@@ -262,7 +304,7 @@ const MatchRate = () => {
           );
         });
       setTimeout(() => {
-        fetchMainTable();
+        setCallTable(true);
         handleClose();
       }, 2000);
     }, 2000);
@@ -418,6 +460,7 @@ const MatchRate = () => {
   };
 
   const callByPassUpload = () => {
+    setByPassAPICalled(true);
     setTimeout(() => {
       fetchMainTable();
       axios
@@ -429,11 +472,13 @@ const MatchRate = () => {
         .then((response) => {
           if (response) {
             fetchMainTable();
+            setByPassAPICalled(false);
           }
         })
         .catch((error) => {
           console.log(error);
           fetchMainTable();
+          setByPassAPICalled(false);
         });
     }, 2000);
   };
@@ -590,35 +635,31 @@ const MatchRate = () => {
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
-                    {item.STATUS === "true" ||
-                    item.STATUS === "Completed" ||
-                    item.STATUS === "Uploaded into client ecospace" ? (
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
-                    ) : item.STATUS === "Failed" || item.STATUS === "false" ? (
-                      <>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amaranth-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                      </>
-                    )}
+                    {item.STATUS === "true" || item.STATUS === "Completed" ? (
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
+                    ) :
+                      item.STATUS === "false" || item.STATUS === "Failed" ? (
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
+                      ) :
+                        (
+                          <>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                          </>
+                        )}
                   </span>
                 </td>
-                <td className="border  px-4 py-2  whitespace-nowrap">
+                <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${
-                      item.STATUS === "true" ||
-                      item.STATUS === "Completed" ||
-                      item.STATUS === "Uploaded into client ecospace"
-                        ? "bg-green-200 text-green-700"
-                        : "bg-amaranth-200 text-amaranth-700 "
-                    }   py-1 px-3 rounded-full text-xs`}
+                    className={`${status[index]?.STATUS === "Completed" || item.STATUS === "Completed"
+                      ? "bg-green-200 text-green-700"
+                      : status[index]?.STATUS === "Approved" || item.STATUS === "true" ? "bg-amaranth-100 text-amaranth-700 "
+                        : status[index]?.STATUS === "Waiting for Approval" || item.STATUS === "Waiting for Approval" ? "bg-amaranth-100 text-amaranth-500 "
+                          : status[index]?.STATUS === "Failed" || item.STATUS === "Failed" ? "bg-red-200 text-red-700 "
+                            : "bg-amaranth-100 text-amaranth-700 "
+                      }   py-1 px-3 rounded-full text-xs`}
                   >
-                    {item.STATUS === "Uploaded into client ecospace"
-                      ? "Completed"
-                      : item.STATUS}
+                    {status[index]?.STATUS === "true" ? "Approved"
+                      : status[index]?.STATUS === "false" ? "Rejected" : status[index]?.STATUS.length > 0 ? status[index]?.STATUS : item.STATUS}
                   </span>
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -638,12 +679,11 @@ const MatchRate = () => {
                       item.STATUS !== "Uploaded into client ecospace" ||
                       item.STATUS !== "Completed"
                     }
-                    className={`${
-                      item.STATUS === "Completed" ||
-                      item.STATUS === "Uploaded into client ecospace"
+                    className={`${item.STATUS === "Completed" ||
+                        item.STATUS === "Uploaded into client ecospace"
                         ? "opacity-1 hover:text-inherit"
                         : "disabled opacity-10 hover:text-inherit"
-                    }  px-2 hover:text-amaranth-600`}
+                      }  px-2 hover:text-amaranth-600`}
                     title="View file"
                   >
                     <svg
@@ -666,40 +706,13 @@ const MatchRate = () => {
                       />
                     </svg>
                   </button>
-                  {/* <button
-                    onClick={() =>
-                      downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
-                    }
-                    className={`${
-                      item.STATUS === "false"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : item.STATUS === "pending"
-                        ? "disabled opacity-10 hover:text-inherit"
-                        : " "
-                    }  px-1 hover:text-amaranth-600 cursor-pointer`}
-                    title="Download file"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button> */}
                   <button
                     onClick={() => handleUploadData(item.RUN_ID)}
                     disabled={item.STATUS !== "Completed"}
-                    className={`${
-                      item.STATUS === "Completed"
+                    className={`${item.STATUS === "Completed"
                         ? "opacity-1 hover:text-inherit"
                         : "disabled opacity-10 hover:text-inherit"
-                    }  px-2 hover:text-amaranth-600`}
+                      }  px-2 hover:text-amaranth-600`}
                     title={
                       item.STATUS === "Uploaded into client ecospace"
                         ? "Already Uploaded into client ecospace"
@@ -1036,7 +1049,7 @@ const MatchRate = () => {
             </div>
             <div className="px-4">
               {SampleFileData?.head?.length > 0 &&
-              SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                 <Table
                   head={SampleFileData?.head}
                   rows={SampleFileData?.rows}

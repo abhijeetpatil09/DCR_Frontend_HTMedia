@@ -76,6 +76,7 @@ const Enrichment = () => {
   const [columns, setColumns] = useState([]);
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
   const [data, setData] = useState([]);
+  const [status, setStatus] = useState([]);
 
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
@@ -134,6 +135,37 @@ const Enrichment = () => {
       .catch((error) => console.log(error));
   }, [user?.name, callTable]);
 
+  const getStatusApi = () => {
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query:
+            "select status from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'CUSTOMER ENRICHMENT' order by RUN_ID desc limit 5;",
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          let res = response?.data?.data;
+          setStatus(res);
+        } else {
+          setStatus([]);
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+  useEffect(() => {
+    let intervalId;
+    if (byPassAPICalled === true) {
+      intervalId = setInterval(() => {
+        getStatusApi();
+      }, 8000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.name, byPassAPICalled, callTable]);
+
   // UseEffect used for Inserting the Provider...
 
   useEffect(() => {
@@ -154,7 +186,7 @@ const Enrichment = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.name]);
 
-  // UseEffect to call API for get the Colums list
+  // UseEffect to call API for get the Columns list
 
   useEffect(() => {
     if (databaseName !== "" && formData["Query_Name"] !== "") {
@@ -210,9 +242,9 @@ const Enrichment = () => {
   const createNewRequest = () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
       axios
-        .get(`http://127.0.0.1:5000/Hoonartekprov`, {
+        .get(`http://127.0.0.1:5000/${user.name}`, {
           params: {
-            query: `select TEMPLATE_STATUS from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
+            query: `select TEMPLATE_STATUS from DCR_PROVIDER2.CLEANROOM.TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
           },
         })
         .then((response) => {
@@ -324,9 +356,11 @@ const Enrichment = () => {
             // fetchcsvTableData();
             setByPassAPICalled(false);
             setCallTable(false);
+            getStatusApi();
           } else {
             setByPassAPICalled(false);
             setCallTable(false);
+            getStatusApi();
             dispatch(
               actions.ConsumerQueryForm({
                 fetchData: false,
@@ -338,6 +372,7 @@ const Enrichment = () => {
           console.log(error);
           setByPassAPICalled(false);
           setCallTable(false);
+          getStatusApi();
           dispatch(
             actions.ConsumerQueryForm({
               fetchData: false,
@@ -379,6 +414,8 @@ const Enrichment = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    // handleClose();
+
     setLoading(true);
 
     const delimiter = "&";
@@ -443,10 +480,12 @@ const Enrichment = () => {
       })
       .then((response) => {
         if (response) {
+          // getStatusApi();
           dispatch(
             actions.ConsumerQueryForm({
               RequestId: formData?.RunId,
               fetchData: true,
+              
             })
           );
           callByPassAPI();
@@ -578,24 +617,30 @@ const Enrichment = () => {
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS === "true" || item.STATUS === "Completed" ? (
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
-                    ) : (
-                      <>
-                        {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amaranth-400 opacity-75"></span> */}
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                      </>
-                    )}
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
+                    ) :
+                      item.STATUS === "false" || item.STATUS === "Failed" ? (
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
+                      ) :
+                        (
+                          <>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                          </>
+                        )}
                   </span>
                 </td>
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${
-                      item.STATUS === "true" || item.STATUS === "Completed"
-                        ? "bg-green-200 text-green-700"
-                        : "bg-amaranth-200 text-amaranth-700 "
-                    }   py-1 px-3 rounded-full text-xs`}
+                    className={`${status[index]?.STATUS === "Completed" || item.STATUS === "Completed"
+                      ? "bg-green-200 text-green-700"
+                      : status[index]?.STATUS === "Approved" || item.STATUS === "true" ? "bg-amaranth-100 text-amaranth-700 "
+                        : status[index]?.STATUS === "Waiting for Approval" || item.STATUS === "Waiting for Approval" ? "bg-amaranth-100 text-amaranth-500 "
+                          : status[index]?.STATUS === "Failed" || item.STATUS === "Failed" ? "bg-red-200 text-red-700 "
+                            : "bg-amaranth-100 text-amaranth-700 "
+                      }   py-1 px-3 rounded-full text-xs`}
                   >
-                    {item.STATUS}
+                    {status[index]?.STATUS === "true" ? "Approved"
+                      : status[index]?.STATUS === "false" ? "Rejected" : status[index]?.STATUS.length > 0 ? status[index]?.STATUS : item.STATUS}
                   </span>
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -614,11 +659,10 @@ const Enrichment = () => {
                     disabled={
                       item.STATUS !== "true" || item.STATUS !== "Completed"
                     }
-                    className={`${
-                      item.STATUS === "true" || item.STATUS === "Completed"
-                        ? "opacity-1 hover:text-inherit"
-                        : "disabled opacity-10 hover:text-inherit"
-                    }  px-2 hover:text-amaranth-600`}
+                    className={`${item.STATUS === "true" || item.STATUS === "Completed"
+                      ? "opacity-1 hover:text-inherit"
+                      : "disabled opacity-10 hover:text-inherit"
+                      }  px-2 hover:text-amaranth-600`}
                     title="View File"
                   >
                     <svg
@@ -648,11 +692,10 @@ const Enrichment = () => {
                     disabled={
                       item.STATUS !== "true" || item.STATUS !== "Completed"
                     }
-                    className={`${
-                      item.STATUS === "true" || item.STATUS === "Completed"
-                        ? "opacity-1 hover:text-inherit"
-                        : "disabled opacity-10 hover:text-inherit"
-                    }  px-2 hover:text-amaranth-600`}
+                    className={`${item.STATUS === "true" || item.STATUS === "Completed"
+                      ? "opacity-1 hover:text-inherit"
+                      : "disabled opacity-10 hover:text-inherit"
+                      }  px-2 hover:text-amaranth-600`}
                     title="Download file"
                   >
                     <svg
@@ -852,7 +895,7 @@ const Enrichment = () => {
             </div>
             <div className="px-4">
               {SampleFileData?.head?.length > 0 &&
-              SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                 <Table
                   head={SampleFileData?.head}
                   rows={SampleFileData?.rows}
