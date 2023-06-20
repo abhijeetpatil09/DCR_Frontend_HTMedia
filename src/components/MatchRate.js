@@ -251,7 +251,7 @@ const MatchRate = () => {
       })
       .catch((error) => console.log(error));
   };
-  
+
   useEffect(() => {
     let intervalId;
     if (byPassAPICalled === true) {
@@ -635,31 +635,42 @@ const MatchRate = () => {
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
-                    {item.STATUS === "Uploaded into client ecospace" || item.STATUS.toLowerCase() === "completed" ? (
+                    {item.STATUS.toLowerCase() === "completed" ? (
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
-                    ) :
-                      item.STATUS === "false" || item.STATUS === "Failed" ? (
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
-                      ) :
-                        (
-                          <>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                          </>
-                        )}
+                    ) : item.STATUS === "false" || item.STATUS === "Failed" ? (
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
+                    ) : (
+                      <>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                      </>
+                    )}
                   </span>
                 </td>
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
-                    className={`${status[index]?.STATUS === "Completed" || item.STATUS === "Completed" || status[index]?.STATUS === "Uploaded into client ecospace" || item.STATUS === "Uploaded into client ecospace"
-                      ? "bg-green-200 text-green-700"
-                      : status[index]?.STATUS === "Approved" || item.STATUS === "true" ? "bg-amaranth-100 text-amaranth-700 "
-                        : status[index]?.STATUS === "Waiting for Approval" || item.STATUS === "Waiting for Approval" ? "bg-amaranth-100 text-amaranth-500 "
-                          : status[index]?.STATUS === "Failed" || item.STATUS === "Failed" ? "bg-red-200 text-red-700 "
-                            : "bg-amaranth-100 text-amaranth-700 "
-                      }   py-1 px-3 rounded-full text-xs`}
+                    className={`${
+                      status[index]?.STATUS === "Completed" ||
+                      item.STATUS === "Completed"
+                        ? "bg-green-200 text-green-700"
+                        : status[index]?.STATUS === "Approved" ||
+                          item.STATUS === "true"
+                        ? "bg-amaranth-100 text-amaranth-700 "
+                        : status[index]?.STATUS === "Waiting for Approval" ||
+                          item.STATUS === "Waiting for Approval"
+                        ? "bg-amaranth-100 text-amaranth-500 "
+                        : status[index]?.STATUS === "Failed" ||
+                          item.STATUS === "Failed"
+                        ? "bg-red-200 text-red-700 "
+                        : "bg-amaranth-100 text-amaranth-700 "
+                    }   py-1 px-3 rounded-full text-xs`}
                   >
-                    {status[index]?.STATUS === "true" ? "Approved"
-                      : status[index]?.STATUS === "false" ? "Rejected" : status[index]?.STATUS.length > 0 ? status[index]?.STATUS : item.STATUS}
+                    {status[index]?.STATUS === "true"
+                      ? "Approved"
+                      : status[index]?.STATUS === "false"
+                      ? "Rejected"
+                      : status[index]?.STATUS.length > 0
+                      ? status[index]?.STATUS
+                      : item.STATUS}
                   </span>
                 </td>
                 <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -671,69 +682,71 @@ const MatchRate = () => {
                   {handleDate(item.RUN_ID)}
                 </td>
                 <td className="border px-4 py-2">
-                  <button
-                    onClick={() =>
-                      fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
-                    }
-                    disabled={
-                      item.STATUS !== "Uploaded into client ecospace" &&
-                      item.STATUS.toLowerCase() !== "completed"
-                    }
-                    className={`${item.STATUS.toLowerCase() === "completed" ||
-                        item.STATUS === "Uploaded into client ecospace"
-                        ? "opacity-1 hover:text-inherit"
-                        : "disabled opacity-10 hover:text-inherit"
+                  <div className="flex justify-between">
+                    <button
+                      onClick={() =>
+                        fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
+                      }
+                      disabled={item.STATUS.toLowerCase() !== "completed"}
+                      className={`${
+                        item.STATUS.toLowerCase() === "completed"
+                          ? "opacity-1 hover:text-inherit"
+                          : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}
-                    title="View file"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-5 h-5"
+                      title="View file"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => handleUploadData(item.RUN_ID)}
-                    disabled={item.STATUS.toLowerCase() !== "completed"}
-                    className={`${item.STATUS.toLowerCase() === "completed"
-                        ? "opacity-1 hover:text-inherit"
-                        : "disabled opacity-10 hover:text-inherit"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleUploadData(item.RUN_ID)}
+                      disabled={
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                      }
+                      className={`${
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true"
+                          ? "opacity-1 hover:text-inherit"
+                          : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}
-                    title={
-                      item.STATUS === "Uploaded into client ecospace"
-                        ? "Already Uploaded into client ecospace"
-                        : "Upload match records into client ecospace"
-                    }
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-5 h-5"
+                      title={
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                          ? "Already Uploaded into client ecospace"
+                          : "Upload match records into client ecospace"
+                      }
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -1049,7 +1062,7 @@ const MatchRate = () => {
             </div>
             <div className="px-4">
               {SampleFileData?.head?.length > 0 &&
-                SampleFileData?.rows?.length > 0 ? (
+              SampleFileData?.rows?.length > 0 ? (
                 <Table
                   head={SampleFileData?.head}
                   rows={SampleFileData?.rows}

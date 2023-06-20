@@ -330,14 +330,16 @@ const QueryStatus = () => {
                           <span
                             className={`${
                               row.STATUS.toLowerCase() === "completed" ||
-                              row.STATUS === "Uploaded into client ecospace"
+                              row.STATUS.toLowerCase() === "true"
                                 ? "bg-green-200 text-green-700"
                                 : row.STATUS === "Failed"
                                 ? "bg-red-200 text-red-700"
                                 : "bg-amaranth-200 text-amaranth-700 "
                             }   py-1 px-3 rounded-full text-xs`}
                           >
-                            {row.STATUS}
+                            {row.STATUS.toLowerCase() === "true"
+                              ? "Approved"
+                              : row.STATUS}
                           </span>
                         </TableCell>
                         <TableCell className="text-amaranth-900" align="center">
@@ -354,13 +356,13 @@ const QueryStatus = () => {
                                 fetchcsvTableData(row.TEMPLATE_NAME, row.RUN_ID)
                               }
                               disabled={
-                                row.STATUS !== "Uploaded into client ecospace" &&
-                                row.STATUS.toLowerCase() !== "completed" 
+                                row.STATUS.toLowerCase() !== "completed"
                               }
-                              className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
+                              className={`${
+                                row.STATUS.toLowerCase() === "completed"
                                   ? "opacity-1 hover:text-inherit"
                                   : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
+                              }  px-2 hover:text-amaranth-600`}
                               title="View File"
                             >
                               <svg
@@ -455,16 +457,18 @@ const QueryStatus = () => {
                                 <button
                                   onClick={() => handleUploadData(row.RUN_ID)}
                                   disabled={
-                                    row.STATUS.toLowerCase() !== "completed"
+                                    row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                    "true"
                                   }
                                   className={`${
-                                    row.STATUS.toLowerCase() === "completed"
+                                    row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                    "true"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600`}
                                   title={
-                                    row.STATUS ===
-                                    "Uploaded into client ecospace"
+                                    row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                    "true"
                                       ? "Already Uploaded into client ecospace"
                                       : "Upload match records into client ecospace"
                                   }
