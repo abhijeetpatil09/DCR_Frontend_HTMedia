@@ -676,7 +676,7 @@ const MatchRate = () => {
                       fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                     }
                     disabled={
-                      item.STATUS !== "Uploaded into client ecospace" ||
+                      item.STATUS !== "Uploaded into client ecospace" &&
                       item.STATUS.toLowerCase() !== "completed"
                     }
                     className={`${item.STATUS.toLowerCase() === "completed" ||

@@ -303,7 +303,8 @@ const QueryStatus = () => {
                                 fetchcsvTableData(row.TEMPLATE_NAME, row.RUN_ID)
                               }
                               disabled={
-                                row.STATUS.toLowerCase() !== "completed"
+                                row.STATUS !== "Uploaded into client ecospace" &&
+                                row.STATUS.toLowerCase() !== "completed" 
                               }
                               className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
                                   ? "opacity-1 hover:text-inherit"
