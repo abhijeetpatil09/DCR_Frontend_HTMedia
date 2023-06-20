@@ -48,94 +48,100 @@ const Home = () => {
             Welcome to DataHaven, a certified snowflake partner product.
           </p>
         </div>
-        <div className="flex flex-row gap-4 mt-6 mx-3">
-          <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
-            <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
-              <div className=" ">
-                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Customer Enrichment
-                </h3>
 
-                <p className="mt-2 text-sm text-gray-500">
-                  Enrich your first hand data with more data points from the
-                  provider's Data.
-                </p>
-                <button
-                  className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/queryform")}
-                >
-                  Start Now
-                </button>
-              </div>
-            </div>
-            <img
-              className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-              src={enrichment}
-              alt=""
-            />
-          </div>
-          <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
-            <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
-              <div className=" ">
-                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Match Rate
-                </h3>
+        {user.role && !user.role.includes("Provider") && (
+          <div className="flex flex-row gap-4 mt-6 mx-3">
+            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+              <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
+                <div className=" ">
+                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                    Match Rate
+                  </h3>
 
-                <p className="mt-2 text-sm text-gray-500">
-                  Find the Match rate between your's and Provider's data based
-                  on a data point(Email/Phone No. etc.,) to run an AD campaign
-                  on provider's Ecospace.
-                </p>
-                <button
-                  className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/publisherform")}
-                >
-                  Start Now
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                  <p className="mt-2 text-sm text-gray-500">
+                    Find the Match rate between your's and Provider's data based
+                    on a data point(Email/Phone No. etc.,) to run an AD campaign
+                    on provider's Ecospace.
+                  </p>
+                  <button
+                    className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                    onClick={() => navigate("/publisherform")}
+                  >
+                    Start Now
+                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                                     </svg> */}
-                </button>
+                  </button>
+                </div>
               </div>
+              <img
+                className="absolute w-44 z-0 bottom-1 right-2 text-amarant-400"
+                src={match}
+                alt="match"
+              />
             </div>
-            <img
-              className="absolute w-44 z-0 bottom-1 right-2 text-amarant-400"
-              src={match}
-              alt="match"
-            />
-          </div>
-        </div>
-        <div className="flex flex-row gap-4 mt-6 mx-3">
-          <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-red-500 to-yellow-500 p-1 shadow-xl">
-            <div
-              className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
-              href=""
-            >
-              <div className=" ">
-                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Analytics
-                </h3>
+            <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
+              <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
+                <div className=" ">
+                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                    Customer Enrichment
+                  </h3>
 
-                <p className="mt-2 text-sm text-gray-500">
-                  Analyze the Match Rate on various Data oints for deeper
-                  insights on the Provider's Data.
-                </p>
-                <button
-                  className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/analytics")}
-                >
-                  Explore More
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                  <p className="mt-2 text-sm text-gray-500">
+                    Enrich your first hand data with more data points from the
+                    provider's Data.
+                  </p>
+                  <button
+                    className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                    onClick={() => navigate("/queryform")}
+                  >
+                    Start Now
+                  </button>
+                </div>
+              </div>
+              <img
+                className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
+                src={enrichment}
+                alt=""
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-row gap-4 mt-6 mx-3">
+          {user.role && !user.role.includes("Provider") && (
+            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+              <div
+                className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
+                href=""
+              >
+                <div className=" ">
+                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                    Analytics
+                  </h3>
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    Analyze the Match Rate on various Data oints for deeper
+                    insights on the Provider's Data.
+                  </p>
+                  <button
+                    className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                    onClick={() => navigate("/analytics")}
+                  >
+                    Explore More
+                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                                     </svg> */}
-                </button>
+                  </button>
+                </div>
               </div>
+              <img
+                className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
+                src={analyticsIllustration}
+                alt=""
+              />
             </div>
-            <img
-              className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-              src={analyticsIllustration}
-              alt=""
-            />
-          </div>
+          )}
           <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
             <div
               className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"

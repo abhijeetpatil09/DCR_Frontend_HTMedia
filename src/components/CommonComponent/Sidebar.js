@@ -19,17 +19,17 @@ const Sidebar = ({ children }) => {
     const { pathname } = window.location;
     if (pathname?.includes("home")) {
       setTab(1);
-    } else if (pathname?.includes("queryform")) {
-      setTab(2);
     } else if (pathname?.includes("publisherform")) {
+      setTab(2);
+    } else if (pathname?.includes("queryform")) {
       setTab(3);
-    } else if (pathname?.includes("querystatus")) {
-      setTab(4);
     } else if (pathname?.includes("analytics")) {
-      setTab(5);
+      setTab(4);
     } else if (pathname?.includes("consumer-admin")) {
-      setTab(6);
+      setTab(5);
     } else if (pathname?.includes("provider-admin")) {
+      setTab(6);
+    } else if (pathname?.includes("querystatus")) {
       setTab(7);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,37 +168,10 @@ const Sidebar = ({ children }) => {
               </li>
             )} */}
 
-            {user["role"] && user["role"].includes("Consumer") && (
-              <li
-                className={`${
-                  tab === 2 ? "bg-amaranth-200" : ""
-                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
-              >
-                <button
-                  onClick={() => navigateTo("/queryform")}
-                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
-                >
-                  <i className="text-xs mr-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" />
-                    </svg>
-                  </i>
-                  <span className={`${isOpened ? "" : "hidden"} `}>
-                    Enrichment
-                  </span>
-                </button>
-              </li>
-            )}
-
             {user["role"] && user["role"].includes("Publisher") && (
               <li
                 className={`${
-                  tab === 3 ? "bg-amaranth-200" : ""
+                  tab === 2 ? "bg-amaranth-200" : ""
                 } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
                 <button
@@ -226,65 +199,68 @@ const Sidebar = ({ children }) => {
               </li>
             )}
 
-            <li
-              className={`${
-                tab === 4 ? "bg-amaranth-200" : ""
-              } hover:bg-amaranth-200 transition ease-in-out duration-500`}
-            >
-              <button
-                onClick={() => navigateTo("/querystatus")}
-                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+            {user["role"] && user["role"].includes("Consumer") && (
+              <li
+                className={`${
+                  tab === 3 ? "bg-amaranth-200" : ""
+                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
-                <i className="text-xs mr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </i>
-                <span className={`${isOpened ? "" : "hidden"} `}>Status</span>
-              </button>
-            </li>
-            <li
-              className={`${
-                tab === 5 ? "bg-amaranth-200" : ""
-              } hover:bg-amaranth-200 transition ease-in-out duration-500`}
-            >
-              <button
-                onClick={() => navigateTo("/analytics")}
-                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+                <button
+                  onClick={() => navigateTo("/queryform")}
+                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+                >
+                  <i className="text-xs mr-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" />
+                    </svg>
+                  </i>
+                  <span className={`${isOpened ? "" : "hidden"} `}>
+                    Enrichment
+                  </span>
+                </button>
+              </li>
+            )}
+
+            {user.role && !user.role.includes("Provider") && (
+              <li
+                className={`${
+                  tab === 4 ? "bg-amaranth-200" : ""
+                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
-                <i className="text-xs mr-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </i>
-                <span className={`${isOpened ? "" : "hidden"} `}>
-                  Analytics
-                </span>
-              </button>
-            </li>
+                <button
+                  onClick={() => navigateTo("/analytics")}
+                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+                >
+                  <i className="text-xs mr-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </i>
+                  <span className={`${isOpened ? "" : "hidden"} `}>
+                    Analytics
+                  </span>
+                </button>
+              </li>
+            )}
 
             {user["role"] && user["role"].includes("Consumer_Admin") && (
               <li
                 className={`${
-                  tab === 6 ? "bg-amaranth-200" : ""
+                  tab === 5 ? "bg-amaranth-200" : ""
                 } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
                 <button
@@ -314,27 +290,63 @@ const Sidebar = ({ children }) => {
               </li>
             )}
             {user["role"] && user["role"].includes("Provider_Admin") && (
-              <li className={`${
-                tab === 7 ? "bg-amaranth-200" : ""
-              } hover:bg-amaranth-200 transition ease-in-out duration-500`}>
+              <li
+                className={`${
+                  tab === 6 ? "bg-amaranth-200" : ""
+                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+              >
                 <button
                   onClick={() => navigateTo("/provider-admin")}
-                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm ">
+                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+                >
                   <i className="text-xs mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                      />
                     </svg>
-
                   </i>
-                  <span
-                    className={`${isOpened ? "" : "hidden"
-                      } `}
-                  >
+                  <span className={`${isOpened ? "" : "hidden"} `}>
                     Admin console
                   </span>
                 </button>
               </li>
             )}
+            <li
+              className={`${
+                tab === 7 ? "bg-amaranth-200" : ""
+              } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+            >
+              <button
+                onClick={() => navigateTo("/querystatus")}
+                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+              >
+                <i className="text-xs mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </i>
+                <span className={`${isOpened ? "" : "hidden"} `}>Status</span>
+              </button>
+            </li>
           </ul>
         </aside>
 

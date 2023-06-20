@@ -226,31 +226,67 @@ const QueryStatus = () => {
                   "& th:first-child": { borderLeft: 1, borderColor: "#d6d3d1" },
                 }}
               >
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={0} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={0}
+                  align="center"
+                >
                   Request ID
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={1} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={1}
+                  align="center"
+                >
                   Template Name
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={2} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={2}
+                  align="center"
+                >
                   Column Names
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={3} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={3}
+                  align="center"
+                >
                   Identifier Type
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={4} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={4}
+                  align="center"
+                >
                   Match Attribute
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={5} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={5}
+                  align="center"
+                >
                   Match Count
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={6} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={6}
+                  align="center"
+                >
                   Status
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={7} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={7}
+                  align="center"
+                >
                   Requested
                 </TableCell>
-                <TableCell className="bg-amaranth-50 text-amaranth-900" key={"Actions"} align="center">
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={"Actions"}
+                  align="center"
+                >
                   Actions
                 </TableCell>
               </TableRow>
@@ -262,6 +298,7 @@ const QueryStatus = () => {
                   ?.map((row, index) => {
                     return (
                       <TableRow
+                        className="border-gray-200 hover:bg-amaranth-50"
                         key={index}
                         sx={{
                           "& td:last-child": {
@@ -271,24 +308,34 @@ const QueryStatus = () => {
                           "& td": { borderLeft: 1, borderColor: "#d6d3d1" },
                         }}
                       >
-                        <TableCell className="text-amaranth-900" align="center">{row.RUN_ID}</TableCell>
+                        <TableCell className="text-amaranth-900" align="center">
+                          {row.RUN_ID}
+                        </TableCell>
                         <TableCell className="text-amaranth-900" align="center">
                           {row.TEMPLATE_NAME}
                         </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">{row.COLOUMNS}</TableCell>
+                        <TableCell className="text-amaranth-900" align="center">
+                          {row.COLOUMNS}
+                        </TableCell>
                         <TableCell className="text-amaranth-900" align="center">
                           {row.IDENTIFIER_TYPE}
                         </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">{row.ATTRIBUTE}</TableCell>
-                        <TableCell className="text-amaranth-900" align="center">{row.MATCH_COUNT}</TableCell>
+                        <TableCell className="text-amaranth-900" align="center">
+                          {row.ATTRIBUTE}
+                        </TableCell>
+                        <TableCell className="text-amaranth-900" align="center">
+                          {row.MATCH_COUNT}
+                        </TableCell>
                         <TableCell className="text-amaranth-900" align="center">
                           <span
-                            className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
+                            className={`${
+                              row.STATUS.toLowerCase() === "completed" ||
+                              row.STATUS === "Uploaded into client ecospace"
                                 ? "bg-green-200 text-green-700"
                                 : row.STATUS === "Failed"
-                                  ? "bg-red-200 text-red-700"
-                                  : "bg-amaranth-200 text-amaranth-700 "
-                              }   py-1 px-3 rounded-full text-xs`}
+                                ? "bg-red-200 text-red-700"
+                                : "bg-amaranth-200 text-amaranth-700 "
+                            }   py-1 px-3 rounded-full text-xs`}
                           >
                             {row.STATUS}
                           </span>
@@ -296,7 +343,11 @@ const QueryStatus = () => {
                         <TableCell className="text-amaranth-900" align="center">
                           {handleDate(row.RUN_ID)}
                         </TableCell>
-                        <TableCell className="text-amaranth-900" key={"actions"} align="center">
+                        <TableCell
+                          className="text-amaranth-900"
+                          key={"actions"}
+                          align="center"
+                        >
                           <div className="flex">
                             <button
                               onClick={() =>
@@ -333,7 +384,7 @@ const QueryStatus = () => {
                               </svg>
                             </button>
                             {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                              row.TEMPLATE_NAME === "customer_enrichment" ? (
+                            row.TEMPLATE_NAME === "customer_enrichment" ? (
                               <button
                                 onClick={() =>
                                   downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
@@ -341,10 +392,11 @@ const QueryStatus = () => {
                                 disabled={
                                   row.STATUS.toLowerCase() !== "completed"
                                 }
-                                className={`${row.STATUS.toLowerCase() === "completed" 
+                                className={`${
+                                  row.STATUS.toLowerCase() === "completed"
                                     ? "opacity-1 hover:text-inherit"
                                     : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
+                                }  px-2 hover:text-amaranth-600`}
                                 title="Download file"
                               >
                                 <svg
@@ -364,18 +416,20 @@ const QueryStatus = () => {
                               </button>
                             ) : null}
                             {row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                              row.TEMPLATE_NAME === "advertiser_match" ? (
+                            row.TEMPLATE_NAME === "advertiser_match" ? (
                               <>
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}
                                   disabled={
-
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${row.STATUS.toLowerCase() === "completed" || row.STATUS === "Uploaded into client ecospace"
+                                  className={`${
+                                    row.STATUS.toLowerCase() === "completed" ||
+                                    row.STATUS ===
+                                      "Uploaded into client ecospace"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
+                                  }  px-2 hover:text-amaranth-600`}
                                   title="Show Analytics"
                                 >
                                   <svg
@@ -403,12 +457,14 @@ const QueryStatus = () => {
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${row.STATUS.toLowerCase() === "completed"
+                                  className={`${
+                                    row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
+                                  }  px-2 hover:text-amaranth-600`}
                                   title={
-                                    row.STATUS === "Uploaded into client ecospace"
+                                    row.STATUS ===
+                                    "Uploaded into client ecospace"
                                       ? "Already Uploaded into client ecospace"
                                       : "Upload match records into client ecospace"
                                   }

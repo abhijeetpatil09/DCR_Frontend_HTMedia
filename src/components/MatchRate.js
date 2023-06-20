@@ -186,8 +186,6 @@ const MatchRate = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callTable]);
 
-
-
   useEffect(() => {
     if (TableData) {
       setTableHead(TableData?.head || []);
@@ -252,7 +250,8 @@ const MatchRate = () => {
         }
       })
       .catch((error) => console.log(error));
-  }
+  };
+  
   useEffect(() => {
     let intervalId;
     if (byPassAPICalled === true) {
@@ -263,6 +262,7 @@ const MatchRate = () => {
     return () => {
       clearInterval(intervalId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.name, byPassAPICalled, callTable]);
 
   const callByPassAPI = () => {
@@ -631,7 +631,7 @@ const MatchRate = () => {
             {data.map((item, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-200 hover:bg-gray-100"
+                className="border-b border-gray-200 hover:bg-amaranth-50"
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">

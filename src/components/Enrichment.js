@@ -612,7 +612,7 @@ const Enrichment = () => {
             {data.map((item, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-200 hover:bg-gray-100"
+                className="border-b border-gray-200 hover:bg-amaranth-50"
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">

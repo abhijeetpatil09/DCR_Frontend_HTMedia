@@ -58,7 +58,11 @@ const OutputTable = ({ id, head, rows }) => {
             >
               {head?.map((column, index) => {
                 return (
-                  <TableCell key={index} align="center">
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={index}
+                    align="center"
+                  >
                     {column}
                   </TableCell>
                 );
@@ -72,6 +76,7 @@ const OutputTable = ({ id, head, rows }) => {
                 ?.map((item, index) => {
                   return (
                     <TableRow
+                      className="border-gray-200 hover:bg-amaranth-50"
                       key={index}
                       sx={{
                         "& td:last-child": {
