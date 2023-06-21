@@ -11,6 +11,8 @@ import match from "../Assets/enrichment.svg";
 import analyticsIllustration from "../Assets/Pie chart _Monochromatic.svg";
 import adminConsole from "../Assets/Settings_Monochromatic.svg";
 
+import { getPartOfDay } from "../utils/commonFunctions";
+
 const Home = () => {
   const state = useSelector((state) => state);
   const navigate = useNavigate();
@@ -41,8 +43,11 @@ const Home = () => {
     <div className="flex flex-row flex-wrap w-full h-full px-5 dark:bg-slate-950 bg-gray-50 pb-10">
       <div className="flex flex-col  text-coal w-2/3  ">
         <div className="flex flex-col mt-9 px-6">
-          <h1 className="text-3xl font-bold text-amaranth-600">
-            Hi {user?.name}, <span className="font-light italic">Good afternoon!</span>
+          <h1 className="flex text-3xl font-bold text-amaranth-600 capitalize">
+            Hi {user.name},{" "}
+            <span className="font-light italic">
+              {getPartOfDay(new Date())}
+            </span>
           </h1>
           <p className="text-gray-600 text-sm pb-2 mb-1">
             Welcome to DataHaven, a certified snowflake partner product.
@@ -239,9 +244,12 @@ const Home = () => {
       <div className="flex flex-col flex-1 w-1/3">
         <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
           <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative mt-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-            <div className="p-4 pb-0 rounded-t-4">
+            <div className="flex p-4 pb-0 rounded-t-4 justify-between">
               <h5 className="mb-0 dark:text-white text-amaranth-700">
                 How to videos
+              </h5>
+              <h5 className="mb-0 dark:text-white text-amaranth-700 cursor-pointer">
+                View All
               </h5>
             </div>
             <div className="flex-auto p-4">
@@ -263,9 +271,12 @@ const Home = () => {
         </div>
         <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
           <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative mt-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-            <div className="p-4 pb-0 rounded-t-4">
+            <div className="flex p-4 pb-0 rounded-t-4 justify-between">
               <h5 className="mb-0 dark:text-white text-amaranth-700">
                 Documents
+              </h5>
+              <h5 className="mb-0 dark:text-white text-amaranth-700 cursor-pointer">
+                View All
               </h5>
             </div>
             <div className="flex-auto p-4">

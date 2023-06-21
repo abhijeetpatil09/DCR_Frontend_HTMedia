@@ -132,3 +132,16 @@ export const CustomTooltip = ({
 
   return null;
 };
+
+// To find the part of the day using current time ..
+export const getPartOfDay = (time) => {
+  const hour = time.getHours();
+  // const min = time.getMinutes();
+  if (hour >= 5 && hour < 12) {
+    return <p>Good morning!</p>;
+  } else if (hour >= 12 && hour < 17) {
+    return <p>Good afternoon!</p>;
+  } else {
+    return <p>Good evening!</p>;
+  }
+};
