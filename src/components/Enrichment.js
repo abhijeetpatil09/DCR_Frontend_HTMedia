@@ -645,9 +645,9 @@ const Enrichment = () => {
                         : "bg-amaranth-100 text-amaranth-700 "
                     }   py-1 px-3 rounded-full text-xs`}
                   >
-                    {status[index]?.STATUS === "true"
+                    {status[index]?.STATUS === "true" || item.STATUS === "true"
                       ? "Approved"
-                      : status[index]?.STATUS === "false"
+                      : status[index]?.STATUS === "false" ||item.STATUS === "false"
                       ? "Rejected"
                       : status[index]?.STATUS.length > 0
                       ? status[index]?.STATUS
