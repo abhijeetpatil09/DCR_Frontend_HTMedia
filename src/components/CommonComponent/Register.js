@@ -487,8 +487,8 @@ const Register = () => {
   );
 
   return (
-    <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 h-screen " >
-      <div className="flex flex-row mx-auto max-w-[70%]  overflow-scroll  max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
+    <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 " >
+      <div className="flex flex-row mx-auto max-w-[70%]    max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
         <div className="w-1/2 px-6 py-4">
           <div className=" flex flex-row items-start justify-start py-4 ">
             <a href="#_"
@@ -520,6 +520,7 @@ const Register = () => {
       </div>
     </div>
   );
+ 
 };
 
 export default Register;

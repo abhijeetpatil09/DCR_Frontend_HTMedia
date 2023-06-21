@@ -42,7 +42,7 @@ const Home = () => {
       <div className="flex flex-col  text-coal w-2/3  ">
         <div className="flex flex-col mt-9 px-6">
           <h1 className="text-3xl font-bold text-amaranth-600">
-            Hi John, <span className="font-light italic">Good afternoon!</span>
+            Hi {user?.name}, <span className="font-light italic">Good afternoon!</span>
           </h1>
           <p className="text-gray-600 text-sm pb-2 mb-1">
             Welcome to DataHaven, a certified snowflake partner product.
@@ -121,7 +121,7 @@ const Home = () => {
                   </h3>
 
                   <p className="mt-2 text-sm text-gray-500">
-                    Analyze the Match Rate on various Data oints for deeper
+                    Analyze the Match Rate on various Data points for deeper
                     insights on the Provider's Data.
                   </p>
                   <button
