@@ -31,18 +31,18 @@ const LandingPage = () => {
                   Home
                 </a> */}
               <a
-                href="#_"
+                href="#features"
                 className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900"
               >
                 Features
               </a>
               <a
-                href="#_"
+                href="#uc"
                 className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900"
               >
                 Use cases
               </a>
-              <a
+              {/* <a
                 href="#_"
                 className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900"
               >
@@ -53,7 +53,7 @@ const LandingPage = () => {
                 className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900"
               >
                 Blog
-              </a>
+              </a> */}
             </nav>
           </div>
           <div className="inline-flex items-center ml-5 space-x-6 lg:justify-end">
@@ -129,7 +129,7 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Section 3 */}
-      <section className="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24">
+      <section id="features" className="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24">
         <div className="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16">
           {/* Image */}
           <div className="w-full h-96  relative overflow-hidden rounded-md shadow-xl sm:rounded-xl md:w-1/2 ">
@@ -339,7 +339,7 @@ const LandingPage = () => {
       </section>
       {/* Section USECASE */}
       
-      <section className="relative pt-16 bg-blueGray-50">
+      <section id="uc" className="relative pt-16 bg-blueGray-50">
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center">
             <div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-78">
@@ -360,9 +360,9 @@ const LandingPage = () => {
             </div>
 
             <div className="w-full md:w-6/12 px-4">
-              <div className="flex flex-wrap">
-                <div className="w-full md:w-6/12 px-4">
-                  <div className="relative flex flex-col mt-4">
+              <div className="flex flex-col flex-wrap">
+                <div className="w-full flex flex-row  px-4">
+                  <div className="w-1/2 relative flex flex-col">
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-sitemap text-amaranth-500">
@@ -376,7 +376,7 @@ const LandingPage = () => {
                       Achieve superior data matching with our advanced matching rate capabilities. Increase data quality and accuracy by efficiently identifying and linking related records. Maximize operational efficiency and decision-making by leveraging a high matching rate, enabling precise data analysis and insights.                       </p>
                     </div>
                   </div>
-                  <div className="relative flex flex-col min-w-0">
+                  <div className="w-1/2 relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-drafting-compass text-amaranth-500">
@@ -395,8 +395,8 @@ const LandingPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-full md:w-6/12 px-4">
-                  <div className="relative flex flex-col min-w-0 mt-4">
+                <div className="w-full flex flex-row  px-4">
+                  <div className="w-1/2 relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-newspaper text-amaranth-500">
@@ -410,7 +410,7 @@ const LandingPage = () => {
                       Launch a targeted advertising campaign to reach your desired audience with precision. Utilize advanced audience segmentation and data analytics to identify the most relevant customer segments for your products or services.                        </p>
                     </div>
                   </div>
-                  <div className="relative flex flex-col min-w-0">
+                  <div className="w-1/2 relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-file-alt text-amaranth-500">
@@ -436,8 +436,8 @@ const LandingPage = () => {
 
 
 
-      {/* Section 5 */}
-      <section className="flex items-center justify-center py-20 bg-white min-w-screen">
+      {/* Section 5 : HIDDEN REMOVE CLASS TO SHOW*/}
+      <section className="flex items-center justify-center py-20 bg-white min-w-screen hidden">
         <div className="px-16 bg-white">
           <div className="container flex flex-col items-start mx-auto lg:items-center">
             <p className="relative flex items-start justify-start w-full text-lg font-bold tracking-wider text-purple-500 uppercase lg:justify-center lg:items-center">
