@@ -63,6 +63,7 @@ const Sidebar = ({ children }) => {
               >
                 <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
                   DataHaven
+                  <span class="text-amaranth-600">.</span>
                 </span>
               </a>
               <i
