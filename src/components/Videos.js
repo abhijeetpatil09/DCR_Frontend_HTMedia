@@ -1,5 +1,4 @@
 import React from "react";
-import doc1 from "../Assets/DocumentFiles/301a975e448b49f5a1d5223e38fc703c.pdf";
 import lvideo from "../Assets/DataCleanRoom_video.mp4";
 
 const Videos = () => {

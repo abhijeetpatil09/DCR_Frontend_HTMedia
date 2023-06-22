@@ -140,7 +140,7 @@ const Enrichment = () => {
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
           query:
-            "select status from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'CUSTOMER ENRICHMENT' order by RUN_ID desc limit 5;",
+            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'CUSTOMER ENRICHMENT' order by RUN_ID desc limit 5;",
         },
       })
       .then((response) => {

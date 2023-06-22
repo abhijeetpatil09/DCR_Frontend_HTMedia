@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { handleDate } from "../utils/commonFunctions";
+import { getPartOfDay, handleDate } from "../utils/commonFunctions";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,8 @@ import enrichment from "../Assets/Personal data _Monochromatic.svg";
 import match from "../Assets/enrichment.svg";
 import analyticsIllustration from "../Assets/Pie chart _Monochromatic.svg";
 import adminConsole from "../Assets/Settings_Monochromatic.svg";
-import doc1 from "../Assets/DocumentFiles/301a975e448b49f5a1d5223e38fc703c.pdf"
 
-
-import { getPartOfDay } from "../utils/commonFunctions";
+import pdf from "../Assets/PDF/USER_MANUAL.pdf";
 
 const Home = () => {
   const state = useSelector((state) => state);
@@ -21,6 +19,10 @@ const Home = () => {
 
   const user = state && state.user;
   const [data, setData] = useState([]);
+
+  const openPDFInNewWindow = () => {
+    window.open(pdf, "_blank");
+  };
 
   useEffect(() => {
     axios
@@ -60,26 +62,21 @@ const Home = () => {
           <div className="flex flex-row gap-4 mt-6 mx-3">
             <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
               <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
-                <div className=" ">
-                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                    Match Rate
-                  </h3>
+                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                  Match Rate
+                </h3>
 
-                  <p className="mt-2 text-sm text-gray-500">
-                    Find the Match rate between your's and Provider's data based
-                    on a data point(Email/Phone No. etc.,) to run an AD campaign
-                    on provider's Ecospace.
-                  </p>
-                  <button
-                    className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                    onClick={() => navigate("/publisherform")}
-                  >
-                    Start Now
-                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                                    </svg> */}
-                  </button>
-                </div>
+                <p className="mt-2 text-sm text-gray-500">
+                  Find the Match rate between your's and Provider's data based
+                  on a data point(Email/Phone No. etc.,) to run an AD campaign
+                  on provider's Ecospace.
+                </p>
+                <button
+                  className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                  onClick={() => navigate("/publisherform")}
+                >
+                  Start Now
+                </button>
               </div>
               <img
                 className="absolute w-44 z-0 bottom-1 right-2 text-amarant-400"
@@ -89,22 +86,20 @@ const Home = () => {
             </div>
             <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
               <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
-                <div className=" ">
-                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                    Customer Enrichment
-                  </h3>
+                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                  Customer Enrichment
+                </h3>
 
-                  <p className="mt-2 text-sm text-gray-500">
-                    Enrich your first hand data with more data points from the
-                    provider's Data.
-                  </p>
-                  <button
-                    className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                    onClick={() => navigate("/queryform")}
-                  >
-                    Start Now
-                  </button>
-                </div>
+                <p className="mt-2 text-sm text-gray-500">
+                  Enrich your first hand data with more data points from the
+                  provider's Data.
+                </p>
+                <button
+                  className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                  onClick={() => navigate("/queryform")}
+                >
+                  Start Now
+                </button>
               </div>
               <img
                 className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
@@ -122,25 +117,20 @@ const Home = () => {
                 className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
                 href=""
               >
-                <div className=" ">
-                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                    Analytics
-                  </h3>
+                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                  Analytics
+                </h3>
 
-                  <p className="mt-2 text-sm text-gray-500">
-                    Analyze the Match Rate on various Data points for deeper
-                    insights on the Provider's Data.
-                  </p>
-                  <button
-                    className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                    onClick={() => navigate("/analytics")}
-                  >
-                    Explore More
-                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                                    </svg> */}
-                  </button>
-                </div>
+                <p className="mt-2 text-sm text-gray-500">
+                  Analyze the Match Rate on various Data points for deeper
+                  insights on the Provider's Data.
+                </p>
+                <button
+                  className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                  onClick={() => navigate("/analytics")}
+                >
+                  Explore More
+                </button>
               </div>
               <img
                 className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
@@ -154,22 +144,20 @@ const Home = () => {
               className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
               href="/"
             >
-              <div className=" ">
-                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Admin Console
-                </h3>
+              <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                Admin Console
+              </h3>
 
-                <p className="mt-2 text-sm text-gray-500">
-                  To Manage Users for your Account, View Itemised Bills,
-                  Snowflake Account Credit consumption details etc.
-                </p>
-                <button
-                  className="flex flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/consumer-admin")}
-                >
-                  Explore More
-                </button>
-              </div>
+              <p className="mt-2 text-sm text-gray-500">
+                To Manage Users for your Account, View Itemised Bills, Snowflake
+                Account Credit consumption details etc.
+              </p>
+              <button
+                className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                onClick={() => navigate("/consumer-admin")}
+              >
+                Explore More
+              </button>
             </div>
             <img
               className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
@@ -215,16 +203,17 @@ const Home = () => {
                       </td>
                       <td className="border px-4 py-2  whitespace-nowrap">
                         <span
-                          className={`${item.STATUS === "true"
-                            ? "bg-green-200 text-green-700"
-                            : "bg-amaranth-200 text-amaranth-700 "
-                            }   py-1 px-3 rounded-full text-xs`}
+                          className={`${
+                            item.STATUS === "true"
+                              ? "bg-green-200 text-green-700"
+                              : "bg-amaranth-200 text-amaranth-700 "
+                          }   py-1 px-3 rounded-full text-xs`}
                         >
                           {item.STATUS === "true"
                             ? "Approved"
                             : item.STATUS === "false"
-                              ? "Rejected"
-                              : "In Progress"}
+                            ? "Rejected"
+                            : "In Progress"}
                         </span>
                       </td>
                       <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -249,8 +238,10 @@ const Home = () => {
               <h5 className="mb-0 dark:text-white text-amaranth-700">
                 How to videos
               </h5>
-              <h5 className="mb-0 dark:text-white text-amaranth-700 cursor-pointer"
-                onClick={() => navigate("/veiw-all-videos")}>
+              <h5
+                className="mb-0 dark:text-white text-amaranth-700 text-sm cursor-pointer"
+                onClick={() => navigate("/veiw-all-videos")}
+              >
                 View All
               </h5>
             </div>
@@ -280,32 +271,30 @@ const Home = () => {
             </div>
             <div className="flex-auto p-4">
               <ul className="flex flex-col pl-0 mb-0 rounded-lg">
-
                 <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
                   <div className="flex items-center">
                     <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
-                      <a
-                        href={doc1} type="file/pdf"
-                        download
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4 cursor-pointer"
+                        onClick={openPDFInNewWindow}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-4 h-4"
-                        >
-                          <title>Download Document</title>
-                          <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
-                          <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
-                        </svg>
-                      </a>
+                        <title>View</title>
+                        <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
+                        <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+                      </svg>
                     </div>
                     <div className="flex flex-col">
-                      <h6 className="mb-1 leading-normal text-sm text-slate-700 dark:text-white">
-                        Document 1
+                      <h6
+                        className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
+                        onClick={openPDFInNewWindow}
+                      >
+                        <span className="font-semibold">USER MANUAL</span>
                       </h6>
                       <span className="leading-tight text-xs">
-                        About document{" "}
+                        This is a User Manual document{" "}
                         <span className="font-semibold"></span>
                       </span>
                     </div>
@@ -315,58 +304,27 @@ const Home = () => {
                 <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
                   <div className="flex items-center">
                     <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
-                      <a
-                        href={doc1} type="file/pdf"
-                        download
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4 cursor-pointer"
+                        onClick={openPDFInNewWindow}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-4 h-4"
-                        >
-                          <title>Download Document</title>
-                          <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
-                          <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
-                        </svg>
-                      </a>
+                        <title>View</title>
+                        <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
+                        <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+                      </svg>
                     </div>
                     <div className="flex flex-col">
-                      <h6 className="mb-1 leading-normal text-sm text-slate-700 dark:text-white">
-                        Document 2
-                      </h6>
-                      <span className="leading-tight text-xs">
-                        About document2..{" "}
-                        <span className="font-semibold"></span>
-                      </span>
-                    </div>
-                  </div>
-                </li>
-                <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
-                  <div className="flex items-center">
-                    <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
-                      <a
-                        href={doc1} type="file/pdf"
-                        download
+                      <h6
+                        className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
+                        onClick={openPDFInNewWindow}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-4 h-4"
-                        >
-                          <title>Download Document</title>
-                          <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
-                          <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
-                        </svg>
-                      </a>
-                    </div>
-                    <div className="flex flex-col">
-                      <h6 className="mb-1 leading-normal text-sm text-slate-700 dark:text-white">
-                        Document 3
+                        <span className="font-semibold">USER MANUAL</span>
                       </h6>
                       <span className="leading-tight text-xs">
-                        About document3......{" "}
+                        This is a User Manual document{" "}
                         <span className="font-semibold"></span>
                       </span>
                     </div>
@@ -377,7 +335,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
