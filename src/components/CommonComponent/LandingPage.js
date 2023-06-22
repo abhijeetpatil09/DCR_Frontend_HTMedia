@@ -596,7 +596,8 @@ const LandingPage = () => {
           <nav className="flex flex-wrap justify-center -mx-5 -my-2">
             <div className="px-5 py-2">
               <a
-                href="/"
+                href="/privacy-policy"
+                target="_blank"
                 className="text-base leading-6 text-gray-500 hover:text-gray-900"
               >
                 Privacy policy
@@ -604,7 +605,8 @@ const LandingPage = () => {
             </div>
             <div className="px-5 py-2">
               <a
-                href="/"
+                href="/terms-and-conditions"
+                target="_blank"
                 className="text-base leading-6 text-gray-500 hover:text-gray-900"
               >
                 Terms of services
