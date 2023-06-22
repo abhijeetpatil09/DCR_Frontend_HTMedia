@@ -60,7 +60,7 @@ const Home = () => {
 
         {user.role && !user.role.includes("Provider") && (
           <div className="flex flex-row gap-4 mt-6 mx-3">
-            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
               <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
                   Match Rate
@@ -84,7 +84,7 @@ const Home = () => {
                 alt="match"
               />
             </div>
-            <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-amranth-500 to-yellow-500 p-1 shadow-xl">
+            <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
               <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
                   Customer Enrichment
@@ -112,7 +112,7 @@ const Home = () => {
 
         <div className="flex flex-row gap-4 mt-6 mx-3">
           {user.role && !user.role.includes("Provider") && (
-            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
               <div
                 className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
                 href=""
@@ -139,7 +139,7 @@ const Home = () => {
               />
             </div>
           )}
-          <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-yellow-500 via-red-500 to-amaranth-500 p-1 shadow-xl">
+          <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
             <div
               className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
               href="/"
