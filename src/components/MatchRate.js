@@ -234,6 +234,22 @@ const MatchRate = () => {
   // };
 
   const getStatusApi = () => {
+    // axios
+    //   .get(`http://127.0.0.1:5000/${user?.name}`, {
+    //     params: {
+    //       query:
+    //         "select status from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 5;",
+    //     },
+    //   })
+    //   .then((response) => {
+    //     if (response?.data?.data) {
+    //       let res = response?.data?.data;
+    //       setStatus(res);
+    //     } else {
+    //       setStatus([]);
+    //     }
+    //   })
+    //   .catch((error) => console.log(error));
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -241,14 +257,7 @@ const MatchRate = () => {
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 5;",
         },
       })
-      .then((response) => {
-        if (response?.data?.data) {
-          let res = response?.data?.data;
-          setStatus(res);
-        } else {
-          setStatus([]);
-        }
-      })
+      .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
   };
 
@@ -257,7 +266,7 @@ const MatchRate = () => {
     if (byPassAPICalled === true) {
       intervalId = setInterval(() => {
         getStatusApi();
-      }, 8000);
+      }, 5000);
     }
     return () => {
       clearInterval(intervalId);
@@ -266,6 +275,7 @@ const MatchRate = () => {
   }, [user?.name, byPassAPICalled, callTable]);
 
   const callByPassAPI = () => {
+
     setTimeout(() => {
       setByPassAPICalled(true);
       fetchMainTable();
@@ -279,12 +289,12 @@ const MatchRate = () => {
         .then((response) => {
           if (response) {
             setByPassAPICalled(false);
-            setCallTable(false);
-            getStatusApi();
+            // getStatusApi();
+            fetchMainTable();
           } else {
             setByPassAPICalled(false);
-            setCallTable(false);
-            getStatusApi();
+            // getStatusApi();
+            fetchMainTable();
             dispatch(
               actions.PublisherForm({
                 fetchData: false,
@@ -295,18 +305,17 @@ const MatchRate = () => {
         .catch((error) => {
           console.log(error);
           setByPassAPICalled(false);
-          setCallTable(false);
-          getStatusApi();
+          fetchMainTable();
           dispatch(
             actions.PublisherForm({
               fetchData: false,
             })
           );
         });
-      setTimeout(() => {
-        setCallTable(true);
-        handleClose();
-      }, 2000);
+      // setTimeout(() => {
+      //   setCallTable(true);
+      //   handleClose();
+      // }, 2000);
     }, 2000);
   };
 
@@ -380,6 +389,7 @@ const MatchRate = () => {
             actions.PublisherForm({
               RequestId: formData?.RunId,
               fetchData: true,
+
             })
           );
           callByPassAPI();
@@ -649,27 +659,23 @@ const MatchRate = () => {
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
                     className={`${
-                      status[index]?.STATUS === "Completed" ||
+                      
                       item.STATUS === "Completed"
                         ? "bg-green-200 text-green-700"
-                        : status[index]?.STATUS === "Approved" ||
+                        : item.STATUS === "Approved" ||
                           item.STATUS === "true"
                         ? "bg-amaranth-100 text-amaranth-700 "
-                        : status[index]?.STATUS === "Waiting for Approval" ||
-                          item.STATUS === "Waiting for Approval"
+                        : item.STATUS === "Waiting for Approval"
                         ? "bg-amaranth-100 text-amaranth-500 "
-                        : status[index]?.STATUS === "Failed" ||
-                          item.STATUS === "Failed"
+                        : item.STATUS === "Failed"
                         ? "bg-red-200 text-red-700 "
                         : "bg-amaranth-100 text-amaranth-700 "
                     }   py-1 px-3 rounded-full text-xs`}
                   >
-                    {status[index]?.STATUS === "true" || item.STATUS === "true"
+                    {item.STATUS === "true"
                       ? "Approved"
-                      : status[index]?.STATUS === "false" || item.STATUS === "false"
+                      : item.STATUS === "false"
                       ? "Rejected"
-                      : status[index]?.STATUS.length > 0
-                      ? status[index]?.STATUS
                       : item.STATUS}
                   </span>
                 </td>

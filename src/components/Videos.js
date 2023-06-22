@@ -6,18 +6,17 @@ const Videos = () => {
         <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
             <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
                 <div className="flex h-12 sticky top-0 z-30 py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
-                    <h3 className="px-5 text-lg font-light text-white">Video List</h3>
+                    <h3 className="px-5 text-lg font-light text-white">How to Videos</h3>
                 </div>
                 <div className="flex-auto p-4">
                     <ul className="flex flex-col pl-0 mb-0 rounded-lg">
                         <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
                             <div className="flex items-center w-1/2">
                                 <div className="flex-auto p-4">
-                                    <h2 className="font-semibold">Video 1</h2> 
+                                    <h2 className="font-semibold">Introduction to DCR</h2> 
                                     <video
                                         width="100%"
                                         height="240"
-                                        autoPlay
                                         loop
                                         muted
                                         controls
@@ -37,7 +36,6 @@ const Videos = () => {
                                     <video
                                         width="100%"
                                         height="240"
-                                        autoPlay
                                         loop
                                         muted
                                         controls
@@ -60,7 +58,6 @@ const Videos = () => {
                                     <video
                                         width="100%"
                                         height="240"
-                                        autoPlay
                                         loop
                                         muted
                                         controls
@@ -80,7 +77,6 @@ const Videos = () => {
                                     <video
                                         width="100%"
                                         height="240"
-                                        autoPlay
                                         loop
                                         muted
                                         controls
