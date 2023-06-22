@@ -11,7 +11,9 @@ import match from "../Assets/enrichment.svg";
 import analyticsIllustration from "../Assets/Pie chart _Monochromatic.svg";
 import adminConsole from "../Assets/Settings_Monochromatic.svg";
 
-import pdf from "../Assets/PDF/USER_MANUAL.pdf";
+import USER_MANUAL_PDF from "../Assets/PDF/User_Manual.pdf";
+import DCR_INTRO_PDF from "../Assets/PDF/DCR_Introduction.pdf";
+import Provider_Data_Catalog_PDF from "../Assets/PDF/Provider_Data_Catalog.pdf";
 
 const Home = () => {
   const state = useSelector((state) => state);
@@ -19,10 +21,6 @@ const Home = () => {
 
   const user = state && state.user;
   const [data, setData] = useState([]);
-
-  const openPDFInNewWindow = () => {
-    window.open(pdf, "_blank");
-  };
 
   useEffect(() => {
     axios
@@ -45,7 +43,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-row flex-wrap w-full h-full px-5 dark:bg-slate-950 bg-gray-50 pb-10">
-      <div className="flex flex-col  text-coal w-2/3  ">
+      <div className="flex flex-col text-coal w-2/3  ">
         <div className="flex flex-col mt-9 px-6">
           <h1 className="flex text-3xl font-bold text-amaranth-600 capitalize">
             Hi {user.name},{" "}
@@ -58,9 +56,9 @@ const Home = () => {
           </p>
         </div>
 
-        {user.role && !user.role.includes("Provider") && (
-          <div className="flex flex-row gap-4 mt-6 mx-3">
-            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
+        <div className="flex flex-row gap-3 mt-6 mx-3 flex-wrap">
+          {user && user?.role.includes("Publisher") && (
+            <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
               <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
                   Match Rate
@@ -84,7 +82,10 @@ const Home = () => {
                 alt="match"
               />
             </div>
-            <div className=" w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
+          )}
+
+          {user.role && user?.role?.includes("Consumer") && (
+            <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
               <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
                   Customer Enrichment
@@ -101,18 +102,17 @@ const Home = () => {
                   Start Now
                 </button>
               </div>
+
               <img
                 className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
                 src={enrichment}
                 alt=""
               />
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="flex flex-row gap-4 mt-6 mx-3">
-          {user.role && !user.role.includes("Provider") && (
-            <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
+          {user.role && !user.role?.includes("Provider") && (
+            <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
               <div
                 className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
                 href=""
@@ -139,32 +139,36 @@ const Home = () => {
               />
             </div>
           )}
-          <div className="w-1/2 relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
-            <div
-              className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
-              href="/"
-            >
-              <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                Admin Console
-              </h3>
 
-              <p className="mt-2 text-sm text-gray-500">
-                To Manage Users for your Account, View Itemised Bills, Snowflake
-                Account Credit consumption details etc.
-              </p>
-              <button
-                className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                onClick={() => navigate("/consumer-admin")}
+          {(user?.role?.includes("Consumer_Admin") ||
+            user?.role?.includes("Provider_Admin")) && (
+            <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
+              <div
+                className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
+                href="/"
               >
-                Explore More
-              </button>
+                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                  Admin Console
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  To Manage Users for your Account, View Itemised Bills,
+                  Snowflake Account Credit consumption details etc.
+                </p>
+                <button
+                  className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                  onClick={() => navigate("/consumer-admin")}
+                >
+                  Explore More
+                </button>
+              </div>
+              <img
+                className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
+                src={adminConsole}
+                alt=""
+              />
             </div>
-            <img
-              className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-              src={adminConsole}
-              alt=""
-            />
-          </div>
+          )}
         </div>
 
         <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full hidden">
@@ -279,7 +283,7 @@ const Home = () => {
                         viewBox="0 0 24 24"
                         fill="currentColor"
                         className="w-4 h-4 cursor-pointer"
-                        onClick={openPDFInNewWindow}
+                        onClick={() => window.open(USER_MANUAL_PDF, "_blank")}
                       >
                         <title>View</title>
                         <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
@@ -289,12 +293,14 @@ const Home = () => {
                     <div className="flex flex-col">
                       <h6
                         className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
-                        onClick={openPDFInNewWindow}
+                        onClick={() => window.open(USER_MANUAL_PDF, "_blank")}
                       >
-                        <span className="font-semibold">USER MANUAL</span>
+                        <span className="font-semibold capitalize">
+                          USER MANUAL
+                        </span>
                       </h6>
                       <span className="leading-tight text-xs">
-                        This is a User Manual document{" "}
+                        This is a User Manual document file{" "}
                         <span className="font-semibold"></span>
                       </span>
                     </div>
@@ -309,7 +315,7 @@ const Home = () => {
                         viewBox="0 0 24 24"
                         fill="currentColor"
                         className="w-4 h-4 cursor-pointer"
-                        onClick={openPDFInNewWindow}
+                        onClick={() => window.open(DCR_INTRO_PDF, "_blank")}
                       >
                         <title>View</title>
                         <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
@@ -319,12 +325,50 @@ const Home = () => {
                     <div className="flex flex-col">
                       <h6
                         className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
-                        onClick={openPDFInNewWindow}
+                        onClick={() => window.open(DCR_INTRO_PDF, "_blank")}
                       >
-                        <span className="font-semibold">USER MANUAL</span>
+                        <span className="font-semibold capitalize">
+                          DCR Introduction
+                        </span>
                       </h6>
                       <span className="leading-tight text-xs">
-                        This is a User Manual document{" "}
+                        This is a DCR Introduction PDF file{" "}
+                        <span className="font-semibold"></span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+
+                <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
+                  <div className="flex items-center">
+                    <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4 cursor-pointer"
+                        onClick={() =>
+                          window.open(Provider_Data_Catalog_PDF, "_blank")
+                        }
+                      >
+                        <title>View</title>
+                        <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
+                        <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+                      </svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <h6
+                        className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
+                        onClick={() =>
+                          window.open(Provider_Data_Catalog_PDF, "_blank")
+                        }
+                      >
+                        <span className="font-semibold capitalize">
+                          Provider's Data Catalog
+                        </span>
+                      </h6>
+                      <span className="leading-tight text-xs">
+                        This is a Provider's Data Catalog PDF File{" "}
                         <span className="font-semibold"></span>
                       </span>
                     </div>

@@ -389,7 +389,6 @@ const MatchRate = () => {
             actions.PublisherForm({
               RequestId: formData?.RunId,
               fetchData: true,
-
             })
           );
           callByPassAPI();

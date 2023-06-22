@@ -30,7 +30,7 @@ const ChartPage = () => {
   });
 
   useEffect(() => {
-    if (RequestId !== "") {
+    if (RequestId && RequestId !== "") {
       dispatch(
         actions.AnalyticsData({
           loader: true,

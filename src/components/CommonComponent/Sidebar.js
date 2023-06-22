@@ -63,7 +63,6 @@ const Sidebar = ({ children }) => {
               >
                 <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
                   DataHaven
-                  <span class="text-amaranth-600">.</span>
                 </span>
               </a>
               <i
@@ -227,7 +226,7 @@ const Sidebar = ({ children }) => {
               </li>
             )}
 
-            {user.role && !user.role.includes("Provider") && (
+            {user.role && !user.role?.includes("Provider") && (
               <li
                 className={`${
                   tab === 4 ? "bg-amaranth-200" : ""

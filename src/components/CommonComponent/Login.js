@@ -85,23 +85,28 @@ const Login = () => {
             // Compare user info
             if (userData) {
               if (userData.PASSWORD !== loginDetails?.password) {
-                // Invalid password
                 setErrors({ ...errors, password: "Invalid Password" });
+                setLoading(false);
               } else {
                 const userRole = [];
                 if (userData?.PUBLISHER?.toLowerCase() === "true") {
                   userRole.push("Publisher");
                 }
-                if (userData?.PROVIDER?.toLowerCase() === "true" && userData?.ADMIN?.toLowerCase() === "true") {
+                if (
+                  userData?.PROVIDER?.toLowerCase() === "true" &&
+                  userData?.ADMIN?.toLowerCase() === "true"
+                ) {
                   userRole.push("Provider");
                   userRole.push("Provider_Admin");
-
                 }
-                if (userData?.CONSUMER?.toLowerCase() === "true" && userData?.ADMIN?.toLowerCase() === "true") {
+                if (
+                  userData?.CONSUMER?.toLowerCase() === "true" &&
+                  userData?.ADMIN?.toLowerCase() === "true"
+                ) {
                   userRole.push("Consumer");
                   userRole.push("Consumer_Admin");
                 }
-               
+
                 setIsSubmitted(true);
 
                 axios
@@ -115,6 +120,7 @@ const Login = () => {
                       let data = response?.data?.data?.[0];
                       dispatch(
                         actions.loginRequest({
+                          isLoggedIn: true,
                           name: loginDetails?.userName,
                           role: userRole,
                           Consumer: data?.USER,
@@ -138,6 +144,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
+          setErrors({ ...errors, userName: "User name not found" });
           setLoading(false);
           console.log(error);
         });
