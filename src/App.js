@@ -15,7 +15,7 @@ import MatchRate from "./components/MatchRate";
 import Analytics from "./components/Analytics";
 import ConsumerAdmin from "./components/Admin/ConsumerAdmin";
 import ProviderAdmin from "./components/Admin/ProviderAdmin/ProviderAdmin";
-
+import Videos from "./components/Videos";
 import PrivacyPolicy from "./components/CommonComponent/CommonPages/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/CommonPages/TermsAndConditions";
 
@@ -45,7 +45,7 @@ function App() {
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/consumer-admin" element={<ConsumerAdmin />} />
                   <Route path="/provider-admin" element={<ProviderAdmin />} />
-
+                  <Route path="/veiw-all-videos" element={<Videos />} />
                   <Route path="/my-profile" element={<Profile />} />
 
                 </Routes>

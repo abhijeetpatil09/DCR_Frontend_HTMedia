@@ -10,6 +10,8 @@ import enrichment from "../Assets/Personal data _Monochromatic.svg";
 import match from "../Assets/enrichment.svg";
 import analyticsIllustration from "../Assets/Pie chart _Monochromatic.svg";
 import adminConsole from "../Assets/Settings_Monochromatic.svg";
+import doc1 from "../Assets/DocumentFiles/301a975e448b49f5a1d5223e38fc703c.pdf"
+
 
 import { getPartOfDay } from "../utils/commonFunctions";
 
@@ -213,17 +215,16 @@ const Home = () => {
                       </td>
                       <td className="border px-4 py-2  whitespace-nowrap">
                         <span
-                          className={`${
-                            item.STATUS === "true"
-                              ? "bg-green-200 text-green-700"
-                              : "bg-amaranth-200 text-amaranth-700 "
-                          }   py-1 px-3 rounded-full text-xs`}
+                          className={`${item.STATUS === "true"
+                            ? "bg-green-200 text-green-700"
+                            : "bg-amaranth-200 text-amaranth-700 "
+                            }   py-1 px-3 rounded-full text-xs`}
                         >
                           {item.STATUS === "true"
                             ? "Approved"
                             : item.STATUS === "false"
-                            ? "Rejected"
-                            : "In Progress"}
+                              ? "Rejected"
+                              : "In Progress"}
                         </span>
                       </td>
                       <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -248,7 +249,8 @@ const Home = () => {
               <h5 className="mb-0 dark:text-white text-amaranth-700">
                 How to videos
               </h5>
-              <h5 className="mb-0 dark:text-white text-amaranth-700 cursor-pointer">
+              <h5 className="mb-0 dark:text-white text-amaranth-700 cursor-pointer"
+                onClick={() => navigate("/veiw-all-videos")}>
                 View All
               </h5>
             </div>
@@ -275,106 +277,99 @@ const Home = () => {
               <h5 className="mb-0 dark:text-white text-amaranth-700">
                 Documents
               </h5>
-              <h5 className="mb-0 dark:text-white text-amaranth-700 cursor-pointer">
-                View All
-              </h5>
             </div>
             <div className="flex-auto p-4">
               <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+
                 <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
                   <div className="flex items-center">
                     <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-4 h-4"
+                      <a
+                        href={doc1} type="file/pdf"
+                        download
                       >
-                        <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
-                        <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <title>Download Document</title>
+                          <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
+                          <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+                        </svg>
+                      </a>
                     </div>
                     <div className="flex flex-col">
                       <h6 className="mb-1 leading-normal text-sm text-slate-700 dark:text-white">
-                        Template 1
+                        Document 1
                       </h6>
                       <span className="leading-tight text-xs">
-                        About template{" "}
-                        <span className="font-semibold">346+ downloaded</span>
+                        About document{" "}
+                        <span className="font-semibold"></span>
                       </span>
                     </div>
                   </div>
-                  <div className="flex">
-                    <button className="group ease-soft-in leading-pro text-xs rounded-3.5xl p-1.2 h-6 w-6 mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle font-bold text-slate-700 shadow-none transition-all dark:text-white">
-                      <i
-                        className="ni ease-bounce text-3xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200"
-                        aria-hidden="true"
-                      ></i>
-                    </button>
-                  </div>
                 </li>
-                <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-xl text-inherit">
+
+                <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
                   <div className="flex items-center">
                     <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-4 h-4"
+                      <a
+                        href={doc1} type="file/pdf"
+                        download
                       >
-                        <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
-                        <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <title>Download Document</title>
+                          <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
+                          <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+                        </svg>
+                      </a>
                     </div>
                     <div className="flex flex-col">
                       <h6 className="mb-1 leading-normal text-sm text-slate-700 dark:text-white">
-                        Template 2
+                        Document 2
                       </h6>
                       <span className="leading-tight text-xs">
-                        About template{" "}
-                        <span className="font-semibold">346+ downloaded</span>
+                        About document2..{" "}
+                        <span className="font-semibold"></span>
                       </span>
                     </div>
                   </div>
-                  <div className="flex">
-                    <button className="group ease-soft-in leading-pro text-xs rounded-3.5xl p-1.2 h-6 w-6 mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle font-bold text-slate-700 shadow-none transition-all dark:text-white">
-                      <i
-                        className="ni ease-bounce text-3xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200"
-                        aria-hidden="true"
-                      ></i>
-                    </button>
-                  </div>
                 </li>
-                <li className="relative flex justify-between py-2 pr-4 border-0 rounded-b-lg rounded-xl text-inherit">
+                <li className="relative flex justify-between py-2 pr-4 mb-2 border-0 rounded-t-lg rounded-xl text-inherit">
                   <div className="flex items-center">
                     <div className="flex items-center pl-2 w-8 h-8 mr-4 text-center text-white bg-center fill-current stroke-none shadow-soft-2xl bg-gradient-to-tl from-purple-900 to-amaranth-800 dark:bg-gradient-to-tl dark:from-slate-850 dark:to-gray-850 rounded-xl">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-4 h-4"
+                      <a
+                        href={doc1} type="file/pdf"
+                        download
                       >
-                        <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
-                        <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <title>Download Document</title>
+                          <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z" />
+                          <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+                        </svg>
+                      </a>
                     </div>
                     <div className="flex flex-col">
                       <h6 className="mb-1 leading-normal text-sm text-slate-700 dark:text-white">
                         Document 3
                       </h6>
                       <span className="leading-tight text-xs">
-                        About template{" "}
-                        <span className="font-semibold">346+ downloaded</span>
+                        About document3......{" "}
+                        <span className="font-semibold"></span>
                       </span>
                     </div>
-                  </div>
-                  <div className="flex">
-                    <button className="group ease-soft-in leading-pro text-xs rounded-3.5xl p-1.2 h-6 w-6 mx-0 my-auto inline-block cursor-pointer border-0 bg-transparent text-center align-middle font-bold text-slate-700 shadow-none transition-all dark:text-white">
-                      <i
-                        className="ni ease-bounce text-3xs group-hover:translate-x-1.25 ni-bold-right transition-all duration-200"
-                        aria-hidden="true"
-                      ></i>
-                    </button>
                   </div>
                 </li>
               </ul>
@@ -382,7 +377,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

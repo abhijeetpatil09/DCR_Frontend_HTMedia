@@ -363,7 +363,7 @@ const QueryStatus = () => {
                                   ? "opacity-1 hover:text-inherit"
                                   : "disabled opacity-10 hover:text-inherit"
                               }  px-2 hover:text-amaranth-600`}
-                              title="View File"
+                              title="View"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
