@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-const OutputTable = ({ id, head, rows }) => {
+const OutputTable = ({ id, head, rows, pagination }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -32,7 +32,7 @@ const OutputTable = ({ id, head, rows }) => {
         </span>
       </div>
 
-      <TableContainer>
+      <TableContainer className="mb-4">
         <Table
           sx={{ minWidth: 650, borderRadius: 0 }}
           stickyHeader
@@ -100,15 +100,17 @@ const OutputTable = ({ id, head, rows }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        component="div"
-        count={rows?.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {pagination !== "none" ? (
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          component="div"
+          count={rows?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      ) : null}
     </Paper>
   );
 };

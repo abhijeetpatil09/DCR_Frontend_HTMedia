@@ -384,14 +384,14 @@ const Sidebar = ({ children }) => {
                   <img className="w-full h-full object-cover" src="https://moesaid.github.io/cleopatra/img/user.svg" />
                 </div> */}
 
-                <div className="capitalize flex items-center ">
+                <div
+                  className="capitalize flex items-center"
+                  onClick={() => setMenuIsOpened(!menuOpen)}
+                >
                   <h1 className="text-sm text-amaranth-900 font-semibold  leading-none">
                     {user?.name}
                   </h1>
-                  <i
-                    className="fad fa-chevron-down ml-2 text-xs leading-none"
-                    onClick={() => setMenuIsOpened(!menuOpen)}
-                  >
+                  <i className="fad fa-chevron-down ml-2 text-xs leading-none">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"

@@ -295,7 +295,7 @@ const Home = () => {
                         className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
                         onClick={() => window.open(USER_MANUAL_PDF, "_blank")}
                       >
-                        <span className="font-semibold capitalize">
+                        <span className="font-semibold uppercase">
                           USER MANUAL
                         </span>
                       </h6>
@@ -327,7 +327,7 @@ const Home = () => {
                         className="mb-1 leading-normal text-sm text-amaranth-950 dark:text-white cursor-pointer"
                         onClick={() => window.open(DCR_INTRO_PDF, "_blank")}
                       >
-                        <span className="font-semibold capitalize">
+                        <span className="font-semibold uppercase">
                           DCR Introduction
                         </span>
                       </h6>
@@ -363,7 +363,7 @@ const Home = () => {
                           window.open(Provider_Data_Catalog_PDF, "_blank")
                         }
                       >
-                        <span className="font-semibold capitalize">
+                        <span className="font-semibold uppercase">
                           Provider's Data Catalog
                         </span>
                       </h6>

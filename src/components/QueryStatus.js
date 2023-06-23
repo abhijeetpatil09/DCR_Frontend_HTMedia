@@ -51,9 +51,16 @@ const QueryStatus = () => {
   const [requestId, setRequestId] = useState("");
 
   // Result Modal
-  const [isResultModalOpen, toggleResultModal] = React.useState(false);
-  const handleResultModalOpen = () => toggleResultModal(true);
-  const handleResultModalClose = () => toggleResultModal(false);
+  const [viewTemplate, setViewTemplate] = React.useState({
+    openModal: false,
+    queryName: "",
+  });
+  const handleResultModalClose = () =>
+    setViewTemplate({
+      ...viewTemplate,
+      openModal: false,
+      queryName: "",
+    });
 
   useEffect(() => {
     axios
@@ -114,7 +121,11 @@ const QueryStatus = () => {
       .then((response) => {
         if (response?.data?.data) {
           fetchTable(response?.data?.data, runId);
-          handleResultModalOpen();
+          setViewTemplate({
+            ...viewTemplate,
+            openModal: true,
+            queryName: templateName,
+          });
         }
       })
       .catch((error) => {
@@ -509,7 +520,7 @@ const QueryStatus = () => {
         />
       </div>
       <Modal
-        open={isResultModalOpen}
+        open={viewTemplate.openModal}
         onClose={handleResultModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -531,7 +542,16 @@ const QueryStatus = () => {
             </div>
             <div className="px-4">
               {tableHead?.length > 0 && tableRows?.length > 0 ? (
-                <CustomTable id={requestId} head={tableHead} rows={tableRows} />
+                <CustomTable
+                  id={requestId}
+                  head={tableHead}
+                  rows={tableRows}
+                  pagination={
+                    viewTemplate.queryName === "ADVERTISER_MATCH"
+                      ? "none"
+                      : true
+                  }
+                />
               ) : null}
             </div>
           </div>

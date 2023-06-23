@@ -47,11 +47,9 @@ const MatchRate = () => {
   const [gender, setGender] = useState("male");
   const [age, setAge] = useState("age_0_6");
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
-  const [status, setStatus] = useState([]);
 
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
-  const [callTable, setCallTable] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -183,8 +181,8 @@ const MatchRate = () => {
 
   useEffect(() => {
     fetchMainTable();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [callTable]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (TableData) {
@@ -272,7 +270,7 @@ const MatchRate = () => {
       clearInterval(intervalId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.name, byPassAPICalled, callTable]);
+  }, [user?.name, byPassAPICalled]);
 
   const callByPassAPI = () => {
 
@@ -1023,14 +1021,11 @@ const MatchRate = () => {
               <div className="px-4">
                 {tableHead?.length > 0 && tableRows?.length > 0 ? (
                   <>
-                    {/* {TableData.map((item, index) => ( 
-                  // console.log
-                      <div className="mr-2 border-r " key={index}>{item},</div>
-                  ))} */}
                     <Table
                       id={TableData?.runId}
                       head={tableHead}
                       rows={tableRows}
+                      pagination={'none'}
                     />
                   </>
                 ) : null}
