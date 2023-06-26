@@ -487,7 +487,7 @@ const Register = () => {
   );
 
   return (
-    <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 " >
+    <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 min-h-screen " >
       <div className="flex flex-row mx-auto max-w-[70%]    max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
         <div className="w-1/2 px-6 py-4">
           <div className=" flex flex-row items-start justify-start py-4 ">
