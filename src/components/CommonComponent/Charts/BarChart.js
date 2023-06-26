@@ -11,7 +11,7 @@ import {
 
 import { CustomTooltip } from "../../../utils/commonFunctions";
 
-const COLORS = ["#3700FF", "#FB0007", "#FED60A", "#FB13F3", "#0891b2"];
+const COLORS = ["#f59e0b", "#10b981", "#FED60A", "#FB13F3", "#0891b2"];
 
 const BarChartAnalytics = ({ data }) => {
   const getPath = (x, y, width, height) => {

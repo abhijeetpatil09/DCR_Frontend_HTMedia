@@ -9,7 +9,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tabs,
+  Tab,
 } from "@mui/material";
+
 import QueryTemplate from "./components/QueryTemplate";
 import PublisherTemplate from "./components/PublisherTemplate";
 
@@ -20,6 +23,8 @@ const ProviderAdmin = () => {
 
   const [data, setData] = useState([]);
   const [role, setRole] = useState("");
+
+  const [activeTab, setActiveTab] = useState(1);
 
   useEffect(() => {
     const element = "Provider_Admin";
@@ -50,6 +55,10 @@ const ProviderAdmin = () => {
       })
       .catch((error) => console.log(error));
   }, [user, UserRole]);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -136,68 +145,33 @@ const ProviderAdmin = () => {
           </Table>
         </TableContainer>
       </div>
-      <div className="m-8 flex justify-between">
-        <div>
-          <div className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg ">
-            <div className="flex flex-row items-start text-amaranth-500 ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 mt-1 mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                />
-              </svg>
-              <div className="flex flex-col">
-                <h3 className="text-lg font-bold text-amaranth-900 uppercase">
-                  Configure Query Template
-                </h3>
-                <span className="text-sm mb-4 font-light text-amaranth-900">
-                  {" "}
-                  Enable/Disable Query Template for perticular consumer.
-                </span>
-              </div>
-            </div>
-          </div>
-          <QueryTemplate user={user} />
+
+      <div className="p-4">
+        <div className="my-4">
+          <h3 className="text-lg font-bold text-amaranth-900 uppercase">
+            Configure Templates
+          </h3>
         </div>
-        <div>
-          <div className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg ">
-            <div className="flex flex-row items-start text-amaranth-500 ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 mt-1 mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                />
-              </svg>
-              <div className="flex flex-col">
-                <h3 className="text-lg font-bold text-amaranth-900 uppercase">
-                  Configure Publisher Template
-                </h3>
-                <span className="text-sm mb-4 font-light text-amaranth-900">
-                  {" "}
-                  Enable/Disable Publisher Template for perticular consumer.
-                </span>
-              </div>
-            </div>
-          </div>
-          <PublisherTemplate user={user} />
-        </div>
+        <Tabs value={activeTab} onChange={handleTabChange} className="mt-4">
+          <Tab
+            className="text-amaranth-600 !important"
+            label="Query Template"
+            value={1}
+          />
+          <Tab
+            className="text-amaranth-600 !important"
+            label="Publisher Template"
+            value={2}
+          />
+        </Tabs>
       </div>
+      {/* <div className="p-4 flex justify-center"> */}
+      {activeTab === 1 ? (
+        <QueryTemplate user={user} />
+      ) : (
+        <PublisherTemplate user={user} />
+      )}
+      {/* </div> */}
     </div>
   );
 };

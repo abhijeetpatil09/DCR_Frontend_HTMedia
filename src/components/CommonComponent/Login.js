@@ -57,7 +57,35 @@ const Login = () => {
     setLoginDetails({ ...loginDetails, [inputName]: inputValue });
   };
 
-  const handleSubmit = (event) => {
+  const getAllConsumers = async (userRole) => {
+    await axios
+      .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
+        params: {
+          query: `select user from CONSUMER_ATTRIBUTES_VW where admin = 'true';`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data) {
+          setIsSubmitted(true);
+
+          let data = response?.data?.data?.[0];
+          dispatch(
+            actions.loginRequest({
+              isLoggedIn: true,
+              name: loginDetails?.userName,
+              role: userRole,
+              Consumer: data?.USER,
+            })
+          );
+          navigate("/home");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleSubmit = async (event) => {
     //Prevent page reload
     event.preventDefault();
     if (loginDetails?.userName === "") {
@@ -70,7 +98,7 @@ const Login = () => {
 
     if (loginDetails?.userName !== "") {
       setLoading(true);
-      axios
+      await axios
         .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
           params: {
             query: `select * from CONSUMER_ATTRIBUTES_VW WHERE USER = '${loginDetails?.userName}';`,
@@ -106,32 +134,7 @@ const Login = () => {
                   userRole.push("Consumer");
                   userRole.push("Consumer_Admin");
                 }
-
-                setIsSubmitted(true);
-
-                axios
-                  .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
-                    params: {
-                      query: `select user from CONSUMER_ATTRIBUTES_VW where admin = 'true';`,
-                    },
-                  })
-                  .then((response) => {
-                    if (response?.data?.data) {
-                      let data = response?.data?.data?.[0];
-                      dispatch(
-                        actions.loginRequest({
-                          isLoggedIn: true,
-                          name: loginDetails?.userName,
-                          role: userRole,
-                          Consumer: data?.USER,
-                        })
-                      );
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-                navigate("/home");
+                getAllConsumers(userRole);
               }
             } else {
               // Username not found

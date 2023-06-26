@@ -62,7 +62,7 @@ const QueryStatus = () => {
       queryName: "",
     });
 
-  useEffect(() => {
+  const fetchMainTable = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -70,9 +70,19 @@ const QueryStatus = () => {
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc;",
         },
       })
-      .then((response) => setData(response.data.data))
+      .then((response) => {
+        if (response) {
+          let data = response?.data?.data;
+          setData(data);
+        }
+      })
       .catch((error) => console.log(error));
-  }, [user?.name]);
+  };
+
+  useEffect(() => {
+    fetchMainTable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
     TEMPLATE_NAME = TEMPLATE_NAME.replace(/\s/g, "_");
@@ -139,7 +149,6 @@ const QueryStatus = () => {
         RequestId: runId,
       })
     );
-    console.log("in sjppooiiui");
     navigate("/analytics");
   };
 
@@ -184,9 +193,8 @@ const QueryStatus = () => {
   };
 
   const callByPassUpload = () => {
-    // setByPassAPICalled(true);
     setTimeout(() => {
-      fetchTable();
+      fetchMainTable();
       axios
         .get(`http://127.0.0.1:5000/${user?.name}`, {
           params: {
@@ -195,14 +203,12 @@ const QueryStatus = () => {
         })
         .then((response) => {
           if (response) {
-            fetchTable();
-            // setByPassAPICalled(false);
+            fetchMainTable();
           }
         })
         .catch((error) => {
           console.log(error);
-          fetchTable();
-          // setByPassAPICalled(false);
+          fetchMainTable();
         });
     }, 2000);
   };
@@ -437,9 +443,7 @@ const QueryStatus = () => {
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
                                   className={`${
-                                    row.STATUS.toLowerCase() === "completed" ||
-                                    row.STATUS ===
-                                      "Uploaded into client ecospace"
+                                    row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600`}
@@ -469,11 +473,13 @@ const QueryStatus = () => {
                                   onClick={() => handleUploadData(row.RUN_ID)}
                                   disabled={
                                     row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                    "true"
+                                      "true" &&
+                                    row.STATUS?.toLowerCase() === "completed"
                                   }
                                   className={`${
                                     row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
-                                    "true"
+                                      "true" &&
+                                    row.STATUS?.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600`}

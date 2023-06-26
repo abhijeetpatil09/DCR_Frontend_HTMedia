@@ -232,22 +232,6 @@ const MatchRate = () => {
   // };
 
   const getStatusApi = () => {
-    // axios
-    //   .get(`http://127.0.0.1:5000/${user?.name}`, {
-    //     params: {
-    //       query:
-    //         "select status from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 5;",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     if (response?.data?.data) {
-    //       let res = response?.data?.data;
-    //       setStatus(res);
-    //     } else {
-    //       setStatus([]);
-    //     }
-    //   })
-    //   .catch((error) => console.log(error));
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -429,7 +413,6 @@ const MatchRate = () => {
   };
 
   const fetchTable = (data, runId) => {
-    console.log(" ~ file: Publisherform.js:383 ~ fetchTable ~ data:", data);
     let head = [];
     let row = [];
     if (data?.length > 0) {
@@ -638,7 +621,7 @@ const MatchRate = () => {
             {data.map((item, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-200 hover:bg-amaranth-50"
+                className="text-amaranth-950 border-b border-gray-200 hover:bg-amaranth-50"
               >
                 <td className="border text-amaranth-900 px-4 py-2">
                   <span className="relative flex h-3 w-3 mr-2">
@@ -721,15 +704,20 @@ const MatchRate = () => {
                     <button
                       onClick={() => handleUploadData(item.RUN_ID)}
                       disabled={
-                        item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                          "true" &&
+                        item.STATUS?.toLowerCase() === "completed"
                       }
                       className={`${
-                        item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true"
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                          "true" &&
+                        item.STATUS?.toLowerCase() === "completed"
                           ? "opacity-1 hover:text-inherit"
                           : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}
                       title={
-                        item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                        "true"
                           ? "Already Uploaded into client ecospace"
                           : "Upload match records into client ecospace"
                       }

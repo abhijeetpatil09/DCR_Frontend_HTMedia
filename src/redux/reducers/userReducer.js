@@ -2,7 +2,6 @@ import * as actionType from '../actions/actionTypes';
 import { updateObject } from '../utility/utility';
 
 const initialState = {
-    isLoggedIn: false,
     name: '',
     role: [],
     Consumer: '',
