@@ -11,6 +11,8 @@ import BgVideo from "../../Assets/loginbg.mp4";
 import BgVideoGreen from "../../Assets/loginbg_green.mp4";
 // import "./pure-react.css";
 // import "./styles.css";
+
+
 import AWS from "aws-sdk";
 import {
   loadCaptchaEnginge,
@@ -485,8 +487,10 @@ const Register = () => {
       </div>
     </div>
   );
-
+   
   return (
+    <>
+     
     <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 min-h-screen " >
       <div className="flex flex-row mx-auto max-w-[70%]    max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
         <div className="w-1/2 px-6 py-4">
@@ -519,6 +523,7 @@ const Register = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
