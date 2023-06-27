@@ -42,6 +42,7 @@ const MatchRate = () => {
     File_Name: "",
     Match_Attribute: "",
     Match_Attribute_Value: "",
+    file: ''
   });
 
   const [gender, setGender] = useState("male");
@@ -223,7 +224,7 @@ const MatchRate = () => {
     event.preventDefault();
     var fileInput = document.getElementById("myFileInput");
     var file = fileInput?.files[0];
-    setFormData({ ...formData, File_Name: file?.name });
+    setFormData({ ...formData, file: file });
   };
 
   // const isValidInput = (inputString) => {
@@ -257,7 +258,6 @@ const MatchRate = () => {
   }, [user?.name, byPassAPICalled]);
 
   const callByPassAPI = () => {
-
     setTimeout(() => {
       setByPassAPICalled(true);
       fetchMainTable();
@@ -359,6 +359,25 @@ const MatchRate = () => {
       }
     });
 
+    // Upload file in Local uploadedFiles folder..
+    const fileName = `${formData.RunId + '.' + formData?.file?.name?.split('.')[1]}`;
+    const modifiedFile = new File([formData?.file], fileName, {
+      type: formData?.file.type
+    });
+    formData.File_Name = fileName;
+    formData.file = modifiedFile;
+    const localFile = new FormData();
+
+    localFile.append("myFile", modifiedFile);
+
+    axios.post("http://localhost:8000/api/localFileUpload", localFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+
+    // API used for inserting the data of Match Rate form
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
