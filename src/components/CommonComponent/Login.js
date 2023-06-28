@@ -121,17 +121,28 @@ const Login = () => {
                   userRole.push("Publisher");
                 }
                 if (
-                  userData?.PROVIDER?.toLowerCase() === "true" &&
-                  userData?.ADMIN?.toLowerCase() === "true"
+                  userData?.PROVIDER?.toLowerCase() === "true"
                 ) {
                   userRole.push("Provider");
-                  userRole.push("Provider_Admin");
                 }
                 if (
-                  userData?.CONSUMER?.toLowerCase() === "true" &&
-                  userData?.ADMIN?.toLowerCase() === "true"
+                  userData?.CONSUMER?.toLowerCase() === "true"
                 ) {
                   userRole.push("Consumer");
+                }
+                if (
+                  userData?.PROVIDER?.toLowerCase() === "true"
+                  &&
+                  userData?.ADMIN?.toLowerCase() === "true"
+                ) {
+                  userRole.push("Provider_Admin");
+                }
+
+                if (
+                  userData?.CONSUMER?.toLowerCase() === "true"
+                  &&
+                  userData?.ADMIN?.toLowerCase() === "true"
+                ) {
                   userRole.push("Consumer_Admin");
                 }
                 getAllConsumers(userRole);
