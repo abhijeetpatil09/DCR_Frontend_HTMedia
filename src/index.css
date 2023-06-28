@@ -45,3 +45,9 @@ code {
 .MuiTabs-indicator {
   background-color: #164e63 !important;
 }
+
+
+.customTooltip {
+  left: 60% !important; /* Adjust this value to move the tooltip */
+  margin-left: 264px !important; /* Adjust this value to move the tooltip */
+}

@@ -548,6 +548,7 @@ const Enrichment = () => {
       {
         element: '#customerEnrichment',
         intro: 'Welcome to customer enrichment page.',
+       
       },
       {
         element: '#viewSample',
@@ -560,6 +561,7 @@ const Enrichment = () => {
      {
         element: modalRef.current,
         intro: 'Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.',
+        tooltipClass: 'customTooltip'
       }
 
     ];
@@ -578,6 +580,7 @@ const Enrichment = () => {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
     }
+    return true;
   };
 
 
