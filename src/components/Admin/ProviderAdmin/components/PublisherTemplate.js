@@ -222,11 +222,11 @@ const PublisherTemplate = ({ user }) => {
           </svg>
           <div className="flex flex-col">
             <h3 className="text-lg font-bold text-amaranth-900 uppercase">
-              Configure Publisher Template
+            CONFIGURE ALLOWED COLUMNS
             </h3>
             <span className="text-sm mb-4 font-light text-amaranth-900">
               {" "}
-              Enable/Disable Publisher Template for particular consumer.
+              Add/Remove Allowed Columns for particular consumer.
             </span>
           </div>
         </div>
