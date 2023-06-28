@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -120,27 +120,21 @@ const Login = () => {
                 if (userData?.PUBLISHER?.toLowerCase() === "true") {
                   userRole.push("Publisher");
                 }
-                if (
-                  userData?.PROVIDER?.toLowerCase() === "true"
-                ) {
+                if (userData?.PROVIDER?.toLowerCase() === "true") {
                   userRole.push("Provider");
                 }
-                if (
-                  userData?.CONSUMER?.toLowerCase() === "true"
-                ) {
+                if (userData?.CONSUMER?.toLowerCase() === "true") {
                   userRole.push("Consumer");
                 }
                 if (
-                  userData?.PROVIDER?.toLowerCase() === "true"
-                  &&
+                  userData?.PROVIDER?.toLowerCase() === "true" &&
                   userData?.ADMIN?.toLowerCase() === "true"
                 ) {
                   userRole.push("Provider_Admin");
                 }
 
                 if (
-                  userData?.CONSUMER?.toLowerCase() === "true"
-                  &&
+                  userData?.CONSUMER?.toLowerCase() === "true" &&
                   userData?.ADMIN?.toLowerCase() === "true"
                 ) {
                   userRole.push("Consumer_Admin");
