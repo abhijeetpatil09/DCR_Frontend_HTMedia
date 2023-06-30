@@ -16,7 +16,7 @@ import Home from "./components/Home";
 import MatchRate from "./components/MatchRate";
 import Analytics from "./components/Analytics";
 import ConsumerAdmin from "./components/Admin/ConsumerAdmin";
-import ProviderAdmin from "./components/Admin/ProviderAdmin/ProviderAdmin";
+import ProviderAdmin from "./components/Admin/ProviderAdmin";
 import Videos from "./components/Videos";
 import PrivacyPolicy from "./components/CommonComponent/CommonPages/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/CommonPages/TermsAndConditions";

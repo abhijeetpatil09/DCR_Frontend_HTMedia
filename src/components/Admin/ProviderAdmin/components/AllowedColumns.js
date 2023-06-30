@@ -5,7 +5,7 @@ import { CircularProgress } from "@mui/material";
 
 import CommonModal from "../../../CommonComponent/Modal";
 
-const PublisherTemplate = ({ user }) => {
+const AllowedColumns = ({ user }) => {
   const [publisherData, setPublisherData] = useState({
     consumer: "",
     template: "",
@@ -88,8 +88,7 @@ const PublisherTemplate = ({ user }) => {
           }
         })
         .catch((error) => console.log(error));
-    }
-    else {
+    } else {
       setColumns([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -222,7 +221,7 @@ const PublisherTemplate = ({ user }) => {
           </svg>
           <div className="flex flex-col">
             <h3 className="text-lg font-bold text-amaranth-900 uppercase">
-            CONFIGURE ALLOWED COLUMNS
+              CONFIGURE ALLOWED COLUMNS
             </h3>
             <span className="text-sm mb-4 font-light text-amaranth-900">
               {" "}
@@ -331,10 +330,11 @@ const PublisherTemplate = ({ user }) => {
           handleClose={handleCloseModal}
           handleClickYes={handleClickYes}
           message={message}
+          buttons={true}
         />
       </div>
     </div>
   );
 };
 
-export default PublisherTemplate;
+export default AllowedColumns;

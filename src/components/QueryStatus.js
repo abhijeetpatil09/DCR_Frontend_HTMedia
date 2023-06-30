@@ -21,6 +21,7 @@ import {
 } from "../utils/commonFunctions";
 import * as actions from "../redux/actions/index";
 import CustomTable from "./CommonComponent/Table";
+import CommonModal from "./CommonComponent/Modal";
 
 // Modal style
 const resultstyle = {
@@ -49,6 +50,11 @@ const QueryStatus = () => {
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [requestId, setRequestId] = useState("");
+
+  const [requestFailedReason, setRequestFailedReason] = React.useState({
+    openModal: false,
+    message: "",
+  });
 
   // Result Modal
   const [viewTemplate, setViewTemplate] = React.useState({
@@ -240,7 +246,10 @@ const QueryStatus = () => {
                     borderLeft: 1,
                     borderColor: "#d6d3d1",
                   },
-                  "& th:first-child": { borderLeft: 1, borderColor: "#d6d3d1" },
+                  "& th:first-of-type": {
+                    borderLeft: 1,
+                    borderColor: "#d6d3d1",
+                  },
                 }}
               >
                 <TableCell
@@ -368,40 +377,72 @@ const QueryStatus = () => {
                           align="center"
                         >
                           <div className="flex">
-                            <button
-                              onClick={() =>
-                                fetchcsvTableData(row.TEMPLATE_NAME, row.RUN_ID)
-                              }
-                              disabled={
-                                row.STATUS.toLowerCase() !== "completed"
-                              }
-                              className={`${
-                                row.STATUS.toLowerCase() === "completed"
-                                  ? "opacity-1 hover:text-inherit"
-                                  : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600`}
-                              title="View"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-5 h-5"
+                            {row.STATUS.toLowerCase() === "failed" ? (
+                              <button
+                                onClick={() =>
+                                  setRequestFailedReason({
+                                    ...requestFailedReason,
+                                    openModal: true,
+                                    message: row.ERROR,
+                                  })
+                                }
+                                className="opacity-1 hover:text-inherit"
+                                title="Request Error"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                              </svg>
-                            </button>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="w-5 h-5"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                                  />
+                                </svg>
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() =>
+                                  fetchcsvTableData(
+                                    row.TEMPLATE_NAME,
+                                    row.RUN_ID
+                                  )
+                                }
+                                disabled={
+                                  row.STATUS.toLowerCase() !== "completed"
+                                }
+                                className={`${
+                                  row.STATUS.toLowerCase() === "completed"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                }  px-2 hover:text-amaranth-600`}
+                                title="View"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-5 h-5"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                                  />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                  />
+                                </svg>
+                              </button>
+                            )}
                             {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
                             row.TEMPLATE_NAME === "customer_enrichment" ? (
                               <button
@@ -563,6 +604,17 @@ const QueryStatus = () => {
           </div>
         </Box>
       </Modal>
+
+      {requestFailedReason.openModal ? (
+        <CommonModal
+          open={requestFailedReason.openModal}
+          handleClose={() =>
+            setRequestFailedReason({ ...requestFailedReason, openModal: false })
+          }
+          message={requestFailedReason.message}
+          buttons={false}
+        />
+      ) : null}
     </div>
   );
 };

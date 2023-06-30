@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
 
 import {
   Table,
@@ -11,28 +10,10 @@ import {
   TableRow,
 } from "@mui/material";
 
-const ConsumerAdmin = () => {
-  const state = useSelector((state) => state);
-  const user = state && state.user;
-  const UserRole = state && state.user && state.user.role;
-
+const ProfileTable = ({ user, UserRole }) => {
   const [data, setData] = useState([]);
-  const [role, setRole] = useState("");
 
   useEffect(() => {
-    const element = "Consumer_Admin";
-    const index = UserRole?.indexOf(element);
-
-    if (index !== -1) {
-      const newArray = [
-        ...UserRole.slice(0, index),
-        ...UserRole.slice(index + 1),
-      ];
-      setRole(newArray?.join(", "));
-    } else {
-      setRole(UserRole?.join(", "));
-    }
-
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -49,12 +30,8 @@ const ConsumerAdmin = () => {
       .catch((error) => console.log(error));
   }, [user, UserRole]);
 
-  console.log("data", data);
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex h-12 sticky top-0 z-30 py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
-        <h3 className="px-5 text-lg font-light text-white">Consumer List</h3>
-      </div>
+    <div className="p-4 w-11/12">
       <TableContainer className="mt-6">
         <Table
           sx={{ minWidth: 650, borderRadius: 0 }}
@@ -76,7 +53,14 @@ const ConsumerAdmin = () => {
                   borderLeft: 1,
                   borderColor: "#d6d3d1",
                 },
-                "& th:first-child": { borderLeft: 1, borderColor: "#d6d3d1" },
+                "& th:first-of-type": {
+                  borderLeft: 1,
+                  borderColor: "#d6d3d1",
+                },
+                "& th:last-child": {
+                  borderRight: 1,
+                  borderColor: "#d6d3d1",
+                },
               }}
             >
               <TableCell
@@ -116,14 +100,29 @@ const ConsumerAdmin = () => {
                     "& td": { borderLeft: 1, borderColor: "#d6d3d1" },
                   }}
                 >
-                  <TableCell className="text-amaranth-900" align="center">
+                  <TableCell className="ext-amaranth-900" align="center">
                     {row.USER}
                   </TableCell>
-                  <TableCell className="text-amaranth-900" align="center">
-                    {role}
+                  <TableCell className="ext-amaranth-900" align="center">
+                    {row.CONSUMER.toLowerCase() === "true" ? "CONSUMER" : ""}
+                    {row.PUBLISHER.toLowerCase() === "true"
+                      ? `${
+                          row.CONSUMER.toLowerCase() === "true"
+                            ? ", PUBLISHER"
+                            : "PUBLISHER"
+                        }`
+                      : ""}
+                    {row.PROVIDER.toLowerCase() === "true"
+                      ? `${
+                          row.CONSUMER.toLowerCase() === "true" ||
+                          row.PUBLISHER.toLowerCase() === "true"
+                            ? ", PROVIDER"
+                            : "PROVIDER"
+                        }`
+                      : ""}
                   </TableCell>
-                  <TableCell className="text-amaranth-900" align="center">
-                    {row.CONSUMER_ADMIN === "TRUE" ? "ADMIN" : "CONSUMER"}
+                  <TableCell className="ext-amaranth-900" align="center">
+                    {row.ADMIN.toLowerCase() === "true" ? "ADMIN" : "PROVIDER"}
                   </TableCell>
                 </TableRow>
               );
@@ -135,4 +134,4 @@ const ConsumerAdmin = () => {
   );
 };
 
-export default ConsumerAdmin;
+export default ProfileTable;

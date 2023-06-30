@@ -13,7 +13,13 @@ const style = {
   borderRadius: 5,
 };
 
-const CommonModal = ({ open, handleClose, handleClickYes, message }) => {
+const CommonModal = ({
+  open,
+  handleClose,
+  handleClickYes,
+  message,
+  buttons,
+}) => {
   return (
     <Modal
       open={open}
@@ -28,20 +34,22 @@ const CommonModal = ({ open, handleClose, handleClickYes, message }) => {
         <div className="flex flex-row justify-center items-start">
           <strong className="mb-8 text-amaranth-900">{message}</strong>
         </div>
-        <div className="flex justify-center">
-          <button
-            onClick={handleClickYes}
-            className="bg-amaranth-600 opacity-1 flex items-center ml-4 px-8 py-2 text-sm text-white rounded-md"
-          >
-            Yes
-          </button>
-          <button
-            onClick={handleClose}
-            className="ml-4 bg-gray-500 px-8 opacity-1 flex items-center py-2 text-sm text-white rounded-md"
-          >
-            No
-          </button>
-        </div>
+        {buttons ? (
+          <div className="flex justify-center">
+            <button
+              onClick={handleClickYes}
+              className="bg-amaranth-600 opacity-1 flex items-center ml-4 px-8 py-2 text-sm text-white rounded-md"
+            >
+              Yes
+            </button>
+            <button
+              onClick={handleClose}
+              className="ml-4 bg-gray-500 px-8 opacity-1 flex items-center py-2 text-sm text-white rounded-md"
+            >
+              No
+            </button>
+          </div>
+        ) : null}
       </Box>
     </Modal>
   );

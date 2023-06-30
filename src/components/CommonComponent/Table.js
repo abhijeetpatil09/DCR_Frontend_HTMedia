@@ -53,7 +53,7 @@ const OutputTable = ({ id, head, rows, pagination }) => {
                   borderLeft: 1,
                   borderColor: "#d6d3d1",
                 },
-                "& th:first-child": { borderLeft: 1, borderColor: "#d6d3d1" },
+                "& th:first-of-type": { borderLeft: 1, borderColor: "#d6d3d1" },
               }}
             >
               {head?.map((column, index) => {

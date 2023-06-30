@@ -242,6 +242,7 @@ const QueryTemplate = ({ user }) => {
           handleClose={handleCloseModal}
           handleClickYes={handleClickYes}
           message={message}
+          buttons={true}
         />
       </div>
     </div>
