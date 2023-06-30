@@ -6,10 +6,10 @@ import { Tabs, Tab } from "@mui/material";
 import QueryTemplate from "./components/QueryTemplate";
 import PublisherTemplate from "./components/AllowedColumns";
 
-import ProfileTable from "../components/ProfilesTable";
-import ItemisedBills from "../components/ItemisedBills";
+import ProfileTable from "./components/ProfilesTable";
+import ItemisedBills from "./components/ItemisedBills";
 
-const ProviderAdminConsole = () => {
+const AdminConsole = () => {
   const state = useSelector((state) => state);
   const user = state && state.user;
   const UserRole = state && state.user && state.user.role;
@@ -38,16 +38,21 @@ const ProviderAdminConsole = () => {
             label="PROFILES"
             value={1}
           />
-          <Tab
-            className="text-amaranth-600 !important uppercase"
-            label="CONFIGURE QUERY TEMPLATES"
-            value={2}
-          />
-          <Tab
-            className="text-amaranth-600 !important uppercase"
-            label="CONFIGURE ALLOWED COLUMNS"
-            value={3}
-          />
+          {user?.role && user?.role?.includes("Provider_Admin") && (
+            <Tab
+              className="text-amaranth-600 !important uppercase"
+              label="CONFIGURE QUERY TEMPLATES"
+              value={2}
+            />
+          )}
+          {user?.role && user?.role?.includes("Provider_Admin") && (
+            <Tab
+              className="text-amaranth-600 !important uppercase"
+              label="CONFIGURE ALLOWED COLUMNS"
+              value={3}
+            />
+          )}
+
           <Tab
             className="text-amaranth-600 !important uppercase"
             label="ITEMISED BILLS"
@@ -56,14 +61,21 @@ const ProviderAdminConsole = () => {
         </Tabs>
       </div>
 
-      {activeTab === 1 && <ProfileTable user={user} UserRole={UserRole} />}
-      {activeTab === 2 && <QueryTemplate user={user} />}
-
-      {activeTab === 3 && <PublisherTemplate user={user} />}
-
-      {activeTab === 4 && <ItemisedBills user={user} />}
+      {user?.role && user?.role?.includes("Consumer_Admin") ? (
+        <>
+          {activeTab === 1 && <ProfileTable user={user} UserRole={UserRole} />}
+          {activeTab === 4 && <ItemisedBills user={user} />}
+        </>
+      ) : (
+        <>
+          {activeTab === 1 && <ProfileTable user={user} UserRole={UserRole} />}
+          {activeTab === 2 && <QueryTemplate user={user} />}
+          {activeTab === 3 && <PublisherTemplate user={user} />}
+          {activeTab === 4 && <ItemisedBills user={user} />}
+        </>
+      )}
     </div>
   );
 };
 
-export default ProviderAdminConsole;
+export default AdminConsole;

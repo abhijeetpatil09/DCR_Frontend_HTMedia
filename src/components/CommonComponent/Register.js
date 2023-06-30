@@ -1,19 +1,8 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import HTWLogo from '../../Assets/hoonartek-logo.png';
 
-import * as actions from "../../redux/actions/index";
-import BgVideo from "../../Assets/loginbg.mp4";
-import BgVideoGreen from "../../Assets/loginbg_green.mp4";
-// import "./pure-react.css";
-// import "./styles.css";
-
-
-import AWS from "aws-sdk";
 import {
   loadCaptchaEnginge,
   validateCaptcha,
@@ -21,8 +10,6 @@ import {
 } from "react-simple-captcha";
 
 const Register = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({
     fullName: "",
     email: "",

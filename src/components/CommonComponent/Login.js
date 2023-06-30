@@ -8,18 +8,7 @@ import HTWLogo from "../../Assets/hoonartek-logo.png";
 
 import * as actions from "../../redux/actions/index";
 
-// import AWS from "aws-sdk";
-
-// const s3 = new AWS.S3({
-//   accessKeyId: "AKIA57AGVWXYVR36XIEC",
-//   secretAccessKey: "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",
-//   // signatureVersion: 'v4',
-//   region: "ap-south-1",
-//   // region: 'ap-south-1',
-// });
-
 const Login = () => {
-  //const blob = new Blob([data.Body.toString()], { type: 'text/csv' });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loginDetails, setLoginDetails] = useState({

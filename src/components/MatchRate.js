@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AWS from "aws-sdk";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
 import { Box, Modal } from "@mui/material";
@@ -11,14 +10,6 @@ import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
 import match from "../Assets/enrichment.svg";
-
-const s3 = new AWS.S3({
-  accessKeyId: "AKIA57AGVWXYVR36XIEC",
-  secretAccessKey: "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",
-  // signatureVersion: 'v4',
-  region: "ap-south-1",
-  // region: 'ap-south-1',
-});
 
 const MatchRate = () => {
   const state = useSelector((state) => state);
@@ -42,7 +33,7 @@ const MatchRate = () => {
     File_Name: "",
     Match_Attribute: "",
     Match_Attribute_Value: "",
-    file: ''
+    file: "",
   });
 
   const [gender, setGender] = useState("male");
@@ -53,6 +44,7 @@ const MatchRate = () => {
   const [tableRows, setTableRows] = useState([]);
 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   // Modal style
   const resultstyle = {
@@ -182,7 +174,7 @@ const MatchRate = () => {
 
   useEffect(() => {
     fetchMainTable();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -258,47 +250,41 @@ const MatchRate = () => {
   }, [user?.name, byPassAPICalled]);
 
   const callByPassAPI = () => {
-    setTimeout(() => {
-      setByPassAPICalled(true);
-      fetchMainTable();
-      handleClose();
-      axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
-          params: {
-            query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
-          },
-        })
-        .then((response) => {
-          if (response) {
-            setByPassAPICalled(false);
-            // getStatusApi();
-            fetchMainTable();
-          } else {
-            setByPassAPICalled(false);
-            // getStatusApi();
-            fetchMainTable();
-            dispatch(
-              actions.PublisherForm({
-                fetchData: false,
-              })
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+    setByPassAPICalled(true);
+    fetchMainTable();
+    handleClose();
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}`, {
+        params: {
+          query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
+        },
+      })
+      .then((response) => {
+        if (response) {
           setByPassAPICalled(false);
+          // getStatusApi();
+          fetchMainTable();
+        } else {
+          setByPassAPICalled(false);
+          // getStatusApi();
           fetchMainTable();
           dispatch(
             actions.PublisherForm({
               fetchData: false,
             })
           );
-        });
-      // setTimeout(() => {
-      //   setCallTable(true);
-      //   handleClose();
-      // }, 2000);
-    }, 2000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setByPassAPICalled(false);
+        fetchMainTable();
+        dispatch(
+          actions.PublisherForm({
+            fetchData: false,
+          })
+        );
+      });
   };
 
   const handleSubmit = (event) => {
@@ -308,61 +294,12 @@ const MatchRate = () => {
 
     formData.RunId = Date.now();
 
-    // const keys = Object.keys(formData);
-    // let csv = keys.join(",") + "\n";
-    // for (const obj of [formData]) {
-    //   const values = keys.map((key) => obj[key]);
-    //   csv += values.join(",") + "\n";
-    // }
-
-    // const blob = new Blob([csv], { type: "text/csv" });
-    // const file1 = new File(
-    //   [blob],
-    //   formData["Query_Name"] + "_" + formData["RunId"] + ".csv",
-    //   { type: "text/csv" }
-    // );
-
-    // const params = {
-    //   // Bucket: 'dcr-poc/query_request',
-    //   Bucket: "dcr-poc",
-    //   Key:
-    //     "query_request/" +
-    //     formData["Query_Name"] +
-    //     "_" +
-    //     formData["RunId"] +
-    //     ".csv",
-    //   Body: blob,
-    //   // ACL: 'private',
-    // };
-
-    // s3.putObject(params, (err, data) => {
-    //   if (err) {
-    //     console.log(err);
-    //   }
-    // });
-
-    // var inputFile = document.getElementById("myFileInput");
-
-    // const params2 = {
-    //   // Bucket: 'dcr-poc/query_request',
-    //   Bucket: "dcr-poc",
-    //   Key: "query_request_data/" + inputFile.files[0].name,
-    //   Body: inputFile.files[0],
-    //   // ACL: 'private',
-    // };
-
-    // s3.putObject(params2, (err, data) => {
-    //   if (err) {
-    //     console.log("err", err);
-    //   } else {
-    //     console.log("data", data);
-    //   }
-    // });
-
     // Upload file in Local uploadedFiles folder..
-    const fileName = `${formData.RunId + '.' + formData?.file?.name?.split('.')[1]}`;
+    const fileName = `${
+      formData.RunId + "." + formData?.file?.name?.split(".")[1]
+    }`;
     const modifiedFile = new File([formData?.file], fileName, {
-      type: formData?.file.type
+      type: formData?.file.type,
     });
     formData.File_Name = fileName;
     formData.file = modifiedFile;
@@ -380,11 +317,10 @@ const MatchRate = () => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}/attachment`, {
         params: {
-          filename: `${formData.File_Name}`
+          filename: `${formData.File_Name}`,
         },
       })
       .then((response) => {
-        console.log("response ==> ", response);
         if (response?.data?.data) {
           dispatch(
             actions.PublisherForm({
@@ -396,6 +332,8 @@ const MatchRate = () => {
         }
       })
       .catch((error) => {
+        setLoading(false);
+        setErrorMessage(true);
         console.log(error);
       });
 
@@ -420,9 +358,6 @@ const MatchRate = () => {
       .catch((error) => {
         console.log(error);
       });
-    
-
-  
   };
 
   const fetchTable = (data, runId) => {
@@ -652,11 +587,9 @@ const MatchRate = () => {
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
                     className={`${
-                      
                       item.STATUS === "Completed"
                         ? "bg-green-200 text-green-700"
-                        : item.STATUS === "Approved" ||
-                          item.STATUS === "true"
+                        : item.STATUS === "Approved" || item.STATUS === "true"
                         ? "bg-amaranth-100 text-amaranth-700 "
                         : item.STATUS === "Waiting for Approval"
                         ? "bg-amaranth-100 text-amaranth-500 "
@@ -717,20 +650,17 @@ const MatchRate = () => {
                     <button
                       onClick={() => handleUploadData(item.RUN_ID)}
                       disabled={
-                        item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                          "true" &&
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true" &&
                         item.STATUS?.toLowerCase() === "completed"
                       }
                       className={`${
-                        item.UPL_INTO_CLI_SPACE?.toLowerCase() !==
-                          "true" &&
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
                         item.STATUS?.toLowerCase() === "completed"
                           ? "opacity-1 hover:text-inherit"
                           : "disabled opacity-10 hover:text-inherit"
                       }  px-2 hover:text-amaranth-600`}
                       title={
-                        item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                        "true"
+                        item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
                           ? "Already Uploaded into client ecospace"
                           : "Upload match records into client ecospace"
                       }
@@ -992,6 +922,19 @@ const MatchRate = () => {
                   )}
                 </button>
               </div>
+              <div className="flex justify-center pt-2">
+                {errorMessage ? (
+                  <span className="text-red-600">
+                    Something went wrong. Please try again after sometime.
+                  </span>
+                ) : (
+                  loading && (
+                    <span className="text-red-600">
+                      Uploading the Attachment. Please wait
+                    </span>
+                  )
+                )}
+              </div>
             </div>
           </form>
         </Box>
@@ -1026,7 +969,7 @@ const MatchRate = () => {
                       id={TableData?.runId}
                       head={tableHead}
                       rows={tableRows}
-                      pagination={'none'}
+                      pagination={"none"}
                     />
                   </>
                 ) : null}

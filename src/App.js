@@ -15,8 +15,7 @@ import Sidebar from "./components/CommonComponent/Sidebar";
 import Home from "./components/Home";
 import MatchRate from "./components/MatchRate";
 import Analytics from "./components/Analytics";
-import ConsumerAdmin from "./components/Admin/ConsumerAdmin";
-import ProviderAdmin from "./components/Admin/ProviderAdmin";
+import AdminConsole from "./components/Admin";
 import Videos from "./components/Videos";
 import PrivacyPolicy from "./components/CommonComponent/CommonPages/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/CommonPages/TermsAndConditions";
@@ -44,8 +43,7 @@ const App = () => {
                   <Route path="/querystatus" element={<QueryStatus />} />
                   <Route path="/publisherform" element={<MatchRate />} />
                   <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/consumer-admin" element={<ConsumerAdmin />} />
-                  <Route path="/provider-admin" element={<ProviderAdmin />} />
+                  <Route path="/admin-console" element={<AdminConsole />} />
                   <Route path="/veiw-all-videos" element={<Videos />} />
                   <Route path="/my-profile" element={<Profile />} />
                 </Routes>

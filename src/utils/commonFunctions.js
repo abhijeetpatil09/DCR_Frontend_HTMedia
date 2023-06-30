@@ -23,7 +23,8 @@ export const jsonToCsv = (jsonData) => {
 // Function for Handle the date as per DD-MM-YYYY format
 
 export const handleDate = (date) => {
-  const dateObj = new Date(date);
+
+  const dateObj = new Date(parseInt(date));
 
   const year = dateObj.getFullYear();
   const month = getMonthName(dateObj.getMonth());

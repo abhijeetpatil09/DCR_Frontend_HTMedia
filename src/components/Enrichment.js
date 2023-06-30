@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import AWS from "aws-sdk";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Box, CircularProgress, Modal } from "@mui/material";
@@ -9,7 +8,7 @@ import SelectDropdown from "./CommonComponent/SelectDropdown";
 import * as actions from "../redux/actions/index";
 import enrichment from "../Assets/Personal data _Monochromatic.svg";
 
-import { Steps, Hints } from 'intro.js-react';
+import { Steps } from 'intro.js-react';
 import "intro.js/introjs.css";
 
 import {
@@ -23,14 +22,6 @@ import Table from "./CommonComponent/Table";
 
 import "./styles.css";
 import "./pure-react.css";
-
-const s3 = new AWS.S3({
-  accessKeyId: "AKIA57AGVWXYVR36XIEC",
-  secretAccessKey: "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",
-  // signatureVersion: 'v4',
-  region: "ap-south-1",
-  // region: 'ap-south-1',
-});
 
 // Modal style
 const resultstyle = {
@@ -431,49 +422,6 @@ const Enrichment = () => {
       return;
     }
     formData.RunId = Date.now();
-
-    const keys = Object.keys(formData);
-    let csv = keys.join(",") + "\n";
-    for (const obj of [formData]) {
-      const values = keys.map((key) => obj[key]);
-      csv += values.join(",") + "\n";
-    }
-
-    const blob = new Blob([csv], { type: "text/csv" });
-
-    // const url = URL.createObjectURL(blob);
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.download = formData['RunId'] +'.csv';
-    // document.body.appendChild(link);
-    // link.click();
-
-    console.log("formData", formData);
-    const params = {
-      // Bucket: 'dcr-poc/query_request',
-      Bucket: "dcr-poc",
-      Key:
-        "query_request/" +
-        formData["Query_Name"] +
-        "_" +
-        formData["RunId"] +
-        ".csv",
-      Body: blob,
-      // ACL: 'private',
-    };
-
-    // s3.listBuckets(function(err, data) {
-    //     if (err) console.log(err, err.stack);
-    //     else console.log(data);
-    // });
-
-    s3.putObject(params, (err, data) => {
-      if (err) {
-        console.log("err", err);
-      } else {
-        console.log("data", data);
-      }
-    });
 
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {

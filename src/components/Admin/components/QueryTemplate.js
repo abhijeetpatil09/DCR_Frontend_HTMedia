@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
-import CommonModal from "../../../CommonComponent/Modal";
+import CommonModal from "../../CommonComponent/Modal";
 
 const QueryTemplate = ({ user }) => {
   const [queryData, setQueryData] = useState({

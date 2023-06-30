@@ -357,11 +357,11 @@ const QueryStatus = () => {
                             className={`${
                               row.STATUS.toLowerCase() === "completed" ||
                               row.STATUS.toLowerCase() === "true"
-                              ? "bg-green-200 text-green-700"
-                              : row.STATUS === "Failed"
+                                ? "bg-green-200 text-green-700"
+                                : row.STATUS === "Failed"
                                 ? "bg-red-200 text-red-700"
                                 : "bg-amaranth-200 text-amaranth-700 "
-                              }   py-1 px-3 rounded-full text-xs`}
+                            }   py-1 px-3 rounded-full text-xs`}
                           >
                             {row.STATUS.toLowerCase() === "true"
                               ? "Approved"
@@ -378,8 +378,8 @@ const QueryStatus = () => {
                         >
                           <div className="flex">
                             {row.STATUS.toLowerCase() === "failed" ? (
-                            <button
-                              onClick={() =>
+                              <button
+                                onClick={() =>
                                   setRequestFailedReason({
                                     ...requestFailedReason,
                                     openModal: true,
@@ -411,40 +411,40 @@ const QueryStatus = () => {
                                     row.TEMPLATE_NAME,
                                     row.RUN_ID
                                   )
-                              }
-                              disabled={
-                                row.STATUS.toLowerCase() !== "completed"
-                              }
+                                }
+                                disabled={
+                                  row.STATUS.toLowerCase() !== "completed"
+                                }
                                 className={`${
                                   row.STATUS.toLowerCase() === "completed"
-                                ? "opacity-1 hover:text-inherit"
-                                : "disabled opacity-10 hover:text-inherit"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
                                 }  px-2 hover:text-amaranth-600`}
-                              title="View"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-5 h-5"
+                                title="View"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                              </svg>
-                            </button>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-5 h-5"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                                  />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                  />
+                                </svg>
+                              </button>
                             )}
                             {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                              row.TEMPLATE_NAME === "customer_enrichment" ? (
+                            row.TEMPLATE_NAME === "customer_enrichment" ? (
                               <button
                                 onClick={() =>
                                   downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
@@ -454,9 +454,9 @@ const QueryStatus = () => {
                                 }
                                 className={`${
                                   row.STATUS.toLowerCase() === "completed"
-                                  ? "opacity-1 hover:text-inherit"
-                                  : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                }  px-2 hover:text-amaranth-600`}
                                 title="Download file"
                               >
                                 <svg
@@ -476,7 +476,7 @@ const QueryStatus = () => {
                               </button>
                             ) : null}
                             {row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                              row.TEMPLATE_NAME === "advertiser_match" ? (
+                            row.TEMPLATE_NAME === "advertiser_match" ? (
                               <>
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}
@@ -485,9 +485,9 @@ const QueryStatus = () => {
                                   }
                                   className={`${
                                     row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
+                                      ? "opacity-1 hover:text-inherit"
+                                      : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600`}
                                   title="Show Analytics"
                                 >
                                   <svg
@@ -514,19 +514,19 @@ const QueryStatus = () => {
                                   onClick={() => handleUploadData(row.RUN_ID)}
                                   disabled={
                                     row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                    "true" &&
+                                      "true" &&
                                     row.STATUS?.toLowerCase() === "completed"
                                   }
                                   className={`${
                                     row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
-                                    "true" &&
+                                      "true" &&
                                     row.STATUS?.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
+                                      ? "opacity-1 hover:text-inherit"
+                                      : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600`}
                                   title={
                                     row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                      "true"
+                                    "true"
                                       ? "Already Uploaded into client ecospace"
                                       : "Upload match records into client ecospace"
                                   }
@@ -613,7 +613,7 @@ const QueryStatus = () => {
           }
           message={requestFailedReason.message}
           buttons={false}
-              />
+        />
       ) : null}
     </div>
   );
