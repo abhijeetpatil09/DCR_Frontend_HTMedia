@@ -308,56 +308,56 @@ const MatchRate = () => {
 
     formData.RunId = Date.now();
 
-    const keys = Object.keys(formData);
-    let csv = keys.join(",") + "\n";
-    for (const obj of [formData]) {
-      const values = keys.map((key) => obj[key]);
-      csv += values.join(",") + "\n";
-    }
+    // const keys = Object.keys(formData);
+    // let csv = keys.join(",") + "\n";
+    // for (const obj of [formData]) {
+    //   const values = keys.map((key) => obj[key]);
+    //   csv += values.join(",") + "\n";
+    // }
 
-    const blob = new Blob([csv], { type: "text/csv" });
-    const file1 = new File(
-      [blob],
-      formData["Query_Name"] + "_" + formData["RunId"] + ".csv",
-      { type: "text/csv" }
-    );
+    // const blob = new Blob([csv], { type: "text/csv" });
+    // const file1 = new File(
+    //   [blob],
+    //   formData["Query_Name"] + "_" + formData["RunId"] + ".csv",
+    //   { type: "text/csv" }
+    // );
 
-    const params = {
-      // Bucket: 'dcr-poc/query_request',
-      Bucket: "dcr-poc",
-      Key:
-        "query_request/" +
-        formData["Query_Name"] +
-        "_" +
-        formData["RunId"] +
-        ".csv",
-      Body: blob,
-      // ACL: 'private',
-    };
+    // const params = {
+    //   // Bucket: 'dcr-poc/query_request',
+    //   Bucket: "dcr-poc",
+    //   Key:
+    //     "query_request/" +
+    //     formData["Query_Name"] +
+    //     "_" +
+    //     formData["RunId"] +
+    //     ".csv",
+    //   Body: blob,
+    //   // ACL: 'private',
+    // };
 
-    s3.putObject(params, (err, data) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    // s3.putObject(params, (err, data) => {
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    // });
 
-    var inputFile = document.getElementById("myFileInput");
+    // var inputFile = document.getElementById("myFileInput");
 
-    const params2 = {
-      // Bucket: 'dcr-poc/query_request',
-      Bucket: "dcr-poc",
-      Key: "query_request_data/" + inputFile.files[0].name,
-      Body: inputFile.files[0],
-      // ACL: 'private',
-    };
+    // const params2 = {
+    //   // Bucket: 'dcr-poc/query_request',
+    //   Bucket: "dcr-poc",
+    //   Key: "query_request_data/" + inputFile.files[0].name,
+    //   Body: inputFile.files[0],
+    //   // ACL: 'private',
+    // };
 
-    s3.putObject(params2, (err, data) => {
-      if (err) {
-        console.log("err", err);
-      } else {
-        console.log("data", data);
-      }
-    });
+    // s3.putObject(params2, (err, data) => {
+    //   if (err) {
+    //     console.log("err", err);
+    //   } else {
+    //     console.log("data", data);
+    //   }
+    // });
 
     // Upload file in Local uploadedFiles folder..
     const fileName = `${formData.RunId + '.' + formData?.file?.name?.split('.')[1]}`;
@@ -377,6 +377,28 @@ const MatchRate = () => {
       },
     });
 
+    axios
+      .get(`http://127.0.0.1:5000/${user?.name}/attachment`, {
+        params: {
+          filename: `${formData.File_Name}`
+        },
+      })
+      .then((response) => {
+        console.log("response ==> ", response);
+        if (response?.data?.data) {
+          dispatch(
+            actions.PublisherForm({
+              RequestId: formData?.RunId,
+              fetchData: true,
+            })
+          );
+          callByPassAPI();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     // API used for inserting the data of Match Rate form
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
@@ -392,43 +414,15 @@ const MatchRate = () => {
               fetchData: true,
             })
           );
-          callByPassAPI();
+          // callByPassAPI();
         }
       })
       .catch((error) => {
         console.log(error);
       });
-    const formData2 = new FormData();
-    formData2.append("file", inputFile.files[0]);
+    
 
-    // fetch("http://localhost:5000/upload", {
-    //   method: "POST",
-    //   body: formData2,
-    // })
-    //   .then((response) => {
-    //     console.log("response upload", response);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-
-    const formData3 = new FormData();
-    formData3.append("file", file1);
-
-    // try {
-    //   fetch("http://localhost:4040/upload2", {
-    //     method: "POST",
-    //     body: formData3,
-    //   })
-    //     .then((response) => {
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // } catch {
-    //   console.log("Error in Upload 2")
-    // }
+  
   };
 
   const fetchTable = (data, runId) => {
