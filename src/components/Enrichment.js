@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import SelectDropdown from "./CommonComponent/SelectDropdown";
 import * as actions from "../redux/actions/index";
 import enrichment from "../Assets/Personal data _Monochromatic.svg";
+import CommonModal from "./CommonComponent/Modal";
 
-import { Steps } from 'intro.js-react';
+import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
 
 import {
@@ -77,6 +78,11 @@ const Enrichment = () => {
 
   const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [requestFailedReason, setRequestFailedReason] = React.useState({
+    openModal: false,
+    message: "",
+  });
 
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -491,37 +497,32 @@ const Enrichment = () => {
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
 
-  const steps =
-    [
-      {
-        element: '#customerEnrichment',
-        intro: 'Welcome to customer enrichment page.',
-       
-      },
-      {
-        element: '#viewSample',
-        intro: 'View sample data to have an understanding on the providers data',
-      },
-      {
-        element: '#createNewRequest',
-        intro: 'Click here to create a new request.',
-      },
-     {
-        element: modalRef.current,
-        intro: 'Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.',
-        tooltipClass: 'customTooltip'
-      }
-
-    ];
- 
-
+  const steps = [
+    {
+      element: "#customerEnrichment",
+      intro: "Welcome to customer enrichment page.",
+    },
+    {
+      element: "#viewSample",
+      intro: "View sample data to have an understanding on the providers data",
+    },
+    {
+      element: "#createNewRequest",
+      intro: "Click here to create a new request.",
+    },
+    {
+      element: modalRef.current,
+      intro:
+        "Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.",
+      tooltipClass: "customTooltip",
+    },
+  ];
 
   const onExit = () => {
     setStepsEnabled(false);
   };
 
   const stepsRef = useRef();
-
 
   const onBeforeChange = (nextStepIndex) => {
     if (nextStepIndex === 2 && !open) {
@@ -530,7 +531,6 @@ const Enrichment = () => {
     }
     return true;
   };
-
 
   return (
     <>
@@ -541,8 +541,7 @@ const Enrichment = () => {
         onExit={onExit}
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
-
-       />
+      />
       {/* <Steps
         enabled={open}
         steps={steps2}
@@ -553,7 +552,12 @@ const Enrichment = () => {
 
       <div className="flex flex-col w-full h-full ">
         <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
-          <h3 id="customerEnrichment" className=" text-lg font-light text-white">Customer Enrichment</h3>
+          <h3
+            id="customerEnrichment"
+            className=" text-lg font-light text-white"
+          >
+            Customer Enrichment
+          </h3>
           <button
             id="viewSample"
             onClick={handleViewSample}
@@ -632,10 +636,11 @@ const Enrichment = () => {
                 >
                   <td className="border text-amaranth-900 px-4 py-2">
                     <span className="relative flex h-3 w-3 mr-2">
-                      {item.STATUS === "true" ||
-                        item.STATUS.toLowerCase() === "completed" ? (
+                      {item.STATUS.toLowerCase() === "true" ||
+                      item.STATUS.toLowerCase() === "completed" ? (
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
-                      ) : item.STATUS === "false" || item.STATUS === "Failed" ? (
+                      ) : item.STATUS.toLowerCase() === "false" ||
+                        item.STATUS.toLowerCase() === "failed" ? (
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
                       ) : (
                         <>
@@ -646,28 +651,28 @@ const Enrichment = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${status[index]?.STATUS.toLowerCase() === "completed" ||
-                        item.STATUS.toLowerCase() === "completed"
-                        ? "bg-green-200 text-green-700"
-                        : status[index]?.STATUS === "Approved" ||
-                          item.STATUS === "true"
-                          ? "bg-amaranth-100 text-amaranth-700 "
-                          : status[index]?.STATUS === "Waiting for Approval" ||
-                            item.STATUS === "Waiting for Approval"
-                            ? "bg-amaranth-100 text-amaranth-500 "
-                            : status[index]?.STATUS === "Failed" ||
-                              item.STATUS === "Failed"
-                              ? "bg-red-200 text-red-700 "
-                              : "bg-amaranth-100 text-amaranth-700 "
-                        }   py-1 px-3 rounded-full text-xs`}
+                      className={`${
+                        status[index]?.STATUS.toLowerCase() === "completed" ||
+                        item.STATUS.toLowerCase() === "completed" ||
+                        status[index]?.STATUS.toLowerCase() === "approved" ||
+                        item.STATUS.toLowerCase() === "true"
+                          ? "bg-green-200 text-green-700"
+                          : status[index]?.STATUS.toLowerCase() === "failed" ||
+                            item.STATUS.toLowerCase() === "failed" || status[index]?.STATUS.toLowerCase() === "rejected" ||
+                            item.STATUS.toLowerCase() === "false"
+                          ? "bg-red-200 text-red-700 "
+                          : "bg-amaranth-100 text-amaranth-700 "
+                      } py-1 px-3 rounded-full text-xs`}
                     >
-                      {status[index]?.STATUS === "true" || item.STATUS === "true"
+                      {status[index]?.STATUS.toLowerCase() === "true" ||
+                      item.STATUS.toLowerCase() === "true"
                         ? "Approved"
-                        : status[index]?.STATUS === "false" || item.STATUS === "false"
-                          ? "Rejected"
-                          : status[index]?.STATUS.length > 0
-                            ? status[index]?.STATUS
-                            : item.STATUS}
+                        : status[index]?.STATUS.toLowerCase() === "false" ||
+                          item.STATUS.toLowerCase() === "false"
+                        ? "Rejected"
+                        : status[index]?.STATUS.length > 0
+                        ? status[index]?.STATUS
+                        : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -680,46 +685,78 @@ const Enrichment = () => {
                   </td>
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
-                      <button
-                        onClick={() =>
-                          fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
-                        }
-                        disabled={item.STATUS.toLowerCase() !== "completed"}
-                        className={`${item.STATUS.toLowerCase() === "completed"
-                          ? "opacity-1 hover:text-inherit"
-                          : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
-                        title="View"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5"
+                      {item.STATUS.toLowerCase() === "failed" ||
+                      item.STATUS.toLowerCase() === "false" ? (
+                        <button
+                          onClick={() =>
+                            setRequestFailedReason({
+                              ...requestFailedReason,
+                              openModal: true,
+                              message: item.ERROR,
+                            })
+                          }
+                          className="opacity-1 px-2 hover:text-inherit"
+                          title="Request Error"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-5 h-5 text-red-600"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                            />
+                          </svg>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
+                          }
+                          disabled={item.STATUS.toLowerCase() !== "completed"}
+                          className={`${
+                            item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
+                          title="View"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-5 h-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                        </button>
+                      )}
                       <button
                         onClick={() =>
                           downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                         }
                         disabled={item.STATUS.toLowerCase() !== "completed"}
-                        className={`${item.STATUS.toLowerCase() === "completed"
-                          ? "opacity-1 hover:text-inherit"
-                          : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                        className={`${
+                          item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                        }  px-2 hover:text-amaranth-600`}
                         title="Download file"
                       >
                         <svg
@@ -753,7 +790,6 @@ const Enrichment = () => {
           aria-describedby="modal-modal-description"
         >
           <Box
-
             sx={style}
             className="bg-white  bg-opacity-75 backdrop-filter backdrop-blur-lg "
           >
@@ -804,9 +840,8 @@ const Enrichment = () => {
               className=" my-1 px-7      "
               name="myForm"
               onSubmit={handleSubmit}
-              
             >
-              <div  >
+              <div>
                 <div className="mt-2 pb-2 flex flex-col">
                   <SelectDropdown
                     title="Columns"
@@ -925,7 +960,7 @@ const Enrichment = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                  SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
@@ -976,6 +1011,21 @@ const Enrichment = () => {
             </div>
           </Box>
         </Modal>
+
+        {requestFailedReason.openModal ? (
+          <CommonModal
+            open={requestFailedReason.openModal}
+            handleClose={() =>
+              setRequestFailedReason({
+                ...requestFailedReason,
+                openModal: false,
+              })
+            }
+            message={requestFailedReason.message}
+            buttons={false}
+            textColor={"text-red-600"}
+          />
+        ) : null}
       </div>
     </>
   );

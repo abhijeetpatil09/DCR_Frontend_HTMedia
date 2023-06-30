@@ -10,6 +10,7 @@ import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
 import match from "../Assets/enrichment.svg";
+import CommonModal from "./CommonComponent/Modal";
 
 const MatchRate = () => {
   const state = useSelector((state) => state);
@@ -74,6 +75,11 @@ const MatchRate = () => {
     setLoading(false);
     setOpen(false);
   };
+
+  const [requestFailedReason, setRequestFailedReason] = React.useState({
+    openModal: false,
+    message: "",
+  });
 
   // Result Modal
   const [isResultModalOpen, toggleResultModal] = React.useState(false);
@@ -575,7 +581,8 @@ const MatchRate = () => {
                   <span className="relative flex h-3 w-3 mr-2">
                     {item.STATUS.toLowerCase() === "completed" ? (
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
-                    ) : item.STATUS === "false" || item.STATUS === "Failed" ? (
+                    ) : item.STATUS.toLowerCase() === "false" ||
+                      item.STATUS.toLowerCase() === "failed" ? (
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
                     ) : (
                       <>
@@ -587,20 +594,18 @@ const MatchRate = () => {
                 <td className="border px-4 py-2  whitespace-nowrap">
                   <span
                     className={`${
-                      item.STATUS === "Completed"
+                      item.STATUS.toLowerCase() === "completed" ||
+                      item.STATUS.toLowerCase() === "true"
                         ? "bg-green-200 text-green-700"
-                        : item.STATUS === "Approved" || item.STATUS === "true"
-                        ? "bg-amaranth-100 text-amaranth-700 "
-                        : item.STATUS === "Waiting for Approval"
-                        ? "bg-amaranth-100 text-amaranth-500 "
-                        : item.STATUS === "Failed"
+                        : item.STATUS.toLowerCase() === "failed" ||
+                          item.STATUS.toLowerCase() === "false"
                         ? "bg-red-200 text-red-700 "
                         : "bg-amaranth-100 text-amaranth-700 "
                     }   py-1 px-3 rounded-full text-xs`}
                   >
-                    {item.STATUS === "true"
+                    {item.STATUS.toLowerCase() === "true"
                       ? "Approved"
-                      : item.STATUS === "false"
+                      : item.STATUS.toLowerCase() === "false"
                       ? "Rejected"
                       : item.STATUS}
                   </span>
@@ -615,38 +620,68 @@ const MatchRate = () => {
                 </td>
                 <td className="border px-4 py-2">
                   <div className="flex justify-between">
-                    <button
-                      onClick={() =>
-                        fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
-                      }
-                      disabled={item.STATUS.toLowerCase() !== "completed"}
-                      className={`${
-                        item.STATUS.toLowerCase() === "completed"
-                          ? "opacity-1 hover:text-inherit"
-                          : "disabled opacity-10 hover:text-inherit"
-                      }  px-2 hover:text-amaranth-600`}
-                      title="View"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5"
+                    {item.STATUS.toLowerCase() === "failed" ||
+                    item.STATUS.toLowerCase() === "false" ? (
+                      <button
+                        onClick={() =>
+                          setRequestFailedReason({
+                            ...requestFailedReason,
+                            openModal: true,
+                            message: item.ERROR,
+                          })
+                        }
+                        className="opacity-1 px-2 hover:text-inherit"
+                        title="Request Error"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-5 h-5 text-red-600"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                          />
+                        </svg>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
+                        }
+                        disabled={item.STATUS.toLowerCase() !== "completed"}
+                        className={`${
+                          item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                        }  px-2 hover:text-amaranth-600`}
+                        title="View"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-5 h-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                      </button>
+                    )}
                     <button
                       onClick={() => handleUploadData(item.RUN_ID)}
                       disabled={
@@ -1056,6 +1091,18 @@ const MatchRate = () => {
           </div>
         </Box>
       </Modal>
+
+      {requestFailedReason.openModal ? (
+        <CommonModal
+          open={requestFailedReason.openModal}
+          handleClose={() =>
+            setRequestFailedReason({ ...requestFailedReason, openModal: false })
+          }
+          message={requestFailedReason.message}
+          buttons={false}
+          textColor={"text-red-600"}
+        />
+      ) : null}
     </div>
   );
 };

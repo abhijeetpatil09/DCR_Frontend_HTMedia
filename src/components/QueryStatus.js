@@ -358,13 +358,16 @@ const QueryStatus = () => {
                               row.STATUS.toLowerCase() === "completed" ||
                               row.STATUS.toLowerCase() === "true"
                                 ? "bg-green-200 text-green-700"
-                                : row.STATUS === "Failed"
+                                : row.STATUS === "Failed" ||
+                                  row.STATUS === "false"
                                 ? "bg-red-200 text-red-700"
                                 : "bg-amaranth-200 text-amaranth-700 "
                             }   py-1 px-3 rounded-full text-xs`}
                           >
                             {row.STATUS.toLowerCase() === "true"
                               ? "Approved"
+                              : row.STATUS.toLowerCase() === "false"
+                              ? "Rejected"
                               : row.STATUS}
                           </span>
                         </TableCell>
@@ -376,8 +379,9 @@ const QueryStatus = () => {
                           key={"actions"}
                           align="center"
                         >
-                          <div className="flex">
-                            {row.STATUS.toLowerCase() === "failed" ? (
+                          <div className="flex justify-between">
+                            {row.STATUS.toLowerCase() === "failed" ||
+                            row.STATUS.toLowerCase() === "false" ? (
                               <button
                                 onClick={() =>
                                   setRequestFailedReason({
@@ -386,16 +390,16 @@ const QueryStatus = () => {
                                     message: row.ERROR,
                                   })
                                 }
-                                className="opacity-1 hover:text-inherit"
+                                className="opacity-1 px-2 hover:text-inherit"
                                 title="Request Error"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
                                   viewBox="0 0 24 24"
-                                  stroke-width="1.5"
+                                  strokeWidth={1.5}
                                   stroke="currentColor"
-                                  class="w-5 h-5"
+                                  class="w-5 h-5 text-red-600"
                                 >
                                   <path
                                     stroke-linecap="round"
@@ -613,6 +617,7 @@ const QueryStatus = () => {
           }
           message={requestFailedReason.message}
           buttons={false}
+          textColor={"text-red-600"}
         />
       ) : null}
     </div>
