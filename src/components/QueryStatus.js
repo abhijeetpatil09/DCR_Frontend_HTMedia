@@ -202,7 +202,7 @@ const QueryStatus = () => {
     setTimeout(() => {
       fetchMainTable();
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
           params: {
             query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
           },

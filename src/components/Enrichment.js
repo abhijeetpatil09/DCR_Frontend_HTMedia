@@ -346,7 +346,7 @@ const Enrichment = () => {
     setByPassAPICalled(true);
     setTimeout(() => {
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
           params: {
             query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
           },

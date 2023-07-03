@@ -260,7 +260,7 @@ const MatchRate = () => {
     fetchMainTable();
     handleClose();
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
         params: {
           query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
         },
@@ -304,6 +304,9 @@ const MatchRate = () => {
     const fileName = `${
       formData.RunId + "." + formData?.file?.name?.split(".")[1]
     }`;
+    //  const fileName = `${
+    //   formData?.file?.name?.split(".")[0] + "_" + formData.RunId 
+    // }`;
     const modifiedFile = new File([formData?.file], fileName, {
       type: formData?.file.type,
     });
@@ -408,7 +411,7 @@ const MatchRate = () => {
     setTimeout(() => {
       fetchMainTable();
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
           params: {
             query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
           },
