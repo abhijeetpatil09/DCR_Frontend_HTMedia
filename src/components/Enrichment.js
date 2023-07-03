@@ -580,7 +580,7 @@ const Enrichment = () => {
             <span className="ml-2">View sample data</span>
           </button>
         </div>
-        <div className="relative flex flex-col px-6 py-8   bg-amaranth-50">
+        <div className="relative flex flex-col px-6 py-8 bg-amaranth-50">
           <div className="flex w-2/3 text-gray-500 ">
             <p>
               Enrich your first hand data with more data points from the
@@ -658,7 +658,9 @@ const Enrichment = () => {
                         item.STATUS.toLowerCase() === "true"
                           ? "bg-green-200 text-green-700"
                           : status[index]?.STATUS.toLowerCase() === "failed" ||
-                            item.STATUS.toLowerCase() === "failed" || status[index]?.STATUS.toLowerCase() === "rejected" ||
+                            item.STATUS.toLowerCase() === "failed" ||
+                            status[index]?.STATUS.toLowerCase() ===
+                              "rejected" ||
                             item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "

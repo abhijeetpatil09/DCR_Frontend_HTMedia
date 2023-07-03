@@ -250,6 +250,10 @@ const QueryStatus = () => {
                     borderLeft: 1,
                     borderColor: "#d6d3d1",
                   },
+                  "& th:last-child": {
+                    borderRight: 1,
+                    borderColor: "#d6d3d1",
+                  },
                 }}
               >
                 <TableCell

@@ -25,11 +25,13 @@ const Sidebar = ({ children }) => {
       setTab(3);
     } else if (pathname?.includes("analytics")) {
       setTab(4);
-    } else if (pathname?.includes("consumer-admin")) {
+    } else if (pathname?.includes("admin-console")) {
       setTab(5);
-    } else if (pathname?.includes("provider-admin")) {
-      setTab(6);
-    } else if (pathname?.includes("querystatus")) {
+    } 
+    // else if (pathname?.includes("provider-admin")) {
+    //   setTab(6);
+    // } 
+    else if (pathname?.includes("querystatus")) {
       setTab(7);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
