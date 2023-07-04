@@ -146,19 +146,20 @@ const Enrichment = () => {
       .then((response) => {
         if (response?.data?.data) {
           let res = response?.data?.data;
-          setStatus(res);
+          setData(res);
         } else {
-          setStatus([]);
+          setData([]);
         }
       })
       .catch((error) => console.log(error));
   };
+  
   useEffect(() => {
     let intervalId;
     if (byPassAPICalled === true) {
       intervalId = setInterval(() => {
         getStatusApi();
-      }, 8000);
+      }, 5000);
     }
     return () => {
       clearInterval(intervalId);
@@ -615,7 +616,7 @@ const Enrichment = () => {
           <h1 className=" mt-4 text-xl font-regular text-amaranth-600 pb-2 ">
             Recent Requests
           </h1>
-          <table className="table-auto w-full text-left text-sm">
+          <table className="table-auto w-full text-center text-sm">
             <thead>
               <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
                 <th className="px-4 py-2 border-r"></th>
@@ -635,48 +636,37 @@ const Enrichment = () => {
                   className="border-b border-gray-200 hover:bg-amaranth-50"
                 >
                   <td className="border text-amaranth-900 px-4 py-2">
-                    <span className="relative flex h-3 w-3 mr-2">
-                      {item.STATUS.toLowerCase() === "true" ||
-                      item.STATUS.toLowerCase() === "completed" ? (
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
-                      ) : item.STATUS.toLowerCase() === "false" ||
-                        item.STATUS.toLowerCase() === "failed" ? (
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
-                      ) : (
-                        <>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                        </>
-                      )}
-                    </span>
-                  </td>
-                  <td className="border px-4 py-2  whitespace-nowrap">
-                    <span
-                      className={`${
-                        status[index]?.STATUS.toLowerCase() === "completed" ||
-                        item.STATUS.toLowerCase() === "completed" ||
-                        status[index]?.STATUS.toLowerCase() === "approved" ||
-                        item.STATUS.toLowerCase() === "true"
-                          ? "bg-green-200 text-green-700"
-                          : status[index]?.STATUS.toLowerCase() === "failed" ||
-                            item.STATUS.toLowerCase() === "failed" ||
-                            status[index]?.STATUS.toLowerCase() ===
-                              "rejected" ||
-                            item.STATUS.toLowerCase() === "false"
-                          ? "bg-red-200 text-red-700 "
-                          : "bg-amaranth-100 text-amaranth-700 "
-                      } py-1 px-3 rounded-full text-xs`}
-                    >
-                      {status[index]?.STATUS.toLowerCase() === "true" ||
-                      item.STATUS.toLowerCase() === "true"
-                        ? "Approved"
-                        : status[index]?.STATUS.toLowerCase() === "false" ||
+                  <span className="relative flex h-3 w-3 mr-2">
+                    {item.STATUS.toLowerCase() === "completed" ? (
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
+                    ) : item.STATUS.toLowerCase() === "false" ||
+                      item.STATUS.toLowerCase() === "failed" ? (
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
+                    ) : (
+                      <>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                      </>
+                    )}
+                  </span>
+                </td>
+                <td className="border px-4 py-2  whitespace-nowrap">
+                  <span
+                    className={`${
+                      item.STATUS.toLowerCase() === "completed" 
+                        ? "bg-green-200 text-green-700"
+                        : item.STATUS.toLowerCase() === "failed" ||
                           item.STATUS.toLowerCase() === "false"
-                        ? "Rejected"
-                        : status[index]?.STATUS.length > 0
-                        ? status[index]?.STATUS
-                        : item.STATUS}
-                    </span>
-                  </td>
+                        ? "bg-red-200 text-red-700 "
+                        : "bg-amaranth-100 text-amaranth-700 "
+                    }   py-1 px-3 rounded-full text-xs`}
+                  >
+                    {item.STATUS.toLowerCase() === "true"
+                      ? "Approved"
+                      : item.STATUS.toLowerCase() === "false"
+                      ? "Rejected"
+                      : item.STATUS}
+                  </span>
+                </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
                   <td className="border px-4 py-2">{item.COLOUMNS}</td>
                   <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>

@@ -523,8 +523,7 @@ const MatchRate = () => {
       intro:
         "Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
-    }
-    
+    },
   ];
 
   const onExit = () => {
@@ -553,9 +552,11 @@ const MatchRate = () => {
       />
       <div className="flex flex-col  w-full h-full font-sans">
         <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
-          <h3 id="matchRate" className="text-lg font-light text-white">Match rate</h3>
+          <h3 id="matchRate" className="text-lg font-light text-white">
+            Match rate
+          </h3>
           <button
-          id="viewSample"
+            id="viewSample"
             onClick={handleViewSample}
             className="flex items-center ml-4 px-2 py-2 text-sm text-white bg-amaranth-600 rounded-md hover:bg-amaranth-700  "
           >
@@ -587,7 +588,7 @@ const MatchRate = () => {
           </div>
           <div className="flex flex-grow-0 mt-4">
             <button
-            id="createNewRequestMatchRate"
+              id="createNewRequestMatchRate"
               onClick={createNewRequest}
               className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  "
             >
@@ -613,7 +614,7 @@ const MatchRate = () => {
             Recent requests
           </h1>
 
-          <table className="table-auto w-full text-left text-sm">
+        <table className="table-auto w-full text-center text-sm">
             <thead>
               <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
                 <th className="px-4 py-2 border-r"></th>
@@ -626,7 +627,7 @@ const MatchRate = () => {
                 <th className="px-4 py-2 border-r">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-gray-600 text-sm font-light">
+          <tbody className="text-amaranth-900 text-sm font-light">
               {data.map((item, index) => (
                 <tr
                   key={index}
@@ -779,6 +780,7 @@ const MatchRate = () => {
         </div>
 
         <Modal
+          ref={modalRef}
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"

@@ -361,12 +361,12 @@ const QueryStatus = () => {
                             className={`${
                               row.STATUS.toLowerCase() === "completed" ||
                               row.STATUS.toLowerCase() === "true"
-                                ? "bg-green-200 text-green-700"
+                                ? "bg-green-200 text-green-700 inline"
                                 : row.STATUS === "Failed" ||
                                   row.STATUS === "false"
-                                ? "bg-red-200 text-red-700"
-                                : "bg-amaranth-200 text-amaranth-700 "
-                            }   py-1 px-3 rounded-full text-xs`}
+                                ? "bg-red-200 text-red-700 inline"
+                                : "text-amaranth-700 block bg-amaranth-200 h-[45px]"
+                            }  text-xs py-1 px-3 rounded-full  `}
                           >
                             {row.STATUS.toLowerCase() === "true"
                               ? "Approved"

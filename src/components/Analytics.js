@@ -114,7 +114,7 @@ const ChartPage = () => {
     );
   };
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = (newValue) => {
     setActiveTab(newValue);
   };
 
@@ -134,7 +134,7 @@ const ChartPage = () => {
           </label>
           <div className="mt-2 flex">
             <input
-              type="number"
+              type="text"
               name="runId"
               placeholder="e.g. 1691891590873"
               onChange={handleSelectRunId}
@@ -172,18 +172,24 @@ const ChartPage = () => {
               We are showing the charts for the Request Id -
               <strong>{RequestId}</strong>
             </span>
-            <Tabs value={activeTab} onChange={handleTabChange} className="mt-4">
-              <Tab
-                className="text-amaranth-600 !important"
-                label="Gender distribution"
-                value="gender"
-              />
-              <Tab
-                className="text-amaranth-600 !important"
-                label="Age distribution"
-                value="age"
-              />
-            </Tabs>
+            <div className="mt-4">
+              <button
+                className={`${
+                  activeTab === "gender" ? "bg-amaranth-600 text-white" : "bg-amaranth-100 text-amaranth-900"
+                } px-4 py-2 mr-2 rounded-md`}
+                onClick={() => handleTabChange("gender")}
+              >
+                Gender distribution
+              </button>
+              <button
+                className={`${
+                  activeTab === "age" ? "bg-amaranth-600 text-white" : " bg-amaranth-100 text-amaranth-900"
+                } px-4 py-2 ml-2 rounded-md`}
+                onClick={() => handleTabChange("age")}
+              >
+                Age distribution
+              </button>
+            </div>
           </>
         )}
       </div>
