@@ -512,7 +512,7 @@ const Enrichment = () => {
       intro: "Click here to create a new request.",
     },
     {
-      element: modalRef.current,
+      element: '#modal_er',
       intro:
         "Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
@@ -529,27 +529,31 @@ const Enrichment = () => {
     if (nextStepIndex === 2 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-    }
-    return true;
+     }
+ 
+  };
+  const onAfterChange = (nextStepIndex) => {
+    if (nextStepIndex === 3 && !open) {
+      setOpen(true);
+      stepsRef.current.updateStepElement(nextStepIndex);
+     }
+ 
   };
 
   return (
     <>
       <Steps
         enabled={stepsEnabled}
+        options={{ hideNext: false }}
         steps={steps}
         initialStep={0}
         onExit={onExit}
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
+        onAfterChange={onAfterChange}
+        
       />
-      {/* <Steps
-        enabled={open}
-        steps={steps2}
-        initialStep={0}
-        onExit={onExit2}
-      // onBeforeChange={onBeforeChange}
-      /> */}
+     
 
       <div className="flex flex-col w-full h-full ">
         <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -780,6 +784,9 @@ const Enrichment = () => {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
+          id="modal_er"
+          container={() => document.getElementById('root')}
+
         >
           <Box
             sx={style}
