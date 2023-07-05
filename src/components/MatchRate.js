@@ -550,7 +550,7 @@ const MatchRate = () => {
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
       />
-      <div className="flex flex-col  w-full h-full font-sans">
+      <div className="flex flex-col  w-full h-full">
         <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
           <h3 id="matchRate" className="text-lg font-light text-white">
             Match rate
@@ -627,7 +627,7 @@ const MatchRate = () => {
                 <th className="px-4 py-2 border-r">Actions</th>
               </tr>
             </thead>
-          <tbody className="text-amaranth-900 text-sm font-light">
+          <tbody className="text-amaranth-950 text-sm font-light">
               {data.map((item, index) => (
                 <tr
                   key={index}
@@ -852,38 +852,6 @@ const MatchRate = () => {
                     required
                   />
 
-                  {/* Drag and Drop */}
-                  {/* <div className="max-w-xl">
-                  <label className="flex justify-center w-full h-32 px-4 transition bg-transparent hover:bg-amaranth-50 border-2 border-amaranth-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-                    <span className="flex items-center space-x-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-6 h-6 text-gray-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                        />
-                      </svg>
-                      <span className="font-medium text-gray-600">
-                        Drop files to Attach, or &nbsp;
-                        <span className="text-blue-600 underline">browse</span>
-                      </span>
-                    </span>
-                    <input
-                      type="file"
-                      id="myFileInput"
-                      onChange={handleFileInput}
-                      required
-                      className="hidden"
-                    />
-                  </label>
-                </div> */}
                 </div>
 
                 <div className="mt-2 pb-21 flex flex-col">

@@ -629,7 +629,7 @@ const Enrichment = () => {
                 <th className="px-4 py-2 border-r">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-amaranth-900 text-sm font-light">
+            <tbody className="text-amaranth-950 text-sm font-light">
               {data.map((item, index) => (
                 <tr
                   key={index}
