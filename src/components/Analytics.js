@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Tabs, Tab } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 
 import BarChartAnalytics from "./CommonComponent/Charts/BarChart";
 import PieChartAnalytics from "./CommonComponent/Charts/PieChart";
 import * as actions from "../redux/actions/index";
+
+import { analysticsTabs } from "../utils/data";
 
 const ChartPage = () => {
   const dispatch = useDispatch();
@@ -114,10 +115,6 @@ const ChartPage = () => {
     );
   };
 
-  const handleTabChange = (newValue) => {
-    setActiveTab(newValue);
-  };
-
   return (
     <div className="flex flex-col w-full h-full dark:bg-slate-950 bg-gray-50">
       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -167,74 +164,74 @@ const ChartPage = () => {
 
       <div className="p-4">
         {chartData?.genderData?.length > 0 && (
-          <>
-            <span className="text-amaranth-600">
-              We are showing the charts for the Request Id -
-              <strong>{RequestId}</strong>
-            </span>
-            <div className="mt-4">
-              <button
-                className={`${
-                  activeTab === "gender" ? "bg-amaranth-600 text-white" : "bg-amaranth-100 text-amaranth-900"
-                } px-4 py-2 mr-2 rounded-md`}
-                onClick={() => handleTabChange("gender")}
-              >
-                Gender distribution
-              </button>
-              <button
-                className={`${
-                  activeTab === "age" ? "bg-amaranth-600 text-white" : " bg-amaranth-100 text-amaranth-900"
-                } px-4 py-2 ml-2 rounded-md`}
-                onClick={() => handleTabChange("age")}
-              >
-                Age distribution
-              </button>
-            </div>
-          </>
+          <span className="text-amaranth-600">
+            We are showing the charts for the Request Id -
+            <strong>{RequestId}</strong>
+          </span>
         )}
       </div>
 
-      {loader ? (
-        <div className="w-full text-center mt-4">
-          <CircularProgress
-            size={60}
-            color="secondary"
-            thickness={4}
-            className="text-amaranth-600 !important"
-          />
+      <div className="tabs">
+        <ul className="px-8">
+          {analysticsTabs?.map((item) => {
+            return (
+              <li
+                onClick={() => setActiveTab(item.name)}
+                className={`${
+                  activeTab === item.name
+                    ? "bg-amaranth-100 rounded-t-lg"
+                    : "bg-white"
+                } px-8 text-amaranth-900 inline-block cursor-pointer p-3`}
+              >
+                {item.tabTitle}
+              </li>
+            );
+          })}
+        </ul>
+        <div className="bg-amaranth-100 p-2">
+          {loader ? (
+            <div className="w-full text-center mt-4">
+              <CircularProgress
+                size={60}
+                color="secondary"
+                thickness={4}
+                className="text-amaranth-600 !important"
+              />
+            </div>
+          ) : chartData?.genderData?.length > 0 &&
+            chartData?.ageData?.length > 0 ? (
+            activeTab === "gender" ? (
+              <div className="flex  flex-row  w-full px-4">
+                <div className="w-1/2">
+                  <BarChartAnalytics data={chartData?.genderData} />
+                </div>
+                <div className="w-1/2">
+                  <PieChartAnalytics
+                    data={chartData?.genderData}
+                    total={chartData?.total}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex  flex-row  w-full px-4">
+                <div className="w-1/2">
+                  <BarChartAnalytics data={chartData?.ageData} />
+                </div>
+                <div className="w-1/2">
+                  <PieChartAnalytics
+                    data={chartData?.ageData}
+                    total={chartData?.total}
+                  />
+                </div>
+              </div>
+            )
+          ) : (
+            <span className="text-amaranth-600 flex flex-grow m-4">
+              Currently we don't have data to display the charts...
+            </span>
+          )}
         </div>
-      ) : chartData?.genderData?.length > 0 &&
-        chartData?.ageData?.length > 0 ? (
-        activeTab === "gender" ? (
-          <div className="flex  flex-row  w-full px-4">
-            <div className="w-1/2">
-              <BarChartAnalytics data={chartData?.genderData} />
-            </div>
-            <div className="w-1/2">
-              <PieChartAnalytics
-                data={chartData?.genderData}
-                total={chartData?.total}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="flex  flex-row  w-full px-4">
-            <div className="w-1/2">
-              <BarChartAnalytics data={chartData?.ageData} />
-            </div>
-            <div className="w-1/2">
-              <PieChartAnalytics
-                data={chartData?.ageData}
-                total={chartData?.total}
-              />
-            </div>
-          </div>
-        )
-      ) : (
-        <span className="text-amaranth-600 flex flex-grow m-4">
-          Currently we don't have data to display the charts...
-        </span>
-      )}
+      </div>
     </div>
   );
 };

@@ -144,7 +144,7 @@ const QueryTemplate = ({ user }) => {
 
   return (
     <div className="w-2/3 mx-8">
-      <div className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg ">
+      <div className="pt-4 bg-opacity-75 backdrop-filter backdrop-blur-lg ">
         <div className="flex flex-row items-start text-amaranth-500 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -71,7 +71,6 @@ const Enrichment = () => {
   const [columns, setColumns] = useState([]);
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState([]);
 
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
