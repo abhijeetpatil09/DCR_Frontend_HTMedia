@@ -52,9 +52,9 @@ const Sidebar = ({ children }) => {
         {/* SIDEBAR */}
         <aside
           className={`${
-            isOpened ? " opened  " : " sidebar bg-amaranth-100 "
+            isOpened ? "opened" : "sidebar bg-amaranth-100 "
           }      
-               flex flex-col items-start  text-amaranth-900 shadow h-[calc(100vh)] sticky top-0  `}
+               flex flex-col items-start text-amaranth-900 shadow h-[calc(100vh)] sticky top-0  `}
         >
           {/* <!-- Side Nav Bar--> */}
           {isOpened ? (
@@ -326,29 +326,7 @@ const Sidebar = ({ children }) => {
           {/* HEADER */}
           <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
             <div className=" px-4">{/* OPTION FOR PARTNER LOGO */}</div>
-            {/* <button
-                onClick={handleSignOut}
-                className={`${user?.name ? "" : "invisible"
-                  }  px-6 w-auto  flex  justify-center items-center  text-amaranth-600  focus:outline-none`}
-              >
-                <svg
-                  className="h-5 w-5 mr-1 text-amaranth-600 "
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-               </button> */}
-            {/* <div onClick={handleSignOut} >{(user?.name) ? "Sign Out" : "Sign In"}</div> */}
+            
             {/* <!-- user --> */}
             <div className="dropdown relative md:static pr-4">
               <button className="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">

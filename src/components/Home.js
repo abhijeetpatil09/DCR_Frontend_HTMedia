@@ -111,6 +111,7 @@ const Home = () => {
             </div>
           )}
 
+          
           {user.role && !user.role?.includes("Provider") && (
             <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
               <div
@@ -142,33 +143,61 @@ const Home = () => {
 
           {(user?.role?.includes("Consumer_Admin") ||
             user?.role?.includes("Provider_Admin")) && (
+              <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
+                <div
+                  className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
+                  href="/"
+                >
+                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                    Admin Console
+                  </h3>
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    To Manage Users for your Account, View Itemised Bills,
+                    Snowflake Account Credit consumption details etc.
+                  </p>
+                  <button
+                    className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                    onClick={() => navigate("/admin-console")}
+                  >
+                    Explore More
+                  </button>
+                </div>
+                <img
+                  className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
+                  src={adminConsole}
+                  alt=""
+                />
+              </div>
+            )}
+
+            {user.role && user?.role?.includes("Publisher") && user.role && !user?.role?.includes("Consumer") && (
             <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
-              <div
-                className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
-                href="/"
-              >
+              <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Admin Console
+                  Explore
                 </h3>
 
                 <p className="mt-2 text-sm text-gray-500">
-                  To Manage Users for your Account, View Itemised Bills,
-                  Snowflake Account Credit consumption details etc.
+                  Want to Explore more features of Datahaven & integrate with
+                  the provider.
                 </p>
                 <button
                   className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/admin-console")}
+                  onClick={() => navigate("/sendEmail")}
                 >
-                  Explore More
+                  Click Here
                 </button>
               </div>
+
               <img
                 className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-                src={adminConsole}
+                src={enrichment}
                 alt=""
               />
             </div>
           )}
+
         </div>
 
         <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full hidden">
@@ -207,17 +236,16 @@ const Home = () => {
                       </td>
                       <td className="border px-4 py-2  whitespace-nowrap">
                         <span
-                          className={`${
-                            item.STATUS === "true"
+                          className={`${item.STATUS === "true"
                               ? "bg-green-200 text-green-700"
                               : "bg-amaranth-200 text-amaranth-700 "
-                          }   py-1 px-3 rounded-full text-xs`}
+                            }   py-1 px-3 rounded-full text-xs`}
                         >
                           {item.STATUS === "true"
                             ? "Approved"
                             : item.STATUS === "false"
-                            ? "Rejected"
-                            : "In Progress"}
+                              ? "Rejected"
+                              : "In Progress"}
                         </span>
                       </td>
                       <td className="border px-4 py-2">{item.RUN_ID}</td>

@@ -8,7 +8,7 @@ import LandingPage from "./components/CommonComponent/LandingPage";
 import Login from "./components/CommonComponent/Login";
 import Register from "./components/CommonComponent/Register";
 import Profile from "./components/CommonComponent/MyPofile";
-
+import Email from "./components/Email";
 import Enrichment from "./components/Enrichment";
 import QueryStatus from "./components/QueryStatus";
 import Sidebar from "./components/CommonComponent/Sidebar";
@@ -46,6 +46,7 @@ const App = () => {
                   <Route path="/admin-console" element={<AdminConsole />} />
                   <Route path="/veiw-all-videos" element={<Videos />} />
                   <Route path="/my-profile" element={<Profile />} />
+                  <Route path="/sendEmail" element={<Email />} />
                 </Routes>
               </Sidebar>
             }
