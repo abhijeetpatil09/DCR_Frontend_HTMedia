@@ -519,9 +519,9 @@ const MatchRate = () => {
       intro: "Click here to create a new request.",
     },
     {
-      element: modalRef.current,
+      element:"#modal_mr",
       intro:
-        "Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.",
+        "Select the columns for match rate. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
     },
   ];
@@ -545,12 +545,13 @@ const MatchRate = () => {
       <Steps
         enabled={stepsEnabled}
         steps={steps}
+        options={{ hideNext: false }}
         initialStep={0}
         onExit={onExit}
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
       />
-      <div className="flex flex-col  w-full h-full">
+      <div id="mr_container" className="flex flex-col  w-full h-full">
         <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
           <h3 id="matchRate" className="text-lg font-light text-white">
             Match rate
@@ -785,6 +786,8 @@ const MatchRate = () => {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
+          id="modal_mr"
+          container={() => document.getElementById('mr_container')}
         >
           <Box
             sx={style}
