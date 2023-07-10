@@ -329,11 +329,11 @@ const MatchRate = () => {
       .get(`http://127.0.0.1:5000/${user?.name}/attachment`, {
         params: {
           filename: `${formData.File_Name}`,
-          identifyer: `${formData.Column_Names}`
+          identifyer: `${formData.Column_Names.toUpperCase()}`
         },
       })
       .then((response) => {
-        if (response?.data?.data === "TRUE") {
+        if (response?.data?.data === true) {
           fetchMainTable();
           axios
             .get(`http://127.0.0.1:5000/${user?.name}`, {
