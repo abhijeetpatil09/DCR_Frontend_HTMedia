@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Switch from '@mui/material/Switch';
 
 import {
   Table,
@@ -13,22 +14,44 @@ import {
 const ProfileTable = ({ user, UserRole }) => {
   const [data, setData] = useState([]);
 
+
+
   useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
-        params: {
-          query: "select * from CONSUMER_ATTRIBUTES_VW order by admin desc;",
-        },
-      })
-      .then((response) => {
-        if (response?.data) {
-          setData(response?.data?.data);
-        } else {
-          setData([]);
-        }
-      })
-      .catch((error) => console.log(error));
+    if (UserRole?.includes("Consumer_Admin")) {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: "select * from CONSUMER_ATTRIBUTES_VW order by admin desc;",
+          },
+        })
+        .then((response) => {
+          if (response?.data) {
+            setData(response?.data?.data);
+          } else {
+            setData([]);
+          }
+        })
+        .catch((error) => console.log(error));
+
+    } else {
+      axios
+        .get(`http://127.0.0.1:5000/${user?.name}`, {
+          params: {
+            query: "select * from DCR_SAMP_PROVIDER_DB.DATAEX.CONSUMER_ATTRIBUTES_VW order by admin desc;",
+          },
+        })
+        .then((response) => {
+          if (response?.data) {
+            setData(response?.data?.data);
+          } else {
+            setData([]);
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   }, [user, UserRole]);
+
+
 
   return (
     <div className="p-4 w-11/12">
@@ -75,7 +98,21 @@ const ProfileTable = ({ user, UserRole }) => {
                 key={1}
                 align="center"
               >
-                Role
+                Consumer
+              </TableCell>
+              <TableCell
+                className="bg-amaranth-50 text-amaranth-900"
+                key={1}
+                align="center"
+              >
+                Publisher
+              </TableCell>
+              <TableCell
+                className="bg-amaranth-50 text-amaranth-900"
+                key={1}
+                align="center"
+              >
+                Provider
               </TableCell>
               <TableCell
                 className="bg-amaranth-50 text-amaranth-900"
@@ -103,26 +140,45 @@ const ProfileTable = ({ user, UserRole }) => {
                   <TableCell className="ext-amaranth-900" align="center">
                     {row.USER}
                   </TableCell>
+
                   <TableCell className="ext-amaranth-900" align="center">
-                    {row.CONSUMER.toLowerCase() === "true" ? "CONSUMER" : ""}
-                    {row.PUBLISHER.toLowerCase() === "true"
-                      ? `${
-                          row.CONSUMER.toLowerCase() === "true"
-                            ? ", PUBLISHER"
-                            : "PUBLISHER"
-                        }`
-                      : ""}
-                    {row.PROVIDER.toLowerCase() === "true"
-                      ? `${
-                          row.CONSUMER.toLowerCase() === "true" ||
-                          row.PUBLISHER.toLowerCase() === "true"
-                            ? ", PROVIDER"
-                            : "PROVIDER"
-                        }`
-                      : ""}
+                    <Switch
+                      checked={row.CONSUMER.toLowerCase() === "true"}
+                      // onChange={handleChange}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
                   </TableCell>
                   <TableCell className="ext-amaranth-900" align="center">
-                    {row.ADMIN.toLowerCase() === "true" ? "ADMIN" : "PROVIDER"}
+                  <Switch
+                      checked={row.PUBLISHER.toLowerCase() === "true"}
+                      // onChange={handleChange}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  </TableCell>
+                  <TableCell className="ext-amaranth-900" align="center">
+
+                    {row.PROVIDER.toLowerCase() === "true" ? "PROVIDER" : ""}
+
+                  </TableCell>
+                  {/* <TableCell className="ext-amaranth-900" align="center">
+                    {row.CONSUMER.toLowerCase() === "true" ? "CONSUMER" : ""}
+                    {row.PUBLISHER.toLowerCase() === "true"
+                      ? `${row.CONSUMER.toLowerCase() === "true"
+                        ? ", PUBLISHER"
+                        : "PUBLISHER"
+                      }`
+                      : ""}
+                    {row.PROVIDER.toLowerCase() === "true"
+                      ? `${row.CONSUMER.toLowerCase() === "true" ||
+                        row.PUBLISHER.toLowerCase() === "true"
+                        ? ", PROVIDER"
+                        : "PROVIDER"
+                      }`
+                      : ""}
+                  </TableCell> */}
+                  <TableCell className="ext-amaranth-900" align="center">
+                    {row.ADMIN.toLowerCase() === "true" ? "ADMIN"
+                      : row.CONSUMER.toLowerCase() === "true" && row.ADMIN.toLowerCase() === "false" ? "CONSUMER" : "PROVIDER"}
                   </TableCell>
                 </TableRow>
               );

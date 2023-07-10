@@ -4,12 +4,14 @@ import { CircularProgress } from "@mui/material";
 import { Box, Modal } from "@mui/material";
 import { Steps } from "intro.js-react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
 import match from "../Assets/enrichment.svg";
+import email from "../Assets/Personal data _Monochromatic.svg"
 import CommonModal from "./CommonComponent/Modal";
 
 import "intro.js/introjs.css";
@@ -17,6 +19,7 @@ import "intro.js/introjs.css";
 const MatchRate = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = state && state.user;
   const TableData =
@@ -47,7 +50,7 @@ const MatchRate = () => {
   const [tableRows, setTableRows] = useState([]);
 
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Modal style
   const resultstyle = {
@@ -76,7 +79,7 @@ const MatchRate = () => {
   const handleClose = () => {
     setLoading(false);
     setOpen(false);
-    setErrorMessage(false);
+    setErrorMessage("");
   };
 
   const [requestFailedReason, setRequestFailedReason] = React.useState({
@@ -304,9 +307,8 @@ const MatchRate = () => {
     formData.RunId = Date.now();
 
     // Upload file in Local uploadedFiles folder..
-    const fileName = `${
-      formData.RunId + "." + formData?.file?.name?.split(".")[1]
-    }`;
+    const fileName = `${formData.RunId + "." + formData?.file?.name?.split(".")[1]
+      }`;
     const modifiedFile = new File([formData?.file], fileName, {
       type: formData?.file.type,
     });
@@ -327,46 +329,47 @@ const MatchRate = () => {
       .get(`http://127.0.0.1:5000/${user?.name}/attachment`, {
         params: {
           filename: `${formData.File_Name}`,
+          identifyer: `${formData.Column_Names}`
         },
       })
       .then((response) => {
-        if (response?.data?.data) {
-          dispatch(
-            actions.PublisherForm({
-              RequestId: formData?.RunId,
-              fetchData: true,
+        if (response?.data?.data === "TRUE") {
+          fetchMainTable();
+          axios
+            .get(`http://127.0.0.1:5000/${user?.name}`, {
+              params: {
+                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
+              },
             })
-          );
-          callByPassAPI();
+            .then((response) => {
+              if (response) {
+                dispatch(
+                  actions.PublisherForm({
+                    RequestId: formData?.RunId,
+                    fetchData: true,
+                  })
+                );
+                callByPassAPI();
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        } else {
+          fetchMainTable();
+          setLoading(false);
+          setErrorMessage("The data is not matching with requested Identifier.");
+
         }
+
       })
       .catch((error) => {
         setLoading(false);
-        setErrorMessage(true);
+        setErrorMessage("Something went wrong, please try again later !!!");
         console.log(error);
       });
 
-    // API used for inserting the data of Match Rate form
-    axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
-        params: {
-          query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
-        },
-      })
-      .then((response) => {
-        if (response) {
-          dispatch(
-            actions.PublisherForm({
-              RequestId: formData?.RunId,
-              fetchData: true,
-            })
-          );
-          // callByPassAPI();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const fetchTable = (data, runId) => {
@@ -519,7 +522,7 @@ const MatchRate = () => {
       intro: "Click here to create a new request.",
     },
     {
-      element:"#modal_mr",
+      element: "#modal_mr",
       intro:
         "Select the columns for match rate. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
@@ -615,7 +618,7 @@ const MatchRate = () => {
             Recent requests
           </h1>
 
-        <table className="table-auto w-full text-center text-sm">
+          <table className="table-auto w-full text-center text-sm">
             <thead>
               <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-sm leading-normal border-t border-l ">
                 <th className="px-4 py-2 border-r"></th>
@@ -628,7 +631,7 @@ const MatchRate = () => {
                 <th className="px-4 py-2 border-r">Actions</th>
               </tr>
             </thead>
-          <tbody className="text-amaranth-950 text-sm font-light">
+            <tbody className="text-amaranth-950 text-sm font-light">
               {data.map((item, index) => (
                 <tr
                   key={index}
@@ -650,21 +653,20 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${
-                        item.STATUS.toLowerCase() === "completed" ||
+                      className={`${item.STATUS.toLowerCase() === "completed" ||
                         item.STATUS.toLowerCase() === "true"
-                          ? "bg-green-200 text-green-700"
-                          : item.STATUS.toLowerCase() === "failed" ||
-                            item.STATUS.toLowerCase() === "false"
+                        ? "bg-green-200 text-green-700"
+                        : item.STATUS.toLowerCase() === "failed" ||
+                          item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
-                      }   py-1 px-3 rounded-full text-xs`}
+                        }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                        ? "Rejected"
-                        : item.STATUS}
+                          ? "Rejected"
+                          : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -678,7 +680,7 @@ const MatchRate = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                      item.STATUS.toLowerCase() === "false" ? (
+                        item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -711,11 +713,10 @@ const MatchRate = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${
-                            item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                          className={`${item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -745,12 +746,11 @@ const MatchRate = () => {
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true" &&
                           item.STATUS?.toLowerCase() === "completed"
                         }
-                        className={`${
-                          item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
+                        className={`${item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
                           item.STATUS?.toLowerCase() === "completed"
-                            ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
-                        }  px-2 hover:text-amaranth-600`}
+                          ? "opacity-1 hover:text-inherit"
+                          : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
                         title={
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
                             ? "Already Uploaded into client ecospace"
@@ -779,7 +779,37 @@ const MatchRate = () => {
             </tbody>
           </table>
         </div>
-
+        {user.role && user?.role?.includes("Publisher") && !user?.role?.includes("Consumer") && (
+          <div className="relative flex flex-col mt-6 px-6 py-8   bg-amaranth-50">
+            <div className="flex w-2/3 text-gray-500 ">
+              <p>
+                Want to Explore more features of Datahaven & integrate with
+                the provider.
+              </p>
+            </div>
+            <div className="flex flex-grow-0 mt-4">
+              <button
+                className="w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700"
+                onClick={() => navigate("/sendEmail")}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6 mr-2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                Click Here
+              </button>
+            </div>
+            <img
+              className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400"
+              src={email}
+              alt=""
+            />
+          </div>
+        )}
         <Modal
           ref={modalRef}
           open={open}
@@ -986,9 +1016,9 @@ const MatchRate = () => {
                   </button>
                 </div>
                 <div className="flex justify-center pt-2">
-                  {errorMessage ? (
+                  {errorMessage !== "" ? (
                     <span className="text-red-600">
-                      Something went wrong. Please try again after sometime.
+                      {errorMessage}
                     </span>
                   ) : (
                     loading && (
@@ -1069,7 +1099,7 @@ const MatchRate = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                SampleFileData?.rows?.length > 0 ? (
+                  SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
