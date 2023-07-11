@@ -255,7 +255,7 @@ const MatchRate = () => {
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
-  },);
+  },[]);
 
   // useEffect(() => {
   //   let intervalId;
