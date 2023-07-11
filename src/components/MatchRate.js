@@ -185,9 +185,18 @@ const MatchRate = () => {
   };
 
   useEffect(() => {
-    fetchMainTable();
+    let intervalId;
+    if (byPassAPICalled === true) {
+      intervalId = setInterval(() => {
+        fetchMainTable();
+      }, 5000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user?.name, byPassAPICalled]);
+
 
   useEffect(() => {
     if (TableData) {
@@ -236,7 +245,7 @@ const MatchRate = () => {
   //   return regex.test(inputString); // returns true if inputString matches the regex pattern, false otherwise
   // };
 
-  const getStatusApi = () => {
+  useEffect(() => {
     axios
       .get(`http://127.0.0.1:5000/${user?.name}`, {
         params: {
@@ -246,24 +255,24 @@ const MatchRate = () => {
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
-  };
+  },);
 
-  useEffect(() => {
-    let intervalId;
-    if (byPassAPICalled === true) {
-      intervalId = setInterval(() => {
-        getStatusApi();
-      }, 5000);
-    }
-    return () => {
-      clearInterval(intervalId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.name, byPassAPICalled]);
+  // useEffect(() => {
+  //   let intervalId;
+  //   if (byPassAPICalled === true) {
+  //     intervalId = setInterval(() => {
+  //       getStatusApi();
+  //     }, 5000);
+  //   }
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user?.name, byPassAPICalled]);
 
   const callByPassAPI = () => {
     setByPassAPICalled(true);
-    fetchMainTable();
+    // fetchMainTable();
     handleClose();
     axios
       .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
@@ -410,7 +419,6 @@ const MatchRate = () => {
   };
 
   const callByPassUpload = () => {
-    // setByPassAPICalled(true);
     setTimeout(() => {
       fetchMainTable();
       axios
@@ -422,13 +430,11 @@ const MatchRate = () => {
         .then((response) => {
           if (response) {
             fetchMainTable();
-            // setByPassAPICalled(false);
           }
         })
         .catch((error) => {
           console.log(error);
           fetchMainTable();
-          // setByPassAPICalled(false);
         });
     }, 2000);
   };
@@ -653,8 +659,7 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${item.STATUS.toLowerCase() === "completed" ||
-                        item.STATUS.toLowerCase() === "true"
+                      className={`${item.STATUS.toLowerCase() === "completed" 
                         ? "bg-green-200 text-green-700"
                         : item.STATUS.toLowerCase() === "failed" ||
                           item.STATUS.toLowerCase() === "false"
