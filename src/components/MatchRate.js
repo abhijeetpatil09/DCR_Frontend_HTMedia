@@ -13,7 +13,7 @@ import Table from "./CommonComponent/Table";
 import match from "../Assets/enrichment.svg";
 import email from "../Assets/Personal data _Monochromatic.svg"
 import CommonModal from "./CommonComponent/Modal";
-
+import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
 
 const MatchRate = () => {
@@ -255,7 +255,7 @@ const MatchRate = () => {
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
-  },[]);
+  }, []);
 
   // useEffect(() => {
   //   let intervalId;
@@ -469,6 +469,19 @@ const MatchRate = () => {
         console.log(error);
       });
   };
+
+
+  const downloadNewFile = () => {
+    const link = document.createElement("a");
+    link.href = SampTemp;
+    link.download = "Sample_Template.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    // toast.success(`Sample Template has been downloaded...`);
+  };
+
+
   /// View the sample data...
 
   const handleViewSample = () => {
@@ -659,7 +672,7 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${item.STATUS.toLowerCase() === "completed" 
+                      className={`${item.STATUS.toLowerCase() === "completed"
                         ? "bg-green-200 text-green-700"
                         : item.STATUS.toLowerCase() === "failed" ||
                           item.STATUS.toLowerCase() === "false"
@@ -795,7 +808,7 @@ const MatchRate = () => {
             <div className="flex flex-grow-0 mt-4">
               <button
                 className="w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700"
-                onClick={() => navigate("/sendEmail")}
+              // onClick={() => handleEmail()}
               >
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -890,6 +903,26 @@ const MatchRate = () => {
                     required
                   />
 
+                </div>
+                <div className="mt-2 pb-21 flex flex-col">
+                  <button
+                    className="flex flex-row text-amaranth-600"
+                    onClick={downloadNewFile}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      
+                    </svg>
+                    <span className="pl-2 underline">Download Template</span>
+                  </button>
                 </div>
 
                 <div className="mt-2 pb-21 flex flex-col">

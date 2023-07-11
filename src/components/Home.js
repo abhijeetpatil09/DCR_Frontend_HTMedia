@@ -184,7 +184,7 @@ const Home = () => {
                 </p>
                 <button
                   className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/sendEmail")}
+                  // onClick={() => handleEmail()}
                 >
                   Click Here
                 </button>

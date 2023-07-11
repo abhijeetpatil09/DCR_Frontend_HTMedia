@@ -123,7 +123,7 @@ const Login = () => {
                 }
 
                 if (
-                  userData?.CONSUMER?.toLowerCase() === "true" &&
+                  userData?.PROVIDER?.toLowerCase() !== "true" &&
                   userData?.ADMIN?.toLowerCase() === "true"
                 ) {
                   userRole.push("Consumer_Admin");
