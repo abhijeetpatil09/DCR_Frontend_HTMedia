@@ -45,13 +45,13 @@ const MatchRate = () => {
   const [gender, setGender] = useState("male");
   const [age, setAge] = useState("age_0_6");
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
-
+  const [note, setNote] = useState("");
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [emailLoading, setEmailLoading] = useState(false);
   // Modal style
   const resultstyle = {
     position: "absolute",
@@ -562,6 +562,29 @@ const MatchRate = () => {
     return true;
   };
 
+  const sendEmail = () => {
+    setEmailLoading(true);
+    axios
+      .get(`http://127.0.0.1:5000/mailtoadmin`, {
+        params: {
+          subject: `${user?.name} wants to explore`,
+          message: `Hello,
+                        ${user?.name} wants to explore more features of Data Haven. Please connect with ${user?.name} as soon as possible.`,
+        },
+      })
+      .then((response) => {
+        if (response) {
+          setNote("** Our Expert team will connect with you, very soon. **");
+          setEmailLoading(false);
+        } else {
+          setNote("");
+          setEmailLoading(false);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+
   return (
     <>
       <Steps
@@ -806,27 +829,45 @@ const MatchRate = () => {
               </p>
             </div>
             <div className="flex flex-grow-0 mt-4">
-              <button
-                className="w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700"
-              // onClick={() => handleEmail()}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6 mr-2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                </svg>
-                Click Here
-              </button>
+              {emailLoading ? (
+                <CircularProgress
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    color: "amaranth-600",
+                  }}
+                />) : (
+                <button
+                  className="w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700"
+                  onClick={() => sendEmail()}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                  Click Here
+                </button>)
+
+              }
+              
             </div>
+
             <img
               className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400"
               src={email}
               alt=""
             />
+            <div className="w-full max-w-full px-3 py-3sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
+              {note !== "" ? (
+                <span className="text-amaranth-950 text-sm">{note}</span>
+              ) : ""}
+            </div>
           </div>
+
         )}
         <Modal
           ref={modalRef}
@@ -919,7 +960,7 @@ const MatchRate = () => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      
+
                     </svg>
                     <span className="pl-2 underline">Download Template</span>
                   </button>
