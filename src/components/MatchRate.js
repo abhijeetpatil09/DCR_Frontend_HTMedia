@@ -195,7 +195,7 @@ const MatchRate = () => {
       clearInterval(intervalId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.name, byPassAPICalled]);
+  }, [byPassAPICalled]);
 
 
   useEffect(() => {
@@ -255,20 +255,8 @@ const MatchRate = () => {
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   let intervalId;
-  //   if (byPassAPICalled === true) {
-  //     intervalId = setInterval(() => {
-  //       getStatusApi();
-  //     }, 5000);
-  //   }
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user?.name, byPassAPICalled]);
 
   const callByPassAPI = () => {
     setByPassAPICalled(true);
@@ -283,11 +271,9 @@ const MatchRate = () => {
       .then((response) => {
         if (response) {
           setByPassAPICalled(false);
-          // getStatusApi();
           fetchMainTable();
         } else {
           setByPassAPICalled(false);
-          // getStatusApi();
           fetchMainTable();
           dispatch(
             actions.PublisherForm({
@@ -695,10 +681,12 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${item.STATUS.toLowerCase() === "completed"
-                        ? "bg-green-200 text-green-700"
-                        : item.STATUS.toLowerCase() === "failed" ||
-                          item.STATUS.toLowerCase() === "false"
+                      className={`${
+                        item.STATUS.toLowerCase() === "completed" ||
+                        item.STATUS.toLowerCase() === "true"
+                          ? "bg-green-200 text-green-700"
+                          : item.STATUS.toLowerCase() === "failed" ||
+                            item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
                         }   py-1 px-3 rounded-full text-xs`}
