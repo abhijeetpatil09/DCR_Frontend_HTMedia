@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 import HTWLogo from '../../Assets/hoonartek-logo.png';
+import axios from "axios";
 
 import {
   loadCaptchaEnginge,
@@ -37,6 +38,8 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [note, setNote] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -170,13 +173,50 @@ const Register = () => {
     if (validateCaptcha(userDetails?.captcha) === true) {
       loadCaptchaEnginge(6);
       setErrors({ ...errors, captcha: null });
+      sendEmail();
     } else {
       setErrors({ ...errors, captcha: "Please enter correct Captcha" });
       return;
     }
-   
+
     toast.success("Registration has been successfull...");
   };
+
+  const sendEmail = () => {
+    setEmailLoading(true);
+    axios
+      .get(`http://127.0.0.1:5000/mailtoadmin`, {
+        params: {
+          subject: `${userDetails?.fullName} wants to register.`,
+          message: `Hello,
+                        ${userDetails?.fullName} wants to register for Data Haven. He/she is filled the information as below.
+                        
+                        *Full Name    : ${userDetails?.fullName}
+                        *Company Name : ${userDetails?.company}
+                        *Designation  : ${userDetails?.designation}
+                        *Email Id     : ${userDetails?.email}
+                        *Does company
+                        have snowflake
+                        account       : ${userDetails?.accountRadio}
+                        *User Name    : ${userDetails?.userName}
+                        *Password     : ${userDetails?.password}
+
+                        Please connect with ${userDetails?.fullName} as soon as possible for the completion of the registration process.`,
+        },
+      })
+      .then((response) => {
+        if (response) {
+          setNote("** Our Expert team will connect with you within next 24 hours for the further process. **");
+          setEmailLoading(false);
+
+        } else {
+          setNote("");
+          setEmailLoading(false);
+
+        }
+      })
+      .catch((error) => console.log(error));
+  }
 
   // JSX code for login form
   const renderForm = (
@@ -457,13 +497,9 @@ const Register = () => {
         <button
           disabled={!formValidated}
           onClick={handleSubmit}
-          className={`flex justify-center rounded-md ${
-            formValidated
-              ? "bg-amaranth-600 text-deep-navy shadow-sm hover:bg-amaranth-600"
-              : "bg-gray-500 text-white"
-          } px-3 py-1.5 text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-green`}
+          className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700 px-3 py-1.5 text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-green"
         >
-          {loading ? (
+          {emailLoading ? (
             <CircularProgress
               style={{ width: "24px", height: "24px", color: "#FFFFFF" }}
             />
@@ -472,44 +508,49 @@ const Register = () => {
           )}
         </button>
       </div>
+      <div className="w-full max-w-full px-3 py-3sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
+        {note !== "" ? (
+          <span className="text-amaranth-950 text-sm">{note}</span>
+        ) : ""}
+      </div>
     </div>
   );
-   
+
   return (
     <>
-     
-    <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 min-h-screen " >
-      <div className="flex flex-row mx-auto max-w-[70%]    max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
-        <div className="w-1/2 px-6 py-4">
-          <div className=" flex flex-row items-start justify-start py-4 ">
-            <a href="#_"
-              className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
-            >
-              <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                <img src={HTWLogo} className='w-12 mr-2' alt="" />
-                DataHaven<span className="text-amaranth-600">.</span>
-              </span>
-            </a>
+
+      <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 min-h-screen " >
+        <div className="flex flex-row mx-auto max-w-[70%]    max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
+          <div className="w-1/2 px-6 py-4">
+            <div className=" flex flex-row items-start justify-start py-4 ">
+              <a href="#_"
+                className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
+              >
+                <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
+                  <img src={HTWLogo} className='w-12 mr-2' alt="" />
+                  DataHaven<span className="text-amaranth-600">.</span>
+                </span>
+              </a>
+            </div>
+            <div className="flex flex-col items-center my-6">
+              <h2 className=" mb-2 text-center text-4xl font-extrabold  tracking-tight    leading-9 text-amaranth-600 ">
+                Register today!
+              </h2>
+              {/* <span className="text-center font-normal text-stone-800 text-sm">Register yourself today.</span> */}
+            </div>
+
+            <div className="flex items-start justify-center my-auto">
+              {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+            </div>
           </div>
-          <div className="flex flex-col items-center my-6">
-            <h2 className=" mb-2 text-center text-4xl font-extrabold  tracking-tight    leading-9 text-amaranth-600 ">
-             Register today!
-            </h2>
-            {/* <span className="text-center font-normal text-stone-800 text-sm">Register yourself today.</span> */}
-          </div>
-        
-        <div className="flex items-start justify-center my-auto"> 
-            {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
-        </div>
-        </div>
-        <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">
+          <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">
             {/* <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2> */}
             <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">Secure data collaboration with DataHaven<span className="font-bold text-4xl text-amaranth-500">.</span></h1>
             {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
-           {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
+            {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
