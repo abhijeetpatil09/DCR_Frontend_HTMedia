@@ -139,7 +139,7 @@ const Home = () => {
           )}
 
 
-          {user.role && !user.role?.includes("Provider") && (
+          {user.role && !user.role?.includes("Provider") &&  user.role?.includes("Consumer") && (
             <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
               <div
                 className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"

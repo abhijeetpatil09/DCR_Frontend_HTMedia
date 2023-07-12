@@ -483,8 +483,8 @@ const QueryStatus = () => {
                                 </svg>
                               </button>
                             ) : null}
-                            {row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                            row.TEMPLATE_NAME === "advertiser_match" ? (
+                            {(row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
+                            row.TEMPLATE_NAME === "advertiser_match") && (user.role && user?.role?.includes("Publisher") && user?.role?.includes("Consumer")) ? (
                               <>
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}

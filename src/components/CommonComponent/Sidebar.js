@@ -228,7 +228,7 @@ const Sidebar = ({ children }) => {
               </li>
             )}
 
-            {user.role && !user.role?.includes("Provider") && (
+            {user.role && !user.role?.includes("Provider") && user.role?.includes("Consumer") && (
               <li
                 className={`${
                   tab === 4 ? "bg-amaranth-200" : ""
