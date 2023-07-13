@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { getPartOfDay, handleDate } from "../utils/commonFunctions";
+import { getPartOfDay } from "../utils/commonFunctions";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,28 +21,8 @@ const Home = () => {
   const navigate = useNavigate();
 
   const user = state && state.user;
-  const [data, setData] = useState([]);
   const [note, setNote] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://127.0.0.1:5000/${user?.name}`, {
-  //       params: {
-  //         query:
-  //           "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc limit 5;",
-  //       },
-  //     })
-  //     .then((response) => {
-  //       if (response?.data?.data) {
-  //         let res = response?.data?.data;
-  //         setData(res);
-  //       } else {
-  //         setData([]);
-  //       }
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, [user?.name]);
 
   const sendEmail = () => {
     setEmailLoading(true);
@@ -58,15 +38,13 @@ const Home = () => {
         if (response) {
           setNote("** Our Expert team will connect with you, very soon. **");
           setEmailLoading(false);
-
         } else {
           setNote("");
           setEmailLoading(false);
-
         }
       })
       .catch((error) => console.log(error));
-  }
+  };
 
   return (
     <div className="flex flex-row flex-wrap w-full h-full px-5 dark:bg-slate-950 bg-gray-50 pb-10">
@@ -138,173 +116,114 @@ const Home = () => {
             </div>
           )}
 
-
-          {user.role && !user.role?.includes("Provider") &&  user.role?.includes("Consumer") && (
-            <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
-              <div
-                className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
-                href=""
-              >
-                <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Analytics
-                </h3>
-
-                <p className="mt-2 text-sm text-gray-500">
-                  Analyze the Match Rate on various Data points for deeper
-                  insights on the Provider's Data.
-                </p>
-                <button
-                  className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                  onClick={() => navigate("/analytics")}
-                >
-                  Explore More
-                </button>
-              </div>
-              <img
-                className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-                src={analyticsIllustration}
-                alt=""
-              />
-            </div>
-          )}
-
-          {(user?.role?.includes("Consumer_Admin") ||
-            user?.role?.includes("Provider_Admin")) && (
-              <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
+          {user.role &&
+            !user.role?.includes("Provider") &&
+            user.role?.includes("Consumer") && (
+              <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amaranth-500 p-1 shadow-xl">
                 <div
                   className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
-                  href="/"
+                  href=""
                 >
                   <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                    Admin Console
+                    Analytics
                   </h3>
 
                   <p className="mt-2 text-sm text-gray-500">
-                    To Manage Users for your Account, View Itemised Bills,
-                    Snowflake Account Credit consumption details etc.
+                    Analyze the Match Rate on various Data points for deeper
+                    insights on the Provider's Data.
                   </p>
                   <button
                     className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                    onClick={() => navigate("/admin-console")}
+                    onClick={() => navigate("/analytics")}
                   >
                     Explore More
                   </button>
                 </div>
                 <img
                   className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-                  src={adminConsole}
+                  src={analyticsIllustration}
                   alt=""
                 />
               </div>
             )}
 
-          {user.role && user?.role?.includes("Publisher") && !user?.role?.includes("Consumer") && (
+          {(user?.role?.includes("Consumer_Admin") ||
+            user?.role?.includes("Provider_Admin")) && (
             <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
-              <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
+              <div
+                className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8"
+                href="/"
+              >
                 <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
-                  Explore
+                  Admin Console
                 </h3>
 
-                <p className="mt-2  text-sm text-gray-500">
-                  Want to Explore more features of Datahaven & integrate with
-                  the provider.
+                <p className="mt-2 text-sm text-gray-500">
+                  To Manage Users for your Account, View Itemised Bills,
+                  Snowflake Account Credit consumption details etc.
                 </p>
-
-                {emailLoading ? (
-                  <CircularProgress
-                    style={{
-                      width: "24px",
-                      height: "24px",
-                      color: "amaranth-600",
-                    }}
-                  />) : (
-
-                  <button
-                    className="flex w-fit flex-row items-center justify-end text-center mt-4  text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
-                    onClick={() => sendEmail()}
-                  >
-                    Click Here
-                  </button>
-                )}
-
+                <button
+                  className="flex w-fit flex-row items-center justify-end text-center mt-6   text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                  onClick={() => navigate("/admin-console")}
+                >
+                  Explore More
+                </button>
               </div>
-
               <img
                 className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
-                src={enrichment}
+                src={adminConsole}
                 alt=""
               />
             </div>
           )}
 
+          {user.role &&
+            user?.role?.includes("Publisher") &&
+            !user?.role?.includes("Consumer") && (
+              <div className="basis-[48%] relative rounded-2xl bg-gradient-to-r from-amaranth-500 via-purple-500 to-indigo-500 p-1 shadow-xl">
+                <div className="z-30 flex flex-col justify-between h-full rounded-xl bg-white p-4 sm:p-6 lg:p-8">
+                  <h3 className="text-lg font-bold text-amaranth-900 sm:text-xl">
+                    Explore
+                  </h3>
+
+                  <p className="mt-2  text-sm text-gray-500">
+                    Want to Explore more features of Datahaven & integrate with
+                    the provider.
+                  </p>
+
+                  {emailLoading ? (
+                    <CircularProgress
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        color: "amaranth-600",
+                      }}
+                    />
+                  ) : (
+                    <button
+                      className="flex w-fit flex-row items-center justify-end text-center mt-4  text-white text-sm rounded-md bg-amaranth-500 px-4 py-2"
+                      onClick={() => sendEmail()}
+                    >
+                      Click Here
+                    </button>
+                  )}
+                </div>
+
+                <img
+                  className="absolute w-44 z-0 bottom-1  right-2 text-amarant-400"
+                  src={enrichment}
+                  alt=""
+                />
+              </div>
+            )}
         </div>
 
-        {/* <div className="w-full max-w-full px-3 sm:flex-0 shrink-0 sm:w-6/12 lg:w-full hidden">
-          <div className="border-black/12.5 shadow-soft-xl dark:bg-gray-950 dark:shadow-soft-dark-xl relative mt-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-            <div className="p-4 pb-0 rounded-t-4">
-              <h5 className="mb-0 dark:text-white text-amaranth-700">
-                Recent requests
-              </h5>
-            </div>
-            <div className="flex-auto p-4">
-              <table className="table-auto w-full text-left text-xs">
-                <thead>
-                  <tr className="bg-amaranth-50 text-amaranth-900 uppercase text-xs leading-normal border-t border-l ">
-                    <th className="px-4 py-2 w-4 "></th>
-                    <th className="px-4 py-2 border-r">Status</th>
-                    <th className="px-4 py-2 border-r">Request ID</th>
-                    <th className="px-4 py-2 border-r">Template name</th>
-                    <th className="px-4 py-2 border-r">Provider</th>
-                    <th className="px-4 py-2 border-r">Requested</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-600 text-xs font-light">
-                  {data.map((item, index) => (
-                    <tr className="border-b border-gray-200 hover:bg-gray-100">
-                      <td className="border  px-4 py-2">
-                        <span className="relative flex h-3 w-3 mr-2">
-                          {item.STATUS === "true" ? (
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
-                          ) : (
-                            <>
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amaranth-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                            </>
-                          )}
-                        </span>
-                      </td>
-                      <td className="border px-4 py-2  whitespace-nowrap">
-                        <span
-                          className={`${item.STATUS === "true"
-                            ? "bg-green-200 text-green-700"
-                            : "bg-amaranth-200 text-amaranth-700 "
-                            }   py-1 px-3 rounded-full text-xs`}
-                        >
-                          {item.STATUS === "true"
-                            ? "Approved"
-                            : item.STATUS === "false"
-                              ? "Rejected"
-                              : "In Progress"}
-                        </span>
-                      </td>
-                      <td className="border px-4 py-2">{item.RUN_ID}</td>
-                      <td className="border px-4 py-2">{item.TEMPLATE_NAME}</td>
-                      <td className="border px-4 py-2">{item.PROVIDER_NAME}</td>
-                      <td className="border px-4 py-2">
-                        <span className="num-2"></span>
-                        {handleDate(item.RUN_ID)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div> */}
         <div className="w-full max-w-full px-3 py-3 font-bold sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
           {note !== "" ? (
             <span className="text-amaranth-950 text-sm">{note}</span>
-          ) : ""}
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className="flex flex-col flex-1 w-1/3">

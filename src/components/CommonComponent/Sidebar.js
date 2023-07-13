@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as actions from "../../redux/actions/index";
@@ -15,6 +15,22 @@ const Sidebar = ({ children }) => {
 
   const [tab, setTab] = useState(0);
 
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setMenuIsOpened(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   useEffect(() => {
     const { pathname } = window.location;
     if (pathname?.includes("home")) {
@@ -27,10 +43,10 @@ const Sidebar = ({ children }) => {
       setTab(4);
     } else if (pathname?.includes("admin-console")) {
       setTab(5);
-    } 
+    }
     // else if (pathname?.includes("provider-admin")) {
     //   setTab(6);
-    // } 
+    // }
     else if (pathname?.includes("querystatus")) {
       setTab(7);
     }
@@ -51,9 +67,7 @@ const Sidebar = ({ children }) => {
       <div className="  w-screen flex flex-row h-[calc(100vh)]  ">
         {/* SIDEBAR */}
         <aside
-          className={`${
-            isOpened ? "opened" : "sidebar bg-amaranth-100 "
-          }      
+          className={`${isOpened ? "opened" : "sidebar bg-amaranth-100 "}      
                flex flex-col items-start text-amaranth-900 shadow h-[calc(100vh)] sticky top-0  `}
         >
           {/* <!-- Side Nav Bar--> */}
@@ -228,36 +242,38 @@ const Sidebar = ({ children }) => {
               </li>
             )}
 
-            {user.role && !user.role?.includes("Provider") && user.role?.includes("Consumer") && (
-              <li
-                className={`${
-                  tab === 4 ? "bg-amaranth-200" : ""
-                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
-              >
-                <button
-                  onClick={() => navigateTo("/analytics")}
-                  className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+            {user.role &&
+              !user.role?.includes("Provider") &&
+              user.role?.includes("Consumer") && (
+                <li
+                  className={`${
+                    tab === 4 ? "bg-amaranth-200" : ""
+                  } hover:bg-amaranth-200 transition ease-in-out duration-500`}
                 >
-                  <i className="text-xs mr-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </i>
-                  <span className={`${isOpened ? "" : "hidden"} `}>
-                    Analytics
-                  </span>
-                </button>
-              </li>
-            )}
+                  <button
+                    onClick={() => navigateTo("/analytics")}
+                    className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+                  >
+                    <i className="text-xs mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </i>
+                    <span className={`${isOpened ? "" : "hidden"} `}>
+                      Analytics
+                    </span>
+                  </button>
+                </li>
+              )}
 
             {((user["role"] && user["role"].includes("Consumer_Admin")) ||
               (user["role"] && user["role"].includes("Provider_Admin"))) && (
@@ -326,7 +342,7 @@ const Sidebar = ({ children }) => {
           {/* HEADER */}
           <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
             <div className=" px-4">{/* OPTION FOR PARTNER LOGO */}</div>
-            
+
             {/* <!-- user --> */}
             <div className="dropdown relative md:static pr-4">
               <button className="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
@@ -361,9 +377,10 @@ const Sidebar = ({ children }) => {
               <button className="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
 
               <div
+                ref={divRef}
                 className={`${
                   menuOpen ? " " : " hidden "
-                } text-gray-500 menu    md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}
+                } text-gray-500 menu md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}
               >
                 <a
                   className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-amaranth-200 hover:text-amaranth-900 transition-all duration-300 ease-in-out"
@@ -372,21 +389,6 @@ const Sidebar = ({ children }) => {
                   <i className="fad fa-user-edit text-xs text-amaranth-800 mr-1"></i>
                   Edit my profile
                 </a>
-
-                {/* <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                  <i className="fad fa-inbox-in text-xs mr-1"></i>
-                  my inbox
-                </a>
-
-                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                  <i className="fad fa-badge-check text-xs mr-1"></i>
-                  tasks
-                </a>
-
-                <a className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
-                  <i className="fad fa-comment-alt-dots text-xs mr-1"></i>
-                  chats
-                </a> */}
 
                 <a
                   onClick={handleSignOut}

@@ -4,22 +4,53 @@ import { CircularProgress } from "@mui/material";
 import { Box, Modal } from "@mui/material";
 import { Steps } from "intro.js-react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
 import Table from "./CommonComponent/Table";
 import match from "../Assets/enrichment.svg";
-import email from "../Assets/Personal data _Monochromatic.svg"
+import email from "../Assets/Personal data _Monochromatic.svg";
 import CommonModal from "./CommonComponent/Modal";
 import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
 
+// Modal style
+const resultstyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "95%",
+  maxHeight: "90%",
+  bgcolor: "background.paper",
+  overflow: "scroll",
+};
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  p: 2,
+  borderRadius: 5,
+};
+
+const initialState = {
+  Query_Name: "advertiser_match",
+  Provider_Name: "",
+  Consumer_Name: "",
+  Column_Names: "",
+  File_Name: "",
+  Match_Attribute: "",
+  Match_Attribute_Value: "",
+  file: "",
+};
+
 const MatchRate = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const user = state && state.user;
   const TableData =
@@ -32,14 +63,8 @@ const MatchRate = () => {
     state && state.ConsumerForm && state.ConsumerForm.SampleFileData;
 
   const [formData, setFormData] = useState({
-    Query_Name: "advertiser_match",
-    Provider_Name: "",
+    ...initialState,
     Consumer_Name: user?.Consumer,
-    Column_Names: "",
-    File_Name: "",
-    Match_Attribute: "",
-    Match_Attribute_Value: "",
-    file: "",
   });
 
   const [gender, setGender] = useState("male");
@@ -52,27 +77,6 @@ const MatchRate = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
-  // Modal style
-  const resultstyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "95%",
-    maxHeight: "90%",
-    bgcolor: "background.paper",
-    overflow: "scroll",
-  };
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 500,
-    bgcolor: "background.paper",
-    p: 2,
-    borderRadius: 5,
-  };
 
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -80,6 +84,11 @@ const MatchRate = () => {
     setLoading(false);
     setOpen(false);
     setErrorMessage("");
+    setFormData({
+      ...formData,
+      Match_Attribute: "",
+      Match_Attribute_Value: "",
+    });
   };
 
   const [requestFailedReason, setRequestFailedReason] = React.useState({
@@ -197,7 +206,6 @@ const MatchRate = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [byPassAPICalled]);
 
-
   useEffect(() => {
     if (TableData) {
       setTableHead(TableData?.head || []);
@@ -255,7 +263,7 @@ const MatchRate = () => {
       })
       .then((response) => setData(response.data.data))
       .catch((error) => console.log(error));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const callByPassAPI = () => {
@@ -286,11 +294,6 @@ const MatchRate = () => {
         console.log(error);
         setByPassAPICalled(false);
         fetchMainTable();
-        dispatch(
-          actions.PublisherForm({
-            fetchData: false,
-          })
-        );
       });
   };
 
@@ -302,8 +305,9 @@ const MatchRate = () => {
     formData.RunId = Date.now();
 
     // Upload file in Local uploadedFiles folder..
-    const fileName = `${formData.RunId + "." + formData?.file?.name?.split(".")[1]
-      }`;
+    const fileName = `${
+      formData.RunId + "." + formData?.file?.name?.split(".")[1]
+    }`;
     const modifiedFile = new File([formData?.file], fileName, {
       type: formData?.file.type,
     });
@@ -324,7 +328,7 @@ const MatchRate = () => {
       .get(`http://127.0.0.1:5000/${user?.name}/attachment`, {
         params: {
           filename: `${formData.File_Name}`,
-          identifyer: `${formData.Column_Names.toUpperCase()}`
+          identifyer: `${formData.Column_Names.toUpperCase()}`,
         },
       })
       .then((response) => {
@@ -350,21 +354,19 @@ const MatchRate = () => {
             .catch((error) => {
               console.log(error);
             });
-
         } else {
           fetchMainTable();
           setLoading(false);
-          setErrorMessage("The data is not matching with requested Identifier.");
-
+          setErrorMessage(
+            "The data is not matching with requested Identifier."
+          );
         }
-
       })
       .catch((error) => {
         setLoading(false);
         setErrorMessage("Something went wrong, please try again later !!!");
         console.log(error);
       });
-
   };
 
   const fetchTable = (data, runId) => {
@@ -456,7 +458,6 @@ const MatchRate = () => {
       });
   };
 
-
   const downloadNewFile = () => {
     const link = document.createElement("a");
     link.href = SampTemp;
@@ -466,7 +467,6 @@ const MatchRate = () => {
     document.body.removeChild(link);
     // toast.success(`Sample Template has been downloaded...`);
   };
-
 
   /// View the sample data...
 
@@ -569,7 +569,6 @@ const MatchRate = () => {
       })
       .catch((error) => console.log(error));
   };
-
 
   return (
     <>
@@ -689,13 +688,13 @@ const MatchRate = () => {
                             item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
-                        }   py-1 px-3 rounded-full text-xs`}
+                      }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                          ? "Rejected"
-                          : item.STATUS}
+                        ? "Rejected"
+                        : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -709,7 +708,7 @@ const MatchRate = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                        item.STATUS.toLowerCase() === "false" ? (
+                      item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -742,10 +741,11 @@ const MatchRate = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${item.STATUS.toLowerCase() === "completed"
-                            ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
-                            }  px-2 hover:text-amaranth-600`}
+                          className={`${
+                            item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -775,11 +775,12 @@ const MatchRate = () => {
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true" &&
                           item.STATUS?.toLowerCase() === "completed"
                         }
-                        className={`${item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
+                        className={`${
+                          item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
                           item.STATUS?.toLowerCase() === "completed"
-                          ? "opacity-1 hover:text-inherit"
-                          : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                        }  px-2 hover:text-amaranth-600`}
                         title={
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
                             ? "Already Uploaded into client ecospace"
@@ -808,55 +809,63 @@ const MatchRate = () => {
             </tbody>
           </table>
         </div>
-        {user.role && user?.role?.includes("Publisher") && !user?.role?.includes("Consumer") && (
-          <div className="relative flex flex-col mt-6 px-6 py-8   bg-amaranth-50">
-            <div className="flex w-2/3 text-gray-500 ">
-              <p>
-                Want to Explore more features of Datahaven & integrate with
-                the provider.
-              </p>
-            </div>
-            <div className="flex flex-grow-0 mt-4">
-              {emailLoading ? (
-                <CircularProgress
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    color: "amaranth-600",
-                  }}
-                />) : (
-                <button
-                  className="w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700"
-                  onClick={() => sendEmail()}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                  </svg>
-                  Click Here
-                </button>)
+        {user.role &&
+          user?.role?.includes("Publisher") &&
+          !user?.role?.includes("Consumer") && (
+            <div className="relative flex flex-col mt-6 px-6 py-8   bg-amaranth-50">
+              <div className="flex w-2/3 text-gray-500 ">
+                <p>
+                  Want to Explore more features of Datahaven & integrate with
+                  the provider.
+                </p>
+              </div>
+              <div className="flex flex-grow-0 mt-4">
+                {emailLoading ? (
+                  <CircularProgress
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      color: "amaranth-600",
+                    }}
+                  />
+                ) : (
+                  <button
+                    className="w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700"
+                    onClick={() => sendEmail()}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6 mr-2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                      />
+                    </svg>
+                    Click Here
+                  </button>
+                )}
+              </div>
 
-              }
-              
+              <img
+                className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400"
+                src={email}
+                alt=""
+              />
+              <div className="w-full max-w-full px-3 py-3sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
+                {note !== "" ? (
+                  <span className="text-amaranth-950 text-sm">{note}</span>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
-
-            <img
-              className="absolute w-44 z-0 bottom-2  right-2 text-amarant-400"
-              src={email}
-              alt=""
-            />
-            <div className="w-full max-w-full px-3 py-3sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
-              {note !== "" ? (
-                <span className="text-amaranth-950 text-sm">{note}</span>
-              ) : ""}
-            </div>
-          </div>
-
-        )}
+          )}
         <Modal
           ref={modalRef}
           open={open}
@@ -864,7 +873,7 @@ const MatchRate = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           id="modal_mr"
-          container={() => document.getElementById('mr_container')}
+          container={() => document.getElementById("mr_container")}
         >
           <Box
             sx={style}
@@ -931,24 +940,25 @@ const MatchRate = () => {
                     onChange={handleFileInput}
                     required
                   />
-
                 </div>
                 <div className="mt-2 pb-21 flex flex-col">
                   <button
                     className="flex flex-row text-amaranth-600"
-                    onClick={downloadNewFile}>
+                    onClick={downloadNewFile}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-6 h-6">
+                      class="w-6 h-6"
+                    >
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-
+                        d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <span className="pl-2 underline">Download Template</span>
                   </button>
@@ -1084,9 +1094,7 @@ const MatchRate = () => {
                 </div>
                 <div className="flex justify-center pt-2">
                   {errorMessage !== "" ? (
-                    <span className="text-red-600">
-                      {errorMessage}
-                    </span>
+                    <span className="text-red-600">{errorMessage}</span>
                   ) : (
                     loading && (
                       <span className="text-red-600">
@@ -1166,7 +1174,7 @@ const MatchRate = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                  SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
