@@ -15,6 +15,10 @@ export const adminConsumerConsoleTabs = [
   },
 ];
 
+export const adminConsumerPublisherConsoleTabs = [
+  { name: "profile", tabTitle: "PROFILES" },
+];
+
 // Tabs for Admin Console for Provider...
 
 export const adminProviderConsoleTabs = [

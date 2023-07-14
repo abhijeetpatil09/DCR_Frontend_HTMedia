@@ -4,6 +4,7 @@ import { CircularProgress } from "@mui/material";
 import { Box, Modal } from "@mui/material";
 import { Steps } from "intro.js-react";
 import { useDispatch, useSelector } from "react-redux";
+import Papa from 'papaparse';
 
 import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
@@ -77,6 +78,10 @@ const MatchRate = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
+
+  let [parsedData, setParsedData] = useState([]);
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [fileError, setFileError] = useState("");
 
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -213,26 +218,6 @@ const MatchRate = () => {
     }
   }, [TableData]);
 
-  // const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
-  //   axios
-  //     .get(`http://127.0.0.1:5000/${user?.name}`, {
-  //       responseType: "json",
-  //       params: {
-  //         query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       if (response?.data) {
-  //         const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
-  //         downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
-  //       } else {
-  //         console.log("File cannnot be downloaded...");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
 
   const handleCustomerFormData = (e) => {
     setFormData({
@@ -241,11 +226,51 @@ const MatchRate = () => {
     });
   };
 
+  
   const handleFileInput = (event) => {
     event.preventDefault();
+    setErrorMessage("");
     var fileInput = document.getElementById("myFileInput");
     var file = fileInput?.files[0];
     setFormData({ ...formData, file: file });
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const csvData = reader.result;
+        Papa.parse(csvData, {
+          complete: (results) => {
+            const firstRow = results.data[0];
+            const firstElement = firstRow && firstRow[0];
+
+            console.log("row ==>", firstRow);
+            console.log("element ==>", firstElement);
+
+
+            if (firstRow.length > 1){
+              setErrorMessage(`Columns are added more than one in the CSV file`);
+            } else if (firstRow.length < 1){
+              setErrorMessage(`Please add one Column in the CSV file`);
+            }else if (firstRow.length < 1){
+              setErrorMessage(`Please add one Column in the CSV file`);
+            } else if (firstRow.length === 1) {
+              if (firstElement === 'EMAIL' || firstElement === 'PHONE' || firstElement === 'MAID') {
+                // Perform additional validations on columns here
+                console.log('Valid CSV file. Upload allowed.');
+                setErrorMessage("");
+                // Perform further actions with the valid CSV data
+              } else {
+                setErrorMessage("Invalid CSV file. Upload not allowed.")
+                console.log('Invalid CSV file. Upload not allowed.');
+              }
+            }
+            
+          },
+        });
+      };
+
+      reader.readAsText(file);
+    }
+    
   };
 
   // const isValidInput = (inputString) => {
@@ -298,6 +323,7 @@ const MatchRate = () => {
   };
 
   const handleSubmit = (event) => {
+
     event.preventDefault();
 
     setLoading(true);
@@ -367,6 +393,7 @@ const MatchRate = () => {
         setErrorMessage("Something went wrong, please try again later !!!");
         console.log(error);
       });
+    
   };
 
   const fetchTable = (data, runId) => {
