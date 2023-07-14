@@ -15,6 +15,7 @@ import email from "../Assets/Personal data _Monochromatic.svg";
 import CommonModal from "./CommonComponent/Modal";
 import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
+import "./introjs-theme.css";
 
 // Modal style
 const resultstyle = {
@@ -543,18 +544,22 @@ const MatchRate = () => {
   const steps = [
     {
       element: "#matchRate",
-      intro: "Welcome to Match Rate page.",
+      title: "Welcome!",
+      intro: "This is the Match Rate page.",
     },
     {
       element: "#viewSample",
+      title: "Step 1",
       intro: "View sample data to have an understanding on the providers data",
     },
     {
       element: "#createNewRequestMatchRate",
+      title: "Step 2",
       intro: "Click here to create a new request.",
     },
     {
       element: "#modal_mr",
+      title: "Step 3",
       intro:
         "Select the columns for match rate. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",

@@ -11,6 +11,7 @@ import CommonModal from "./CommonComponent/Modal";
 
 import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
+import "./introjs-theme.css";
 
 import {
   jsonToCsv,
@@ -500,18 +501,22 @@ const Enrichment = () => {
   const steps = [
     {
       element: "#customerEnrichment",
-      intro: "Welcome to customer enrichment page.",
+      title: 'Welcome!',
+      intro: "This is the customer enrichment page.",
     },
     {
       element: "#viewSample",
+      title: 'Step 1',
       intro: "View sample data to have an understanding on the providers data",
     },
     {
       element: "#createNewRequest",
+      title: 'Step 2',
       intro: "Click here to create a new request.",
     },
     {
       element: '#modal_er',
+      title: 'Step 3',
       intro:
         "Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
