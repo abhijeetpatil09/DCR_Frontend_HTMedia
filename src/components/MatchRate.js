@@ -5,6 +5,7 @@ import { Box, Modal } from "@mui/material";
 import { Steps } from "intro.js-react";
 import { useDispatch, useSelector } from "react-redux";
 import Papa from 'papaparse';
+import { read, utils } from 'xlsx';
 
 import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
@@ -15,7 +16,6 @@ import email from "../Assets/Personal data _Monochromatic.svg";
 import CommonModal from "./CommonComponent/Modal";
 import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
-import "./introjs-theme.css";
 
 // Modal style
 const resultstyle = {
@@ -77,12 +77,11 @@ const MatchRate = () => {
   const [tableRows, setTableRows] = useState([]);
 
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
 
-  let [parsedData, setParsedData] = useState([]);
-  const [fileUploaded, setFileUploaded] = useState(false);
-  const [fileError, setFileError] = useState("");
+
 
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -227,7 +226,7 @@ const MatchRate = () => {
     });
   };
 
-  
+
   const handleFileInput = (event) => {
     event.preventDefault();
     setErrorMessage("");
@@ -235,44 +234,93 @@ const MatchRate = () => {
     var file = fileInput?.files[0];
     setFormData({ ...formData, file: file });
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const csvData = reader.result;
-        Papa.parse(csvData, {
-          complete: (results) => {
-            const firstRow = results.data[0];
-            const firstElement = firstRow && firstRow[0];
+      setUploading(true);
+      // setErrorMessage("Uploading the file please wait...")
+      const fileExtension = file.name.split(".").pop().toLowerCase();
 
-            console.log("row ==>", firstRow);
-            console.log("element ==>", firstElement);
+      if (fileExtension === "csv") {
+        // Handle CSV file
+        const reader = new FileReader();
+        reader.onload = () => {
+          const csvData = reader.result;
+          Papa.parse(csvData, {
+            complete: (results) => {
+              const firstRow = results.data[0];
+              const firstElement = firstRow && firstRow[0];
 
+              console.log("row ==>", firstRow);
+              console.log("element ==>", firstElement);
 
-            if (firstRow.length > 1){
-              setErrorMessage(`Columns are added more than one in the CSV file`);
-            } else if (firstRow.length < 1){
-              setErrorMessage(`Please add one Column in the CSV file`);
-            }else if (firstRow.length < 1){
-              setErrorMessage(`Please add one Column in the CSV file`);
-            } else if (firstRow.length === 1) {
-              if (firstElement === 'EMAIL' || firstElement === 'PHONE' || firstElement === 'MAID') {
-                // Perform additional validations on columns here
-                console.log('Valid CSV file. Upload allowed.');
-                setErrorMessage("");
-                // Perform further actions with the valid CSV data
-              } else {
-                setErrorMessage("Invalid CSV file. Upload not allowed.")
-                console.log('Invalid CSV file. Upload not allowed.');
+              if (firstRow.length > 1) {
+                setUploading(false);
+                setErrorMessage("Columns are added more than one in the CSV file");
+              } else if (firstRow.length < 1) {
+                setUploading(false);
+                setErrorMessage("Please add one Column in the CSV file");
+              } else if (firstRow.length === 1) {
+                if (
+                  firstElement.toUpperCase() === "EMAIL" ||
+                  firstElement.toUpperCase() === "PHONE" ||
+                  firstElement.toUpperCase() === "MAID-WIP"
+                ) {
+                  setUploading(false);
+                  setErrorMessage("");
+                } else {
+                  setUploading(false);
+                  setErrorMessage("Invalid CSV file. Upload not allowed.");
+                }
               }
-            }
-            
-          },
-        });
-      };
+            },
+          });
+        };
 
-      reader.readAsText(file);
+        reader.readAsText(file);
+      } else if (fileExtension === "xlsx") {
+        // Handle XLSX file
+        const reader = new FileReader();
+        reader.onload = () => {
+          const arrayBuffer = reader.result;
+          const workbook = read(arrayBuffer, { type: "array" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
+
+          // Assuming the first row contains the column names
+          const firstRow = jsonData[0];
+          const firstElement = firstRow && firstRow[0];
+
+          console.log("row ==>", firstRow);
+          console.log("element ==>", firstElement);
+
+          if (firstRow.length > 1) {
+            setUploading(false);
+            setErrorMessage("Columns are added more than one in the XLSX file");
+          } else if (firstRow.length < 1) {
+            setUploading(false);
+            setErrorMessage("Please add one Column in the XLSX file");
+          } else if (firstRow.length === 1) {
+            if (
+              firstElement.toUpperCase() === "EMAIL" ||
+              firstElement.toUpperCase() === "PHONE" ||
+              firstElement.toUpperCase() === "MAID-WIP"
+            ) {
+              setUploading(false);
+              setErrorMessage("");
+            } else {
+              setUploading(false);
+              setErrorMessage("Invalid XLSX file. Upload not allowed.");
+            }
+          }
+        };
+
+        reader.readAsArrayBuffer(file);
+      } else {
+        setUploading(false);
+        setErrorMessage("Invalid file type. Only CSV and XLSX files are allowed.");
+      }
     }
-    
   };
+
+
 
   // const isValidInput = (inputString) => {
   //   const regex = /^[0-9][0-9,-]*[0-9]$/; // regex pattern to match only comma, hyphen, and numeric values and start and end with numeric values
@@ -332,9 +380,8 @@ const MatchRate = () => {
     formData.RunId = Date.now();
 
     // Upload file in Local uploadedFiles folder..
-    const fileName = `${
-      formData.RunId + "." + formData?.file?.name?.split(".")[1]
-    }`;
+    const fileName = `${formData.RunId + "." + formData?.file?.name?.split(".")[1]
+      }`;
     const modifiedFile = new File([formData?.file], fileName, {
       type: formData?.file.type,
     });
@@ -394,7 +441,7 @@ const MatchRate = () => {
         setErrorMessage("Something went wrong, please try again later !!!");
         console.log(error);
       });
-    
+
   };
 
   const fetchTable = (data, runId) => {
@@ -544,22 +591,18 @@ const MatchRate = () => {
   const steps = [
     {
       element: "#matchRate",
-      title: "Welcome!",
-      intro: "This is the Match Rate page.",
+      intro: "Welcome to Match Rate page.",
     },
     {
       element: "#viewSample",
-      title: "Step 1",
       intro: "View sample data to have an understanding on the providers data",
     },
     {
       element: "#createNewRequestMatchRate",
-      title: "Step 2",
       intro: "Click here to create a new request.",
     },
     {
       element: "#modal_mr",
-      title: "Step 3",
       intro:
         "Select the columns for match rate. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
@@ -712,21 +755,20 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${
-                        item.STATUS.toLowerCase() === "completed" ||
+                      className={`${item.STATUS.toLowerCase() === "completed" ||
                         item.STATUS.toLowerCase() === "true"
-                          ? "bg-green-200 text-green-700"
-                          : item.STATUS.toLowerCase() === "failed" ||
-                            item.STATUS.toLowerCase() === "false"
+                        ? "bg-green-200 text-green-700"
+                        : item.STATUS.toLowerCase() === "failed" ||
+                          item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
-                      }   py-1 px-3 rounded-full text-xs`}
+                        }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                        ? "Rejected"
-                        : item.STATUS}
+                          ? "Rejected"
+                          : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -740,7 +782,7 @@ const MatchRate = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                      item.STATUS.toLowerCase() === "false" ? (
+                        item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -773,11 +815,10 @@ const MatchRate = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${
-                            item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                          className={`${item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -807,12 +848,11 @@ const MatchRate = () => {
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true" &&
                           item.STATUS?.toLowerCase() === "completed"
                         }
-                        className={`${
-                          item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
+                        className={`${item.UPL_INTO_CLI_SPACE?.toLowerCase() !== "true" &&
                           item.STATUS?.toLowerCase() === "completed"
-                            ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
-                        }  px-2 hover:text-amaranth-600`}
+                          ? "opacity-1 hover:text-inherit"
+                          : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
                         title={
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
                             ? "Already Uploaded into client ecospace"
@@ -1111,7 +1151,7 @@ const MatchRate = () => {
                     className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
                     type="submit"
                   >
-                    {loading ? (
+                    {loading || uploading ? (
                       <CircularProgress
                         style={{
                           width: "24px",
@@ -1206,7 +1246,7 @@ const MatchRate = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                SampleFileData?.rows?.length > 0 ? (
+                  SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
