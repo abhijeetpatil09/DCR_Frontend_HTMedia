@@ -6,12 +6,12 @@ const Profile = () => {
       <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="text-lg font-light text-white">My profile</h3>
         </div>
-      <div className="container mx-auto max-w-3xl mt-8 shadow-sm">
+      <div className="container mx-auto my-auto max-w-3xl mt-8 ">
         <form action="{{ route('profile.save') }}" method="POST" enctype="multipart/form-data">
-          <div className="w-full bg-white rounded-lg mx-auto mt-8 flex overflow-hidden rounded-b-none">
+          <div className="w-full bg-white rounded-lg mx-auto mt-8 flex overflow-hidden rounded-b-none shadow-sm">
             <div className="w-1/3 bg-amaranth-50 p-8 hidden md:inline-block">
               <h2 className="font-medium text-md text-gray-700 mb-4 tracking-wide">Profile Info</h2>
-              <p className="text-xs text-gray-500">You can use this section to update yoour password.</p>
+              <p className="text-xs text-gray-500">You can use this section to update your password.</p>
               <dl className="divide-y divide-gray-100">
                 <div className="flex flex-col px-4 py-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Full name</dt>
@@ -44,9 +44,9 @@ const Profile = () => {
             </div>
 
           </div>
-          <div className="flex  flex-row justify-end items-center p-16 py-8 bg-amaranth-700 clearfix rounded-b-lg border-t border-gray-200">
+          <div className="flex  flex-row justify-end items-center px-4 py-2 bg-amaranth-700 clearfix rounded-b-lg border-t border-gray-200">
             <p className="float-left text-xs text-white tracking-tight  mr-4">Click on Save to update your Profile Info</p>
-            <button id="createNewRequestMatchRate" className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-amaranth-700  ">Save changes</button>          </div>
+            <button id="createNewRequestMatchRate" className=" w-max flex items-center px-2 py-2  text-sm text-white bg-amaranth-600 rounded-md   hover:bg-white hover:text-amaranth-800  ">Save changes</button>          </div>
         </form>
       </div>
     </div>
