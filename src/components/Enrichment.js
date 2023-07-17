@@ -548,7 +548,7 @@ const Enrichment = () => {
     <>
       <Steps
         enabled={stepsEnabled}
-        options={{ hideNext: false }}
+        options={{ hideNext: false, dontShowAgain: true }}
         steps={steps}
         initialStep={0}
         onExit={onExit}

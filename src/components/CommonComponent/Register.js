@@ -169,19 +169,6 @@ const Register = () => {
     setUserDetails({ ...userDetails, [inputName]: inputValue });
   };
 
-  const handleSubmit = () => {
-    if (validateCaptcha(userDetails?.captcha) === true) {
-      loadCaptchaEnginge(6);
-      setErrors({ ...errors, captcha: null });
-      sendEmail();
-    } else {
-      setErrors({ ...errors, captcha: "Please enter correct Captcha" });
-      return;
-    }
-
-    toast.success("Registration has been successfull...");
-  };
-
   const sendEmail = () => {
     setEmailLoading(true);
     axios
@@ -217,6 +204,39 @@ const Register = () => {
       })
       .catch((error) => console.log(error));
   }
+
+  const registerUser = () => {
+    axios
+      .get(`http://127.0.0.1:5000/Provider`, {
+        params: {
+          query:
+            `INSERT INTO DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.user_details_registration(FULL_NAME,COMPANY,DESIGNATION,EMAIL_ID,SNOWFLAKE_ACCOUNT,USERNAME,PASSWORD) VALUES('${userDetails?.fullName}','${userDetails?.company}','${userDetails?.designation}','${userDetails?.email}','${userDetails?.accountRadio}','${userDetails?.userName}','${userDetails?.password}');`,
+        },
+      })
+      .then((response) => {
+        if (response) {
+          sendEmail();
+        } else {
+          setNote("Please, try Again to register.");
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+
+  const handleSubmit = () => {
+    if (validateCaptcha(userDetails?.captcha) === true) {
+      loadCaptchaEnginge(6);
+      setErrors({ ...errors, captcha: null });
+      registerUser();
+    } else {
+      setErrors({ ...errors, captcha: "Please enter correct Captcha" });
+      return;
+    }
+
+    toast.success("Registration has been successfull...");
+  };
+
+ 
 
   // JSX code for login form
   const renderForm = (

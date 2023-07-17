@@ -650,7 +650,7 @@ const MatchRate = () => {
       <Steps
         enabled={stepsEnabled}
         steps={steps}
-        options={{ hideNext: false }}
+        options={{ hideNext: false, dontShowAgain: true }}
         initialStep={0}
         onExit={onExit}
         ref={stepsRef}

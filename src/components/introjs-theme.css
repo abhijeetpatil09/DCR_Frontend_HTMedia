@@ -60,3 +60,15 @@
   border-color: #2454a9;
   text-decoration: none;
 }
+
+.introjs-dontShowAgain {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+  border-radius: 0;
+}
+
+.introjs-dontShowAgain input {
+  width: 20px;
+  height: 20px;
+}
