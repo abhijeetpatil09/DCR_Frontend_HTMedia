@@ -74,7 +74,7 @@ const Sidebar = ({ children }) => {
           {isOpened ? (
             <div className="flex flex-row items-center justify-around gap-1 h-10 w-full mb-2 pt-1">
               <a
-                href={"/#"}
+                href={"/home"}
                 className="flex pl-6  items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
               >
                 <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">

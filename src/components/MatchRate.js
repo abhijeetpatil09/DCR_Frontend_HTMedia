@@ -226,7 +226,6 @@ const MatchRate = () => {
     });
   };
 
-
   const handleFileInput = (event) => {
     event.preventDefault();
     setErrorMessage("");
@@ -319,8 +318,6 @@ const MatchRate = () => {
       }
     }
   };
-
-
 
   // const isValidInput = (inputString) => {
   //   const regex = /^[0-9][0-9,-]*[0-9]$/; // regex pattern to match only comma, hyphen, and numeric values and start and end with numeric values
@@ -441,7 +438,6 @@ const MatchRate = () => {
         setErrorMessage("Something went wrong, please try again later !!!");
         console.log(error);
       });
-
   };
 
   const fetchTable = (data, runId) => {
