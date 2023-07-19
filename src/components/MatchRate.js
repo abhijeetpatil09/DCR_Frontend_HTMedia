@@ -390,56 +390,67 @@ const MatchRate = () => {
 
     localFile.append("myFile", modifiedFile);
 
-    axios.post("http://localhost:8000/api/localFileUpload", localFile, {
-      headers: {
-        "content-type": "multipart/form-data",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-
     axios
-      .get(`${baseURL}/${user?.name}/attachment`, {
-        params: {
-          filename: `${formData.File_Name}`,
-          identifyer: `${formData.Column_Names.toUpperCase()}`,
-        },
-      })
+      .post(
+        "http://ec2-3-110-222-253.ap-south-1.compute.amazonaws.com:8000/api/localFileUpload",
+        localFile,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
       .then((response) => {
-        if (response?.data?.data === true) {
-          fetchMainTable();
+        if (parseInt(response?.status) === 200) {
           axios
-            .get(`${baseURL}/${user?.name}`, {
+            .get(`${baseURL}/${user?.name}/attachment`, {
               params: {
-                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
+                filename: `${formData.File_Name}`,
+                identifyer: `${formData.Column_Names.toUpperCase()}`,
               },
             })
             .then((response) => {
-              if (response) {
-                dispatch(
-                  actions.PublisherForm({
-                    RequestId: formData?.RunId,
-                    fetchData: true,
+              if (response?.data?.data === true) {
+                fetchMainTable();
+                axios
+                  .get(`${baseURL}/${user?.name}`, {
+                    params: {
+                      query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
+                    },
                   })
+                  .then((response) => {
+                    if (response) {
+                      dispatch(
+                        actions.PublisherForm({
+                          RequestId: formData?.RunId,
+                          fetchData: true,
+                        })
+                      );
+                      callByPassAPI();
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              } else {
+                fetchMainTable();
+                setLoading(false);
+                setErrorMessage(
+                  "The data is not matching with requested Identifier."
                 );
-                callByPassAPI();
               }
             })
             .catch((error) => {
+              setLoading(false);
+              setErrorMessage(
+                "Something went wrong, please try again later !!!"
+              );
               console.log(error);
             });
-        } else {
-          fetchMainTable();
-          setLoading(false);
-          setErrorMessage(
-            "The data is not matching with requested Identifier."
-          );
         }
       })
-      .catch((error) => {
-        setLoading(false);
-        setErrorMessage("Something went wrong, please try again later !!!");
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   };
 
   const fetchTable = (data, runId) => {
