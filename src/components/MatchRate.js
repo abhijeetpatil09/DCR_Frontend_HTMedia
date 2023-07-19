@@ -316,7 +316,9 @@ const MatchRate = () => {
         reader.readAsArrayBuffer(file);
       } else {
         setUploading(false);
-        setErrorMessage("Invalid file type. Only CSV and XLSX files are allowed.");
+        setErrorMessage(
+          "Invalid file type. Only CSV and XLSX files are allowed."
+        );
       }
     }
   };
