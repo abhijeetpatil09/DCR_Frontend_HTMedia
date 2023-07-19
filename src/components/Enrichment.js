@@ -78,7 +78,7 @@ const Enrichment = () => {
 
   const [callTable, setCallTable] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [error1, setError1] = useState("");
   const [requestFailedReason, setRequestFailedReason] = React.useState({
     openModal: false,
     message: "",
@@ -153,7 +153,7 @@ const Enrichment = () => {
       })
       .catch((error) => console.log(error));
   };
-  
+
   useEffect(() => {
     let intervalId;
     if (byPassAPICalled === true) {
@@ -310,10 +310,13 @@ const Enrichment = () => {
   /// Handle the dropdown data...
 
   const handleEnrichmentFormData = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+
   };
 
   /// Handle Multiselct select box...
@@ -333,7 +336,9 @@ const Enrichment = () => {
         ...formData,
         [name]: allSelect,
       });
-    } else {
+    }
+    else {
+
       setFormData({
         ...formData,
         [name]: event,
@@ -418,6 +423,7 @@ const Enrichment = () => {
     // handleClose();
 
     setLoading(true);
+    setError1("");
 
     const delimiter = "&";
     const selectedColumns = `#${formData.Column_Names?.join(delimiter)}#`;
@@ -428,6 +434,13 @@ const Enrichment = () => {
       );
       return;
     }
+
+    if (!formData.Column_Names || formData.Column_Names.length === 0) {
+      setError1("Please select columns from the list.");
+      setLoading(false);
+      return;
+    }
+    
     formData.RunId = Date.now();
 
     axios
@@ -533,15 +546,15 @@ const Enrichment = () => {
     if (nextStepIndex === 2 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-     }
- 
+    }
+
   };
   const onAfterChange = (nextStepIndex) => {
     if (nextStepIndex === 3 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-     }
- 
+    }
+
   };
 
   return (
@@ -555,9 +568,9 @@ const Enrichment = () => {
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
         onAfterChange={onAfterChange}
-        
+
       />
-     
+
 
       <div className="flex flex-col w-full h-full ">
         <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -644,37 +657,36 @@ const Enrichment = () => {
                   className="border-b border-gray-200 hover:bg-amaranth-50"
                 >
                   <td className="border text-amaranth-900 px-4 py-2">
-                  <span className="relative flex h-3 w-3 mr-2">
-                    {item.STATUS.toLowerCase() === "completed" ? (
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
-                    ) : item.STATUS.toLowerCase() === "false" ||
-                      item.STATUS.toLowerCase() === "failed" ? (
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
-                    ) : (
-                      <>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
-                      </>
-                    )}
-                  </span>
-                </td>
-                <td className="border px-4 py-2  whitespace-nowrap">
-                  <span
-                    className={`${
-                      item.STATUS.toLowerCase() === "completed" 
+                    <span className="relative flex h-3 w-3 mr-2">
+                      {item.STATUS.toLowerCase() === "completed" ? (
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
+                      ) : item.STATUS.toLowerCase() === "false" ||
+                        item.STATUS.toLowerCase() === "failed" ? (
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span>
+                      ) : (
+                        <>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-amaranth-500"></span>
+                        </>
+                      )}
+                    </span>
+                  </td>
+                  <td className="border px-4 py-2  whitespace-nowrap">
+                    <span
+                      className={`${item.STATUS.toLowerCase() === "completed"
                         ? "bg-green-200 text-green-700"
                         : item.STATUS.toLowerCase() === "failed" ||
                           item.STATUS.toLowerCase() === "false"
-                        ? "bg-red-200 text-red-700 "
-                        : "bg-amaranth-100 text-amaranth-700 "
-                    }   py-1 px-3 rounded-full text-xs`}
-                  >
-                    {item.STATUS.toLowerCase() === "true"
-                      ? "Approved"
-                      : item.STATUS.toLowerCase() === "false"
-                      ? "Rejected"
-                      : item.STATUS}
-                  </span>
-                </td>
+                          ? "bg-red-200 text-red-700 "
+                          : "bg-amaranth-100 text-amaranth-700 "
+                        }   py-1 px-3 rounded-full text-xs`}
+                    >
+                      {item.STATUS.toLowerCase() === "true"
+                        ? "Approved"
+                        : item.STATUS.toLowerCase() === "false"
+                          ? "Rejected"
+                          : item.STATUS}
+                    </span>
+                  </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
                   <td className="border px-4 py-2">{item.COLOUMNS}</td>
                   <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
@@ -686,7 +698,7 @@ const Enrichment = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                      item.STATUS.toLowerCase() === "false" ? (
+                        item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -719,11 +731,10 @@ const Enrichment = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${
-                            item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                          className={`${item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -752,11 +763,10 @@ const Enrichment = () => {
                           downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                         }
                         disabled={item.STATUS.toLowerCase() !== "completed"}
-                        className={`${
-                          item.STATUS.toLowerCase() === "completed"
-                            ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
-                        }  px-2 hover:text-amaranth-600`}
+                        className={`${item.STATUS.toLowerCase() === "completed"
+                          ? "opacity-1 hover:text-inherit"
+                          : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
                         title="Download file"
                       >
                         <svg
@@ -859,6 +869,7 @@ const Enrichment = () => {
                   />
                 </div>
 
+
                 <div className="mt-2 pb-21 flex flex-col">
                   <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                     Identifier type
@@ -875,6 +886,7 @@ const Enrichment = () => {
                     <option value="MAID">MAID</option>
                   </select>
                 </div>
+
 
                 <div className="mt-2 flex justify-end">
                   <button
@@ -893,6 +905,13 @@ const Enrichment = () => {
                       "Submit Query"
                     )}
                   </button>
+                </div>
+                <div className="flex justify-center pt-2">
+                  {error1 !== "" ? (
+                    <span className="text-red-600">{error1}</span>
+                  ) : (
+                    null
+                  )}
                 </div>
               </div>
             </form>
@@ -963,7 +982,7 @@ const Enrichment = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                SampleFileData?.rows?.length > 0 ? (
+                  SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}

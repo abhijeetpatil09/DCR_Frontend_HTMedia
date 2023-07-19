@@ -1,6 +1,37 @@
 import React from "react";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
+
 
 const Profile = () => {
+
+  const state = useSelector((state) => state);
+  const user = state && state.user;
+  const[data, setData] = useState([]);
+
+  useEffect(() => {
+      axios
+        .get(`http://127.0.0.1:5000/Provider`, {
+          params: {
+            query: `select * from DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.user_details_registration where USERNAME = ${user?.name};`,
+          },
+        })
+        .then((response) => {
+          if (response) {
+            setData(response);
+          } else {
+            setData([]);
+          }
+        })
+        .catch((error) => console.log(error));
+    
+  }, [user?.name]);
+
+
+
   return (
     <div className="flex flex-col flex-grow w-full h-full bg-gray-50">
       <div className="flex h-12 sticky top-0 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -15,7 +46,7 @@ const Profile = () => {
               <dl className="divide-y divide-gray-100">
                 <div className="flex flex-col px-4 py-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Full name</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">Rashmi Verma</dd>
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">`${data.FULL_NAME}`</dd>
                 </div>
                 <div className="flex flex-col px-4 py-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
