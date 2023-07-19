@@ -23,6 +23,8 @@ import * as actions from "../redux/actions/index";
 import CustomTable from "./CommonComponent/Table";
 import CommonModal from "./CommonComponent/Modal";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 // Modal style
 const resultstyle = {
   position: "absolute",
@@ -70,7 +72,7 @@ const QueryStatus = () => {
 
   const fetchMainTable = () => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query:
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc;",
@@ -93,7 +95,7 @@ const QueryStatus = () => {
   const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
     TEMPLATE_NAME = TEMPLATE_NAME.replace(/\s/g, "_");
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         responseType: "json",
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
@@ -129,7 +131,7 @@ const QueryStatus = () => {
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
         },
@@ -169,7 +171,7 @@ const QueryStatus = () => {
 
   const handleUploadData = async (runId) => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
         },
@@ -178,7 +180,7 @@ const QueryStatus = () => {
         if (response?.data?.data) {
           let data = response?.data?.data?.[0];
           axios
-            .get(`http://127.0.0.1:5000/${user?.name}`, {
+            .get(`${baseURL}/${user?.name}`, {
               params: {
                 query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
               },
@@ -202,7 +204,7 @@ const QueryStatus = () => {
     setTimeout(() => {
       fetchMainTable();
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
+        .get(`${baseURL}/${user?.name}/procedure`, {
           params: {
             query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
           },

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import HTWLogo from '../../Assets/hoonartek-logo.png';
+import HTWLogo from "../../Assets/hoonartek-logo.png";
 import axios from "axios";
 
 import {
@@ -9,6 +9,8 @@ import {
   validateCaptcha,
   LoadCanvasTemplateNoReload,
 } from "react-simple-captcha";
+
+const baseURL = process.env.REACT_APP_BASE_URL;
 
 const Register = () => {
   const [userDetails, setUserDetails] = useState({
@@ -36,7 +38,6 @@ const Register = () => {
 
   const [formValidated, setFormValidated] = useState(false);
 
-  const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [note, setNote] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
@@ -172,7 +173,7 @@ const Register = () => {
   const sendEmail = () => {
     setEmailLoading(true);
     axios
-      .get(`http://127.0.0.1:5000/mailtoadmin`, {
+      .get(`${baseURL}/mailtoadmin`, {
         params: {
           subject: `${userDetails?.fullName} wants to register.`,
           message: `Hello,
@@ -193,24 +194,23 @@ const Register = () => {
       })
       .then((response) => {
         if (response) {
-          setNote("** Our Expert team will connect with you within next 24 hours for the further process. **");
+          setNote(
+            "** Our Expert team will connect with you within next 24 hours for the further process. **"
+          );
           setEmailLoading(false);
-
         } else {
           setNote("");
           setEmailLoading(false);
-
         }
       })
       .catch((error) => console.log(error));
-  }
+  };
 
   const registerUser = () => {
     axios
-      .get(`http://127.0.0.1:5000/Provider`, {
+      .get(`${baseURL}/Provider`, {
         params: {
-          query:
-            `INSERT INTO DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.user_details_registration(FULL_NAME,COMPANY,DESIGNATION,EMAIL_ID,SNOWFLAKE_ACCOUNT,USERNAME,PASSWORD) VALUES('${userDetails?.fullName}','${userDetails?.company}','${userDetails?.designation}','${userDetails?.email}','${userDetails?.accountRadio}','${userDetails?.userName}','${userDetails?.password}');`,
+          query: `INSERT INTO DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.user_details_registration(FULL_NAME,COMPANY,DESIGNATION,EMAIL_ID,SNOWFLAKE_ACCOUNT,USERNAME,PASSWORD) VALUES('${userDetails?.fullName}','${userDetails?.company}','${userDetails?.designation}','${userDetails?.email}','${userDetails?.accountRadio}','${userDetails?.userName}','${userDetails?.password}');`,
         },
       })
       .then((response) => {
@@ -221,7 +221,7 @@ const Register = () => {
         }
       })
       .catch((error) => console.log(error));
-  }
+  };
 
   const handleSubmit = () => {
     if (validateCaptcha(userDetails?.captcha) === true) {
@@ -235,8 +235,6 @@ const Register = () => {
 
     toast.success("Registration has been successfull...");
   };
-
- 
 
   // JSX code for login form
   const renderForm = (
@@ -531,23 +529,25 @@ const Register = () => {
       <div className="w-full max-w-full px-3 py-3sm:flex-0 shrink-0 sm:w-6/12 lg:w-full">
         {note !== "" ? (
           <span className="text-amaranth-950 text-sm">{note}</span>
-        ) : ""}
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
 
   return (
     <>
-
-      <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 min-h-screen " >
+      <div className="bg-stone-300 flex flex-row  p-9 lg:p-13 xl:p-15 min-h-screen ">
         <div className="flex flex-row mx-auto max-w-[70%]    max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
           <div className="w-1/2 px-6 py-4">
             <div className=" flex flex-row items-start justify-start py-4 ">
-              <a href="#_"
+              <a
+                href="#_"
                 className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
               >
                 <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                  <img src={HTWLogo} className='w-12 mr-2' alt="" />
+                  <img src={HTWLogo} className="w-12 mr-2" alt="" />
                   DataHaven<span className="text-amaranth-600">.</span>
                 </span>
               </a>
@@ -560,12 +560,19 @@ const Register = () => {
             </div>
 
             <div className="flex items-start justify-center my-auto">
-              {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+              {isSubmitted ? (
+                <div>User is successfully logged in</div>
+              ) : (
+                renderForm
+              )}
             </div>
           </div>
           <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">
             {/* <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2> */}
-            <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">Secure data collaboration with DataHaven<span className="font-bold text-4xl text-amaranth-500">.</span></h1>
+            <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">
+              Secure data collaboration with DataHaven
+              <span className="font-bold text-4xl text-amaranth-500">.</span>
+            </h1>
             {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
             {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
           </div>

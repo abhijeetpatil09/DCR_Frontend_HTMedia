@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 const SnowflakeDataFetcher = () => {
   const state = useSelector((state) => state);
 
@@ -9,7 +11,7 @@ const SnowflakeDataFetcher = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:5000/${user?.name}`, {
+    axios.get(`${baseURL}/${user?.name}`, {
       params: {
         query: 'select * from API_TEST.PUBLIC.STUDENTS;'
       }

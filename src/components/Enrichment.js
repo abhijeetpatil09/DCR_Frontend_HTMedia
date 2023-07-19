@@ -25,6 +25,8 @@ import Table from "./CommonComponent/Table";
 import "./styles.css";
 import "./pure-react.css";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 // Modal style
 const resultstyle = {
   position: "absolute",
@@ -118,7 +120,7 @@ const Enrichment = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query:
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'CUSTOMER ENRICHMENT' order by RUN_ID desc limit 5;",
@@ -137,7 +139,7 @@ const Enrichment = () => {
 
   const getStatusApi = () => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query:
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'CUSTOMER ENRICHMENT' order by RUN_ID desc limit 5;",
@@ -153,7 +155,7 @@ const Enrichment = () => {
       })
       .catch((error) => console.log(error));
   };
-
+  
   useEffect(() => {
     let intervalId;
     if (byPassAPICalled === true) {
@@ -171,7 +173,7 @@ const Enrichment = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: "select provider from DCR_SAMP_CONSUMER1.PUBLIC.PROV_DETAILS;",
         },
@@ -192,7 +194,7 @@ const Enrichment = () => {
   useEffect(() => {
     if (databaseName !== "" && formData["Query_Name"] !== "") {
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`${baseURL}/${user?.name}`, {
           params: {
             query: `select allowed_columns from ${databaseName}.CLEANROOM.TEMPLATES where template_name='${formData["Query_Name"]}';`,
           },
@@ -224,7 +226,7 @@ const Enrichment = () => {
 
   const getDatabaseName = (selectedProvider) => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select database from DCR_SAMP_CONSUMER1.PUBLIC.PROV_DETAILS where provider = '${selectedProvider}';`,
         },
@@ -243,7 +245,7 @@ const Enrichment = () => {
   const createNewRequest = () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
       axios
-        .get(`http://127.0.0.1:5000/${user.name}`, {
+        .get(`${baseURL}/${user.name}`, {
           params: {
             query: `select TEMPLATE_STATUS from DCR_PROVIDER2.CLEANROOM.TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
           },
@@ -279,7 +281,7 @@ const Enrichment = () => {
       setOpenSampleData(true);
     } else {
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`${baseURL}/${user?.name}`, {
           params: {
             query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
           },
@@ -310,13 +312,10 @@ const Enrichment = () => {
   /// Handle the dropdown data...
 
   const handleEnrichmentFormData = (e) => {
-
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-
-
   };
 
   /// Handle Multiselct select box...
@@ -352,7 +351,7 @@ const Enrichment = () => {
     setByPassAPICalled(true);
     setTimeout(() => {
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
+        .get(`${baseURL}/${user?.name}/procedure`, {
           params: {
             query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
           },
@@ -397,7 +396,7 @@ const Enrichment = () => {
   const downloadFile = (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         responseType: "json", // Set the response type to JSON
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId};`,
@@ -444,7 +443,7 @@ const Enrichment = () => {
     formData.RunId = Date.now();
 
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id, attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${selectedColumns}','${formData.Consumer_Name}','${formData.RunId}', '${formData.Attribute_Value}');`,
         },
@@ -490,7 +489,7 @@ const Enrichment = () => {
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
         },
@@ -546,15 +545,15 @@ const Enrichment = () => {
     if (nextStepIndex === 2 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-    }
-
+     }
+ 
   };
   const onAfterChange = (nextStepIndex) => {
     if (nextStepIndex === 3 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-    }
-
+     }
+ 
   };
 
   return (
@@ -568,9 +567,9 @@ const Enrichment = () => {
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
         onAfterChange={onAfterChange}
-
+        
       />
-
+     
 
       <div className="flex flex-col w-full h-full ">
         <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
@@ -698,7 +697,7 @@ const Enrichment = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                        item.STATUS.toLowerCase() === "false" ? (
+                      item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -763,10 +762,11 @@ const Enrichment = () => {
                           downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                         }
                         disabled={item.STATUS.toLowerCase() !== "completed"}
-                        className={`${item.STATUS.toLowerCase() === "completed"
-                          ? "opacity-1 hover:text-inherit"
-                          : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                        className={`${
+                          item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                        }  px-2 hover:text-amaranth-600`}
                         title="Download file"
                       >
                         <svg
@@ -869,7 +869,6 @@ const Enrichment = () => {
                   />
                 </div>
 
-
                 <div className="mt-2 pb-21 flex flex-col">
                   <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                     Identifier type
@@ -886,7 +885,6 @@ const Enrichment = () => {
                     <option value="MAID">MAID</option>
                   </select>
                 </div>
-
 
                 <div className="mt-2 flex justify-end">
                   <button

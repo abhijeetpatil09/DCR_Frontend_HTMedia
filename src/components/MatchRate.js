@@ -17,6 +17,8 @@ import CommonModal from "./CommonComponent/Modal";
 import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 // Modal style
 const resultstyle = {
   position: "absolute",
@@ -144,7 +146,7 @@ const MatchRate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: "select provider from DCR_SAMP_CONSUMER1.PUBLIC.PROV_DETAILS;",
         },
@@ -162,7 +164,7 @@ const MatchRate = () => {
   const createNewRequest = () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
       axios
-        .get(`http://127.0.0.1:5000/${user.name}`, {
+        .get(`${baseURL}/${user.name}`, {
           params: {
             query: `select TEMPLATE_STATUS from DCR_PROVIDER2.CLEANROOM.TEMPLATES where CONSUMER_NAME = '${formData.Consumer_Name}' AND TEMPLATE_NAME = '${formData.Query_Name}';`,
           },
@@ -188,7 +190,7 @@ const MatchRate = () => {
 
   const fetchMainTable = () => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query:
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 5;",
@@ -326,7 +328,7 @@ const MatchRate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query:
             "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by RUN_ID desc limit 5;",
@@ -342,7 +344,7 @@ const MatchRate = () => {
     // fetchMainTable();
     handleClose();
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
+      .get(`${baseURL}/${user?.name}/procedure`, {
         params: {
           query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
         },
@@ -396,7 +398,7 @@ const MatchRate = () => {
     });
 
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}/attachment`, {
+      .get(`${baseURL}/${user?.name}/attachment`, {
         params: {
           filename: `${formData.File_Name}`,
           identifyer: `${formData.Column_Names.toUpperCase()}`,
@@ -406,7 +408,7 @@ const MatchRate = () => {
         if (response?.data?.data === true) {
           fetchMainTable();
           axios
-            .get(`http://127.0.0.1:5000/${user?.name}`, {
+            .get(`${baseURL}/${user?.name}`, {
               params: {
                 query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.dcr_query_request1(template_name,provider_name,columns,consumer_name,run_id,file_name,attribute_name,attribute_value) values ('${formData.Query_Name}', '${formData.Provider_Name}','${formData.Column_Names}','${formData.Consumer_Name}','${formData.RunId}', '${formData.File_Name}','${formData.Match_Attribute}','${formData.Match_Attribute_Value}');`,
               },
@@ -461,7 +463,7 @@ const MatchRate = () => {
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
         },
@@ -481,7 +483,7 @@ const MatchRate = () => {
     setTimeout(() => {
       fetchMainTable();
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}/procedure`, {
+        .get(`${baseURL}/${user?.name}/procedure`, {
           params: {
             query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
           },
@@ -500,7 +502,7 @@ const MatchRate = () => {
 
   const handleUploadData = async (runId) => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
         },
@@ -509,7 +511,7 @@ const MatchRate = () => {
         if (response?.data?.data) {
           let data = response?.data?.data?.[0];
           axios
-            .get(`http://127.0.0.1:5000/${user?.name}`, {
+            .get(`${baseURL}/${user?.name}`, {
               params: {
                 query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
               },
@@ -551,7 +553,7 @@ const MatchRate = () => {
       setOpenSampleData(true);
     } else {
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`${baseURL}/${user?.name}`, {
           params: {
             query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
           },
@@ -622,7 +624,7 @@ const MatchRate = () => {
   const sendEmail = () => {
     setEmailLoading(true);
     axios
-      .get(`http://127.0.0.1:5000/mailtoadmin`, {
+      .get(`${baseURL}/mailtoadmin`, {
         params: {
           subject: `${user?.name} wants to explore`,
           message: `Hello,

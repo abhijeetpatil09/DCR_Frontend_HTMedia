@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-
+const baseURL = process.env.REACT_APP_BASE_URL;
 
 const Profile = () => {
 
@@ -14,7 +14,7 @@ const Profile = () => {
 
   useEffect(() => {
       axios
-        .get(`http://127.0.0.1:5000/Provider`, {
+        .get(`${baseURL}/Provider`, {
           params: {
             query: `select * from DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.user_details_registration where USERNAME = ${user?.name};`,
           },

@@ -9,6 +9,8 @@ import * as actions from "../redux/actions/index";
 
 import { analysticsTabs } from "../utils/data";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 const ChartPage = () => {
   const dispatch = useDispatch();
 
@@ -38,7 +40,7 @@ const ChartPage = () => {
         })
       );
       axios
-        .get(`http://127.0.0.1:5000/${user?.name}`, {
+        .get(`${baseURL}/${user?.name}`, {
           params: {
             query: `select advertiser_match,age_0_6, age_7_16, age_17_25, age_26_40, age_41_above, male, female from DCR_SAMP_CONSUMER1.PUBLIC.advertiser_match_${RequestId}_insights;`,
           },

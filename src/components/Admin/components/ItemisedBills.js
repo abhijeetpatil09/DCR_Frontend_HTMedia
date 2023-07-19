@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 const ItemisedBills = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
@@ -71,20 +73,9 @@ const ItemisedBills = () => {
     }
   };
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 500,
-    bgcolor: "background.paper",
-    p: 2,
-    borderRadius: 5,
-  };
-
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:5000/${user?.name}`, {
+      .get(`${baseURL}/${user?.name}`, {
         params: {
           query: `select * from DCR_SAMP_PROVIDER_DB.DATAEX.CONSUMER_ATTRIBUTES_VW where PROVIDER='FALSE'and ADMIN='TRUE';`,
         },

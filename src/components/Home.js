@@ -16,6 +16,8 @@ import USER_MANUAL_PDF from "../Assets/PDF/User_Manual.pdf";
 import DCR_INTRO_PDF from "../Assets/PDF/DCR_Introduction.pdf";
 import Provider_Data_Catalog_PDF from "../Assets/PDF/Provider_Data_Catalog.pdf";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 const Home = () => {
   const state = useSelector((state) => state);
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ const Home = () => {
   const sendEmail = () => {
     setEmailLoading(true);
     axios
-      .get(`http://127.0.0.1:5000/mailtoadmin`, {
+      .get(`${baseURL}/mailtoadmin`, {
         params: {
           subject: `${user?.name} wants to explore`,
           message: `Hello,

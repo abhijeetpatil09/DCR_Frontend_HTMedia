@@ -8,6 +8,8 @@ import HTWLogo from "../../Assets/hoonartek-logo.png";
 
 import * as actions from "../../redux/actions/index";
 
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,7 +50,7 @@ const Login = () => {
 
   const getAllConsumers = async (userRole) => {
     await axios
-      .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
+      .get(`${baseURL}/${loginDetails?.userName}`, {
         params: {
           query: `select user from CONSUMER_ATTRIBUTES_VW where admin = 'TRUE';`,
         },
@@ -88,7 +90,7 @@ const Login = () => {
     if (loginDetails?.userName !== "") {
       setLoading(true);
       await axios
-        .get(`http://127.0.0.1:5000/${loginDetails?.userName}`, {
+        .get(`${baseURL}/${loginDetails?.userName}`, {
           params: {
             query: `select * from CONSUMER_ATTRIBUTES_VW WHERE USER = '${loginDetails?.userName}';`,
           },
