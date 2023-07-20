@@ -101,8 +101,9 @@ const Sidebar = ({ children }) => {
             </div>
           ) : (
             <div
-              className={`${isOpened ? "" : "text-amaranth-600"
-                }  mb-2 pt-2 px-6 flex justify-start items-center  text-stone-600 focus:text-amaranth-900 cursor-pointer`}
+              className={`${
+                isOpened ? "" : "text-amaranth-600"
+              }  mb-2 pt-2 px-6 flex justify-start items-center  text-stone-600 focus:text-amaranth-900 cursor-pointer`}
               onClick={() => setIsOpened(!isOpened)}
             >
               <i
@@ -128,8 +129,9 @@ const Sidebar = ({ children }) => {
             {/* <!-- Items Section --> */}
 
             <li
-              className={`${tab === 1 ? "bg-amaranth-200" : ""
-                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+              className={`${
+                tab === 1 ? "bg-amaranth-200" : ""
+              } hover:bg-amaranth-200 transition ease-in-out duration-500`}
             >
               <button
                 onClick={() => navigateTo("/home")}
@@ -184,8 +186,9 @@ const Sidebar = ({ children }) => {
 
             {user["role"] && user["role"].includes("Publisher") && (
               <li
-                className={`${tab === 2 ? "bg-amaranth-200" : ""
-                  } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+                className={`${
+                  tab === 2 ? "bg-amaranth-200" : ""
+                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
                 <button
                   onClick={() => navigateTo("/publisherform")}
@@ -214,8 +217,9 @@ const Sidebar = ({ children }) => {
 
             {user["role"] && user["role"].includes("Consumer") && (
               <li
-                className={`${tab === 3 ? "bg-amaranth-200" : ""
-                  } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+                className={`${
+                  tab === 3 ? "bg-amaranth-200" : ""
+                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
                 <button
                   onClick={() => navigateTo("/queryform")}
@@ -242,8 +246,9 @@ const Sidebar = ({ children }) => {
               !user.role?.includes("Provider") &&
               user.role?.includes("Consumer") && (
                 <li
-                  className={`${tab === 4 ? "bg-amaranth-200" : ""
-                    } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+                  className={`${
+                    tab === 4 ? "bg-amaranth-200" : ""
+                  } hover:bg-amaranth-200 transition ease-in-out duration-500`}
                 >
                   <button
                     onClick={() => navigateTo("/analytics")}
@@ -272,63 +277,64 @@ const Sidebar = ({ children }) => {
 
             {((user["role"] && user["role"].includes("Consumer_Admin")) ||
               (user["role"] && user["role"].includes("Provider_Admin"))) && (
-                <li
-                  className={`${tab === 5 ? "bg-amaranth-200" : ""
-                    } hover:bg-amaranth-200 transition ease-in-out duration-500`}
-                >
-                  <button
-                    onClick={() => navigateTo("/admin-console")}
-                    className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
-                  >
-                    <i className="text-xs mr-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                        />
-                      </svg>
-                    </i>
-                    <span className={`${isOpened ? "" : "hidden"} `}>
-                      Admin console
-                    </span>
-                  </button>
-                </li>
-              )}
-            {(user["role"] && !user["role"].includes("Provider")) && (
               <li
-                className={`${tab === 7 ? "bg-amaranth-200" : ""
-                  } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+                className={`${
+                  tab === 5 ? "bg-amaranth-200" : ""
+                } hover:bg-amaranth-200 transition ease-in-out duration-500`}
               >
                 <button
-                  onClick={() => navigateTo("/querystatus")}
+                  onClick={() => navigateTo("/admin-console")}
                   className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
                 >
                   <i className="text-xs mr-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
                       className="w-4 h-4"
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z"
-                        clipRule="evenodd"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
                       />
                     </svg>
                   </i>
-                  <span className={`${isOpened ? "" : "hidden"} `}>Status</span>
+                  <span className={`${isOpened ? "" : "hidden"} `}>
+                    Admin console
+                  </span>
                 </button>
               </li>
             )}
+
+            <li
+              className={`${
+                tab === 7 ? "bg-amaranth-200" : ""
+              } hover:bg-amaranth-200 transition ease-in-out duration-500`}
+            >
+              <button
+                onClick={() => navigateTo("/querystatus")}
+                className=" py-4 px-6 flex flex justify-start items-center w-full  capitalize font-medium text-sm "
+              >
+                <i className="text-xs mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </i>
+                <span className={`${isOpened ? "" : "hidden"} `}>Status</span>
+              </button>
+            </li>
           </ul>
         </aside>
 
@@ -372,8 +378,9 @@ const Sidebar = ({ children }) => {
 
               <div
                 ref={divRef}
-                className={`${menuOpen ? " " : " hidden "
-                  } text-gray-500 menu md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}
+                className={`${
+                  menuOpen ? " " : " hidden "
+                } text-gray-500 menu md:w-auto rounded bg-white shadow-md absolute z-20 right-1   w-40  py-2 animated faster`}
               >
                 <a
                   className="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-amaranth-200 hover:text-amaranth-900 transition-all duration-300 ease-in-out"
