@@ -71,7 +71,8 @@ const QueryStatus = () => {
     });
 
   const fetchMainTable = () => {
-    axios
+    if (user["role"] && user["role"].includes("Publisher") && user["role"].includes("Consumer")){
+      axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
           query:
@@ -85,8 +86,26 @@ const QueryStatus = () => {
         }
       })
       .catch((error) => console.log(error));
+    } else {
+      axios
+      .get(`${baseURL}/${user?.name}`, {
+        params: {
+          query:
+            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by run_id desc;",
+        },
+      })
+      .then((response) => {
+        if (response) {
+          let data = response?.data?.data;
+          setData(data);
+        }
+      })
+      .catch((error) => console.log(error));
+    }
+   
   };
 
+  
   useEffect(() => {
     fetchMainTable();
     // eslint-disable-next-line react-hooks/exhaustive-deps
