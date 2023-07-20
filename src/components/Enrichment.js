@@ -335,9 +335,7 @@ const Enrichment = () => {
         ...formData,
         [name]: allSelect,
       });
-    }
-    else {
-
+    } else {
       setFormData({
         ...formData,
         [name]: event,
@@ -439,7 +437,7 @@ const Enrichment = () => {
       setLoading(false);
       return;
     }
-    
+
     formData.RunId = Date.now();
 
     axios
@@ -513,22 +511,22 @@ const Enrichment = () => {
   const steps = [
     {
       element: "#customerEnrichment",
-      title: 'Welcome!',
+      title: "Welcome!",
       intro: "This is the customer enrichment page.",
     },
     {
       element: "#viewSample",
-      title: 'Step 1',
+      title: "Step 1",
       intro: "View sample data to have an understanding on the providers data",
     },
     {
       element: "#createNewRequest",
-      title: 'Step 2',
+      title: "Step 2",
       intro: "Click here to create a new request.",
     },
     {
-      element: '#modal_er',
-      title: 'Step 3',
+      element: "#modal_er",
+      title: "Step 3",
       intro:
         "Select the columns for enrichment. You can multiselect. Select Identifier type to do the match. Submit the request.",
       tooltipClass: "customTooltip",
@@ -545,15 +543,13 @@ const Enrichment = () => {
     if (nextStepIndex === 2 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-     }
- 
+    }
   };
   const onAfterChange = (nextStepIndex) => {
     if (nextStepIndex === 3 && !open) {
       setOpen(true);
       stepsRef.current.updateStepElement(nextStepIndex);
-     }
- 
+    }
   };
 
   return (
@@ -567,10 +563,7 @@ const Enrichment = () => {
         ref={stepsRef}
         onBeforeChange={onBeforeChange}
         onAfterChange={onAfterChange}
-        
       />
-     
-
       <div className="flex flex-col w-full h-full ">
         <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
           <h3
@@ -671,19 +664,20 @@ const Enrichment = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${item.STATUS.toLowerCase() === "completed"
-                        ? "bg-green-200 text-green-700"
-                        : item.STATUS.toLowerCase() === "failed" ||
-                          item.STATUS.toLowerCase() === "false"
+                      className={`${
+                        item.STATUS.toLowerCase() === "completed"
+                          ? "bg-green-200 text-green-700"
+                          : item.STATUS.toLowerCase() === "failed" ||
+                            item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
-                        }   py-1 px-3 rounded-full text-xs`}
+                      }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                          ? "Rejected"
-                          : item.STATUS}
+                        ? "Rejected"
+                        : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -730,10 +724,11 @@ const Enrichment = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${item.STATUS.toLowerCase() === "completed"
-                            ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
-                            }  px-2 hover:text-amaranth-600`}
+                          className={`${
+                            item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -799,8 +794,7 @@ const Enrichment = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           id="modal_er"
-          container={() => document.getElementById('root')}
-
+          container={() => document.getElementById("root")}
         >
           <Box
             sx={style}
@@ -907,9 +901,7 @@ const Enrichment = () => {
                 <div className="flex justify-center pt-2">
                   {error1 !== "" ? (
                     <span className="text-red-600">{error1}</span>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
                 </div>
               </div>
             </form>
@@ -980,7 +972,7 @@ const Enrichment = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                  SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
