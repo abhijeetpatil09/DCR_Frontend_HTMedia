@@ -420,9 +420,9 @@ const LandingPage = () => {
 
                         </i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Integrations with Facebook and meta-ads</h6>
+                      <h6 className="text-xl mb-1 font-semibold">Integrations with Facebook and google-ads</h6>
                       <p className="mb-4 text-blueGray-500 text-sm">
-                      Seamlessly integrate your marketing efforts with Facebook and Meta Ads platforms for enhanced reach and impact. Connect your customer data and insights to create highly targeted ad campaigns.                        </p>
+                      Seamlessly integrate your marketing efforts with Facebook and Google Ads platforms for enhanced reach and impact. Connect your customer data and insights to create highly targeted ad campaigns.                        </p>
                     </div>
                   </div>
                 </div>

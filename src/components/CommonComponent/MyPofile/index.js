@@ -134,7 +134,7 @@ const Profile = () => {
 
               <button
                 // id="createNewRequestMatchRate"
-                className=" w-full rounded-none px-2 py-2 mb-0  text-white bg-amaranth-600  text-lg hover:bg-amaranth-500 hover:text-white text-center font-semibold "
+                className=" w-2/3 rounded-md ml-14 px-2 py-2 mb-0  text-white bg-amaranth-600  text-lg hover:bg-amaranth-500 hover:text-white text-center font-semibold "
                 onClick={handleSave}
               > Save
               </button>

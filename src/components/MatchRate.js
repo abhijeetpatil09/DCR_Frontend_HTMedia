@@ -6,7 +6,7 @@ import { Steps } from "intro.js-react";
 import { useDispatch, useSelector } from "react-redux";
 import Papa from "papaparse";
 import { read, utils } from "xlsx";
-
+import { useNavigate } from "react-router-dom";
 import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
 
 import * as actions from "../redux/actions/index";
@@ -78,7 +78,7 @@ const MatchRate = () => {
   const [note, setNote] = useState("");
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [downloadSample, setDownloadSample] = useState(false);
 
@@ -372,9 +372,8 @@ const MatchRate = () => {
     formData.RunId = Date.now();
 
     // Upload file in Local uploadedFiles folder..
-    const fileName = `${
-      formData.RunId + "." + formData?.file?.name?.split(".")[1]
-    }`;
+    const fileName = `${formData.RunId + "." + formData?.file?.name?.split(".")[1]
+      }`;
     const modifiedFile = new File([formData?.file], fileName, {
       type: formData?.file.type,
     });
@@ -492,16 +491,19 @@ const MatchRate = () => {
         .then((response) => {
           if (response) {
             fetchMainTable();
+            // setLoading(false);
           }
         })
         .catch((error) => {
           console.log(error);
           fetchMainTable();
+          // setLoading(false);
         });
     }, 2000);
   };
 
   const handleUploadData = async (runId) => {
+    // setLoading(true);
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -644,6 +646,15 @@ const MatchRate = () => {
       .catch((error) => console.log(error));
   };
 
+  const showAnalyticsPage = (runId) => {
+    dispatch(
+      actions.AnalyticsData({
+        RequestId: runId,
+      })
+    );
+    navigate("/analytics");
+  };
+
   return (
     <>
       <Steps
@@ -754,20 +765,19 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${
-                        item.STATUS.toLowerCase() === "completed"
-                          ? "bg-green-200 text-green-700"
-                          : item.STATUS.toLowerCase() === "failed" ||
-                            item.STATUS.toLowerCase() === "false"
+                      className={`${item.STATUS.toLowerCase() === "completed"
+                        ? "bg-green-200 text-green-700"
+                        : item.STATUS.toLowerCase() === "failed" ||
+                          item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
-                      }   py-1 px-3 rounded-full text-xs`}
+                        }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                        ? "Rejected"
-                        : item.STATUS}
+                          ? "Rejected"
+                          : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -781,7 +791,7 @@ const MatchRate = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                      item.STATUS.toLowerCase() === "false" ? (
+                        item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -814,11 +824,10 @@ const MatchRate = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${
-                            item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                          className={`${item.STATUS.toLowerCase() === "completed"
+                            ? "opacity-1 hover:text-inherit"
+                            : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -843,28 +852,65 @@ const MatchRate = () => {
                         </button>
                       )}
                       {user.role &&
-                      user?.role?.includes("Publisher") &&
-                      user?.role?.includes("Consumer") ? (
+                        user?.role?.includes("Publisher") &&
+                        user?.role?.includes("Consumer") ? (
                         <>
-                          <button
-                            onClick={() => handleUploadData(item.RUN_ID)}
-                            disabled={
-                              item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                          {/* {loading ? (
+                            <div>
+                              <CircularProgress
+                                style={{
+                                  width: "16px",
+                                  height: "16px",
+                                  color: "amaranth-600",
+                                }}
+                              />
+                            </div>
+                          ) : ( */}
+                            <button
+                              onClick={() => handleUploadData(item.RUN_ID)}
+                              disabled={
+                                item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
                                 "true" &&
-                              item.STATUS?.toLowerCase() === "completed"
-                            }
-                            className={`${
-                              item.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                item.STATUS?.toLowerCase() === "completed"
+                              }
+                              className={`${item.UPL_INTO_CLI_SPACE?.toLowerCase() !==
                                 "true" &&
-                              item.STATUS?.toLowerCase() === "completed"
+                                item.STATUS?.toLowerCase() === "completed"
                                 ? "opacity-1 hover:text-inherit"
                                 : "disabled opacity-10 hover:text-inherit"
-                            }  px-2 hover:text-amaranth-600`}
-                            title={
-                              item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
-                                ? "Already Uploaded into client ecospace"
-                                : "Upload match records into client ecospace"
+                                }  px-2 hover:text-amaranth-600`}
+                              title={
+                                item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                                  ? "Already Uploaded into client ecospace"
+                                  : "Upload match records into client ecospace"
+                              }
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="w-5 h-5"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                                />
+                              </svg>
+                            </button>
+                          {/* )} */}
+                          <button
+                            onClick={() => showAnalyticsPage(item.RUN_ID)}
+                            disabled={
+                              item.STATUS.toLowerCase() !== "completed"
                             }
+                            className={`${item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                              }  px-2 hover:text-amaranth-600`}
+                            title="Show Analytics"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -872,17 +918,25 @@ const MatchRate = () => {
                               viewBox="0 0 24 24"
                               strokeWidth="1.5"
                               stroke="currentColor"
-                              className="w-5 h-5"
+                              className="w-4 h-4"
                             >
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                                d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"
                               />
                             </svg>
                           </button>
+
                         </>
                       ) : null}
+
+
                     </div>
                   </td>
                 </tr>
@@ -1265,7 +1319,7 @@ const MatchRate = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                SampleFileData?.rows?.length > 0 ? (
+                  SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
