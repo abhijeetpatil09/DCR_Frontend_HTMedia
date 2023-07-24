@@ -18,6 +18,7 @@ const AllowedColumns = ({ user }) => {
   const [consumers, setConsumers] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [allColumns, setAllColumns] = useState([]);
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -95,6 +96,23 @@ const AllowedColumns = ({ user }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publisherData.consumer, publisherData.template]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${baseURL}/${user.name}`, {
+  //       params: {
+  //         query: `SELECT * FROM DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.LIST_OF_ALL_COLUMNS;`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (response?.data) {
+  //         setAllColumns(response?.data?.data);
+  //       } else {
+  //         setAllColumns([]);
+  //       }
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, [user?.name]);
 
   //   UseEffect for Status buttton Enable/Disable....
 

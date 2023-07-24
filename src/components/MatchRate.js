@@ -16,7 +16,8 @@ import email from "../Assets/Personal data _Monochromatic.svg";
 import CommonModal from "./CommonComponent/Modal";
 import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
-
+import meta from "../Assets/META.svg";
+import google from "../Assets/GoogleAd.svg";
 const baseURL = process.env.REACT_APP_BASE_URL;
 const nodeURL = process.env.REACT_APP_NODE_URL;
 
@@ -80,6 +81,7 @@ const MatchRate = () => {
   const [tableRows, setTableRows] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [downloadSample, setDownloadSample] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -491,19 +493,19 @@ const MatchRate = () => {
         .then((response) => {
           if (response) {
             fetchMainTable();
-            // setLoading(false);
+            setUploading(false);
           }
         })
         .catch((error) => {
           console.log(error);
           fetchMainTable();
-          // setLoading(false);
+          setUploading(false);
         });
     }, 2000);
   };
 
   const handleUploadData = async (runId) => {
-    // setLoading(true);
+    setUploading(true);
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -521,7 +523,22 @@ const MatchRate = () => {
             })
             .then((response) => {
               if (response) {
-                callByPassUpload();
+                axios
+                  .get(`${baseURL}/${user?.name}`, {
+                    params: {
+                      query: `update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';`,
+                    },
+                  })
+                  .then((response) => {
+                    if (response) {
+                      fetchMainTable();
+                      callByPassUpload();
+                      
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               }
             })
             .catch((error) => {
@@ -739,8 +756,8 @@ const MatchRate = () => {
                 <th className="px-4 py-2 border-r">Identifier Type</th>
                 <th className="px-4 py-2 border-r">Match Attribute</th>
                 <th className="px-4 py-2 border-r">Match count</th>
-                <th className="px-4 py-2 border-r">Requested</th>
                 <th className="px-4 py-2 border-r">Actions</th>
+                <th className="px-4 py-2 border-r">Requested</th>
               </tr>
             </thead>
             <tbody className="text-amaranth-950 text-sm font-light">
@@ -784,10 +801,6 @@ const MatchRate = () => {
                   <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
                   <td className="border px-4 py-2">{item.ATTRIBUTE}</td>
                   <td className="border px-4 py-2">{item.MATCH_COUNT}</td>
-                  <td className="border px-4 py-2">
-                    <span className="num-2"></span>
-                    {handleDate(item.RUN_ID)}
-                  </td>
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
@@ -855,7 +868,7 @@ const MatchRate = () => {
                         user?.role?.includes("Publisher") &&
                         user?.role?.includes("Consumer") ? (
                         <>
-                          {/* {loading ? (
+                          {uploading && item.UPL_INTO_CLI_SPACE?.toLowerCase() === "in progress" ? (
                             <div>
                               <CircularProgress
                                 style={{
@@ -863,9 +876,10 @@ const MatchRate = () => {
                                   height: "16px",
                                   color: "amaranth-600",
                                 }}
+                                title="Wait uploading is going on"
                               />
                             </div>
-                          ) : ( */}
+                          ) : (
                             <button
                               onClick={() => handleUploadData(item.RUN_ID)}
                               disabled={
@@ -900,7 +914,7 @@ const MatchRate = () => {
                                 />
                               </svg>
                             </button>
-                          {/* )} */}
+                          )}
                           <button
                             onClick={() => showAnalyticsPage(item.RUN_ID)}
                             disabled={
@@ -933,11 +947,40 @@ const MatchRate = () => {
                             </svg>
                           </button>
 
+                          <button
+                            // onClick={() => metaAd(item.RUN_ID)}
+                            disabled={
+                              item.STATUS.toLowerCase() !== "completed"
+                            }
+                            className={`${item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                              }  px-2 hover:text-amaranth-600`}
+                            title="Run Ad campaign on Meta ADs"
+                          >
+                            <img src={meta} alt="" />
+                          </button>
+                          <button
+                            // onClick={() => googleAd(item.RUN_ID)}
+                            disabled={
+                              item.STATUS.toLowerCase() !== "completed"
+                            }
+                            className={`${item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                              }  px-2 hover:text-amaranth-600`}
+                            title="Run Ad campaign on Google ADs"
+                          >
+                           <img src={google} alt="" /> 
+                          </button>
+
                         </>
                       ) : null}
-
-
                     </div>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <span className="num-2"></span>
+                    {handleDate(item.RUN_ID)}
                   </td>
                 </tr>
               ))}

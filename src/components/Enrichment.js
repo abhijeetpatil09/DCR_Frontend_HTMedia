@@ -155,7 +155,7 @@ const Enrichment = () => {
       })
       .catch((error) => console.log(error));
   };
-  
+
   useEffect(() => {
     let intervalId;
     if (byPassAPICalled === true) {
@@ -489,7 +489,7 @@ const Enrichment = () => {
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId} limit 1000;`,
+          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId}_sample;`,
         },
       })
       .then((response) => {
@@ -638,8 +638,8 @@ const Enrichment = () => {
                 <th className="px-4 py-2 border-r">Column names</th>
                 <th className="px-4 py-2 border-r">Identifier Type</th>
                 <th className="px-4 py-2 border-r">Match count</th>
-                <th className="px-4 py-2 border-r">Requested</th>
                 <th className="px-4 py-2 border-r">Actions</th>
+                <th className="px-4 py-2 border-r">Requested</th>
               </tr>
             </thead>
             <tbody className="text-amaranth-950 text-sm font-light">
@@ -664,34 +664,30 @@ const Enrichment = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${
-                        item.STATUS.toLowerCase() === "completed"
+                      className={`${item.STATUS.toLowerCase() === "completed"
                           ? "bg-green-200 text-green-700"
                           : item.STATUS.toLowerCase() === "failed" ||
                             item.STATUS.toLowerCase() === "false"
-                          ? "bg-red-200 text-red-700 "
-                          : "bg-amaranth-100 text-amaranth-700 "
-                      }   py-1 px-3 rounded-full text-xs`}
+                            ? "bg-red-200 text-red-700 "
+                            : "bg-amaranth-100 text-amaranth-700 "
+                        }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                        ? "Rejected"
-                        : item.STATUS}
+                          ? "Rejected"
+                          : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
                   <td className="border px-4 py-2">{item.COLOUMNS}</td>
                   <td className="border px-4 py-2">{item.IDENTIFIER_TYPE}</td>
                   <td className="border px-4 py-2">{item.MATCH_COUNT}</td>
-                  <td className="border px-4 py-2">
-                    <span className="num-2"></span>
-                    {handleDate(item.RUN_ID)}
-                  </td>
+
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                      item.STATUS.toLowerCase() === "false" ? (
+                        item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -724,11 +720,10 @@ const Enrichment = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${
-                            item.STATUS.toLowerCase() === "completed"
+                          className={`${item.STATUS.toLowerCase() === "completed"
                               ? "opacity-1 hover:text-inherit"
                               : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                            }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
@@ -757,11 +752,10 @@ const Enrichment = () => {
                           downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                         }
                         disabled={item.STATUS.toLowerCase() !== "completed"}
-                        className={`${
-                          item.STATUS.toLowerCase() === "completed"
+                        className={`${item.STATUS.toLowerCase() === "completed"
                             ? "opacity-1 hover:text-inherit"
                             : "disabled opacity-10 hover:text-inherit"
-                        }  px-2 hover:text-amaranth-600`}
+                          }  px-2 hover:text-amaranth-600`}
                         title="Download file"
                       >
                         <svg
@@ -780,6 +774,10 @@ const Enrichment = () => {
                         </svg>
                       </button>
                     </div>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <span className="num-2"></span>
+                    {handleDate(item.RUN_ID)}
                   </td>
                 </tr>
               ))}
@@ -972,7 +970,7 @@ const Enrichment = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                SampleFileData?.rows?.length > 0 ? (
+                  SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}

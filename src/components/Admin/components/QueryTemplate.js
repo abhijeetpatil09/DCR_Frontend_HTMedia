@@ -47,7 +47,7 @@ const QueryTemplate = ({ user }) => {
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
-          query: `select distinct TEMPLATE_NAME from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${queryData.consumer}';`,
+          query: `select distinct TEMPLATE_NAME, TEMPLATE_STATUS from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where CONSUMER_NAME = '${queryData.consumer}';`,
         },
       })
       .then((response) => {
@@ -93,9 +93,8 @@ const QueryTemplate = ({ user }) => {
                   {
                      "Consumer_Name": "${queryData.consumer}",
                      "Template_Name": "${queryData.template}",
-                     "Template_Status" : ${
-                       queryData.status === true ? "false" : "true"
-                     }
+                     "Template_Status" : ${queryData.status === true ? "false" : "true"
+            }
                   }
                   ');`,
         },
@@ -116,8 +115,7 @@ const QueryTemplate = ({ user }) => {
       return;
     } else {
       setMessage(
-        `Are you sure, you want to ${
-          queryData.status === true ? "Disable" : "Enable"
+        `Are you sure, you want to ${queryData.status === true ? "Disable" : "Enable"
         } this template?`
       );
       setOpenModal(!openModal);
@@ -211,6 +209,11 @@ const QueryTemplate = ({ user }) => {
             {templateNames?.map((template, index) => (
               <option key={index} value={template?.TEMPLATE_NAME}>
                 {template?.TEMPLATE_NAME}
+                {"       "}
+                {template?.TEMPLATE_STATUS === true
+                  ? " ✓"
+                  : "✗"
+                }
               </option>
             ))}
           </select>
@@ -231,9 +234,8 @@ const QueryTemplate = ({ user }) => {
                   }}
                 />
               ) : (
-                <span className="ml-2">{`${
-                  queryData.status === true ? "Disable" : "Enable"
-                }`}</span>
+                <span className="ml-2">{`${queryData.status === true ? "Disable" : "Enable"
+                  }`}</span>
               )}
             </button>
           </div>

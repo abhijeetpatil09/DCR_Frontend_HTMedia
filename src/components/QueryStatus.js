@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
-
+import { CircularProgress } from "@mui/material";
+import meta from "../Assets/META.svg";
+import google from "../Assets/GoogleAd.svg";
 import {
   Table,
   TableBody,
@@ -52,7 +54,7 @@ const QueryStatus = () => {
   const [tableHead, setTableHead] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [requestId, setRequestId] = useState("");
-
+  const [uploading, setUploading] = useState(false);
   const [requestFailedReason, setRequestFailedReason] = React.useState({
     openModal: false,
     message: "",
@@ -71,41 +73,41 @@ const QueryStatus = () => {
     });
 
   const fetchMainTable = () => {
-    if (user["role"] && user["role"].includes("Publisher") && user["role"].includes("Consumer")){
+    if (user["role"] && user["role"].includes("Publisher") && user["role"].includes("Consumer")) {
       axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query:
-            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc;",
-        },
-      })
-      .then((response) => {
-        if (response) {
-          let data = response?.data?.data;
-          setData(data);
-        }
-      })
-      .catch((error) => console.log(error));
+        .get(`${baseURL}/${user?.name}`, {
+          params: {
+            query:
+              "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc;",
+          },
+        })
+        .then((response) => {
+          if (response) {
+            let data = response?.data?.data;
+            setData(data);
+          }
+        })
+        .catch((error) => console.log(error));
     } else {
       axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query:
-            "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by run_id desc;",
-        },
-      })
-      .then((response) => {
-        if (response) {
-          let data = response?.data?.data;
-          setData(data);
-        }
-      })
-      .catch((error) => console.log(error));
+        .get(`${baseURL}/${user?.name}`, {
+          params: {
+            query:
+              "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by run_id desc;",
+          },
+        })
+        .then((response) => {
+          if (response) {
+            let data = response?.data?.data;
+            setData(data);
+          }
+        })
+        .catch((error) => console.log(error));
     }
-   
+
   };
 
-  
+
   useEffect(() => {
     fetchMainTable();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,6 +191,7 @@ const QueryStatus = () => {
   };
 
   const handleUploadData = async (runId) => {
+    setUploading(true);
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -206,7 +209,22 @@ const QueryStatus = () => {
             })
             .then((response) => {
               if (response) {
-                callByPassUpload();
+                axios
+                  .get(`${baseURL}/${user?.name}`, {
+                    params: {
+                      query: `update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';`,
+                    },
+                  })
+                  .then((response) => {
+                    if (response) {
+                      fetchMainTable();
+                      callByPassUpload();
+
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               }
             })
             .catch((error) => {
@@ -231,11 +249,13 @@ const QueryStatus = () => {
         .then((response) => {
           if (response) {
             fetchMainTable();
+            setUploading(false);
           }
         })
         .catch((error) => {
           console.log(error);
           fetchMainTable();
+          setUploading(false);
         });
     }, 2000);
   };
@@ -328,17 +348,17 @@ const QueryStatus = () => {
                 </TableCell>
                 <TableCell
                   className="bg-amaranth-50 text-amaranth-900"
-                  key={7}
-                  align="center"
-                >
-                  Requested
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
                   key={"Actions"}
                   align="center"
                 >
                   Actions
+                </TableCell>
+                <TableCell
+                  className="bg-amaranth-50 text-amaranth-900"
+                  key={7}
+                  align="center"
+                >
+                  Requested
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -379,26 +399,23 @@ const QueryStatus = () => {
                         </TableCell>
                         <TableCell className="text-amaranth-900" align="center">
                           <span
-                            className={`${
-                              row.STATUS.toLowerCase() === "completed" ||
+                            className={`${row.STATUS.toLowerCase() === "completed" ||
                               row.STATUS.toLowerCase() === "true"
-                                ? "bg-green-200 text-green-700 inline"
-                                : row.STATUS === "Failed" ||
-                                  row.STATUS === "false"
+                              ? "bg-green-200 text-green-700 inline"
+                              : row.STATUS === "Failed" ||
+                                row.STATUS === "false"
                                 ? "bg-red-200 text-red-700 inline"
                                 : "text-amaranth-700 block bg-amaranth-200 h-[45px]"
-                            }  text-xs py-1 px-3 rounded-full  `}
+                              }  text-xs py-1 px-3 rounded-full  `}
                           >
                             {row.STATUS.toLowerCase() === "true"
                               ? "Approved"
                               : row.STATUS.toLowerCase() === "false"
-                              ? "Rejected"
-                              : row.STATUS}
+                                ? "Rejected"
+                                : row.STATUS}
                           </span>
                         </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {handleDate(row.RUN_ID)}
-                        </TableCell>
+
                         <TableCell
                           className="text-amaranth-900"
                           key={"actions"}
@@ -406,7 +423,7 @@ const QueryStatus = () => {
                         >
                           <div className="flex justify-between">
                             {row.STATUS.toLowerCase() === "failed" ||
-                            row.STATUS.toLowerCase() === "false" ? (
+                              row.STATUS.toLowerCase() === "false" ? (
                               <button
                                 onClick={() =>
                                   setRequestFailedReason({
@@ -444,11 +461,10 @@ const QueryStatus = () => {
                                 disabled={
                                   row.STATUS.toLowerCase() !== "completed"
                                 }
-                                className={`${
-                                  row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
+                                className={`${row.STATUS.toLowerCase() === "completed"
+                                  ? "opacity-1 hover:text-inherit"
+                                  : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600`}
                                 title="View"
                               >
                                 <svg
@@ -473,7 +489,7 @@ const QueryStatus = () => {
                               </button>
                             )}
                             {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                            row.TEMPLATE_NAME === "customer_enrichment" ? (
+                              row.TEMPLATE_NAME === "customer_enrichment" ? (
                               <button
                                 onClick={() =>
                                   downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
@@ -481,11 +497,10 @@ const QueryStatus = () => {
                                 disabled={
                                   row.STATUS.toLowerCase() !== "completed"
                                 }
-                                className={`${
-                                  row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
+                                className={`${row.STATUS.toLowerCase() === "completed"
+                                  ? "opacity-1 hover:text-inherit"
+                                  : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600`}
                                 title="Download file"
                               >
                                 <svg
@@ -505,18 +520,17 @@ const QueryStatus = () => {
                               </button>
                             ) : null}
                             {(row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                            row.TEMPLATE_NAME === "advertiser_match") && (user.role && user?.role?.includes("Publisher") && user?.role?.includes("Consumer")) ? (
+                              row.TEMPLATE_NAME === "advertiser_match") && (user.role && user?.role?.includes("Publisher") && user?.role?.includes("Consumer")) ? (
                               <>
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${
-                                    row.STATUS.toLowerCase() === "completed"
-                                      ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
+                                  className={`${row.STATUS.toLowerCase() === "completed"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600`}
                                   title="Show Analytics"
                                 >
                                   <svg
@@ -540,44 +554,86 @@ const QueryStatus = () => {
                                   </svg>
                                 </button>
                                 <button
-                                  onClick={() => handleUploadData(row.RUN_ID)}
+                                  // onClick={() => metaAd(row.RUN_ID)}
                                   disabled={
-                                    row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                      "true" &&
-                                    row.STATUS?.toLowerCase() === "completed"
+                                    row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${
-                                    row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                  className={`${row.STATUS.toLowerCase() === "completed"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600`}
+                                  title="Show Analytics"
+                                >
+                                  <img src={meta} alt="" />
+                                </button>
+                                <button
+                                  // onClick={() => googleAd(row.RUN_ID)}
+                                  disabled={
+                                    row.STATUS.toLowerCase() !== "completed"
+                                  }
+                                  className={`${row.STATUS.toLowerCase() === "completed"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600`}
+                                  title="Show Analytics"
+                                >
+                                  <img src={google} alt="" />
+                                </button>
+                                {uploading && row.UPL_INTO_CLI_SPACE?.toLowerCase() === "in progress" ? (
+                                  <div>
+                                    <CircularProgress
+                                      style={{
+                                        width: "16px",
+                                        height: "16px",
+                                        color: "amaranth-600",
+                                      }}
+                                      title="Wait uploading is going on"
+                                    />
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => handleUploadData(row.RUN_ID)}
+                                    disabled={
+                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
                                       "true" &&
-                                    row.STATUS?.toLowerCase() === "completed"
+                                      row.STATUS?.toLowerCase() === "completed"
+                                    }
+                                    className={`${row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                      "true" &&
+                                      row.STATUS?.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
                                       : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
-                                  title={
-                                    row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                    "true"
-                                      ? "Already Uploaded into client ecospace"
-                                      : "Upload match records into client ecospace"
-                                  }
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="currentColor"
-                                    className="w-5 h-5"
+                                      }  px-2 hover:text-amaranth-600`}
+                                    title={
+                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                                        ? "Already Uploaded into client ecospace"
+                                        : "Upload match records into client ecospace"
+                                    }
                                   >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                                    />
-                                  </svg>
-                                </button>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth="1.5"
+                                      stroke="currentColor"
+                                      className="w-5 h-5"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                                      />
+                                    </svg>
+                                  </button>
+                                )}
+                                
+
                               </>
                             ) : null}
                           </div>
+                        </TableCell>
+                        <TableCell className="text-amaranth-900" align="center">
+                          {handleDate(row.RUN_ID)}
                         </TableCell>
                       </TableRow>
                     );
