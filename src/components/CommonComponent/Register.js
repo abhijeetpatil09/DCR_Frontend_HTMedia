@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import HTWLogo from "../../Assets/hoonartek-logo.png";
+import HTWLogo from "../../Assets/Logos/Data_Haven_Logo.svg";
 import axios from "axios";
 
 import {
@@ -543,12 +543,11 @@ const Register = () => {
           <div className="w-1/2 px-6 py-4">
             <div className=" flex flex-row items-start justify-start py-4 ">
               <a
-                href="#_"
+                href="/"
                 className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
               >
                 <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                  <img src={HTWLogo} className="w-12 mr-2" alt="" />
-                  DataHaven<span className="text-amaranth-600">.</span>
+                  <img src={HTWLogo} className="w-52 mr-2" alt="" />
                 </span>
               </a>
             </div>
