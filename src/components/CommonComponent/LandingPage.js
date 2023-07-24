@@ -1,5 +1,5 @@
 import React from "react";
-import HTWLogo from "../../Assets/hoonartek-logo.png";
+import HTWLogo from "../../Assets/Logos/Data_Haven_Logo.svg";
 import Hero1 from "../../Assets/landing/hero1.jpg";
 import Hero2 from "../../Assets/landing/hero2.jpg";
 import Hero3 from "../../Assets/landing/hero3.jpg";
@@ -19,17 +19,10 @@ const LandingPage = () => {
               className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
             >
               <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                <img src={HTWLogo} className="w-12 mr-2" alt="" />
-                DataHaven<span className="text-amaranth-600">.</span>
+                <img src={HTWLogo} className="w-52 mr-2" alt="" />
               </span>
             </a>
             <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">
-              {/* <a
-                  href="#_"
-                  className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900"
-                >
-                  Home
-                </a> */}
               <a
                 href="#features"
                 className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900"
@@ -129,7 +122,10 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Section 3 */}
-      <section id="features" className="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24">
+      <section
+        id="features"
+        className="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24"
+      >
         <div className="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16">
           {/* Image */}
           <div className="w-full h-96  relative overflow-hidden rounded-md shadow-xl sm:rounded-xl md:w-1/2 ">
@@ -338,24 +334,42 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Section USECASE */}
-      
+
       <section id="uc" className="relative pt-16 bg-blueGray-50">
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center">
             <div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-78">
               <div className="relative flex flex-col min-w-0 break-word w-full mb-6 shadow-lg rounded-lg bg-amaranth-700">
-                <img alt="..." src={"https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=700&amp;q=80"} className="w-full align-middle rounded-t-lg"/>
-                  <blockquote className="relative p-8 mb-4">
-                    <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 583 95" className="absolute left-0 w-full block h-95-px -top-[64px]">
-                      <polygon points="-30,95 583,95 583,65" className="text-amaranth-700 fill-current"></polygon>
-                    </svg>
-                    <h4 className="text-xl font-bold text-white">
-                      Data Monetization
-                    </h4>
-                    <p className="text-md font-light mt-2 text-white">
-                    Unlock the hidden value of your data with Data Monetization. Transform your organization's data into a revenue-generating asset by leveraging insights, analytics, and partnerships. Monetize data through targeted marketing campaigns, data-as-a-service offerings, and strategic collaborations.    
-                    </p>
-                  </blockquote>
+                <img
+                  alt="..."
+                  src={
+                    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=700&amp;q=80"
+                  }
+                  className="w-full align-middle rounded-t-lg"
+                />
+                <blockquote className="relative p-8 mb-4">
+                  <svg
+                    preserveAspectRatio="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 583 95"
+                    className="absolute left-0 w-full block h-95-px -top-[64px]"
+                  >
+                    <polygon
+                      points="-30,95 583,95 583,65"
+                      className="text-amaranth-700 fill-current"
+                    ></polygon>
+                  </svg>
+                  <h4 className="text-xl font-bold text-white">
+                    Data Monetization
+                  </h4>
+                  <p className="text-md font-light mt-2 text-white">
+                    Unlock the hidden value of your data with Data Monetization.
+                    Transform your organization's data into a revenue-generating
+                    asset by leveraging insights, analytics, and partnerships.
+                    Monetize data through targeted marketing campaigns,
+                    data-as-a-service offerings, and strategic collaborations.
+                  </p>
+                </blockquote>
               </div>
             </div>
 
@@ -366,32 +380,65 @@ const LandingPage = () => {
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-sitemap text-amaranth-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
+                            />
                           </svg>
                         </i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Match Rate Efficiency</h6>
+                      <h6 className="text-xl mb-1 font-semibold">
+                        Match Rate Efficiency
+                      </h6>
                       <p className="mb-4 text-blueGray-500 text-sm">
-                      Achieve superior data matching with our advanced matching rate capabilities. Increase data quality and accuracy by efficiently identifying and linking related records. Maximize operational efficiency and decision-making by leveraging a high matching rate, enabling precise data analysis and insights.                       </p>
+                        Achieve superior data matching with our advanced
+                        matching rate capabilities. Increase data quality and
+                        accuracy by efficiently identifying and linking related
+                        records. Maximize operational efficiency and
+                        decision-making by leveraging a high matching rate,
+                        enabling precise data analysis and insights.{" "}
+                      </p>
                     </div>
                   </div>
                   <div className="w-1/2 relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-drafting-compass text-amaranth-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                            />
                           </svg>
                         </i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
-                        Customer Enrichment & Customer Overlap 
+                        Customer Enrichment & Customer Overlap
                       </h6>
                       <p className="mb-4 text-blueGray-500 text-sm">
-                      Unlock a deeper understanding of your customer base with customer enrichment and overlap analysis. Enhance customer profiles by appending additional data attributes, such as demographics, preferences, and purchasing behavior.  
-
-</p>
+                        Unlock a deeper understanding of your customer base with
+                        customer enrichment and overlap analysis. Enhance
+                        customer profiles by appending additional data
+                        attributes, such as demographics, preferences, and
+                        purchasing behavior.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -400,29 +447,63 @@ const LandingPage = () => {
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-newspaper text-amaranth-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z"
+                            />
                           </svg>
                         </i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Run an AD Campaign </h6>
+                      <h6 className="text-xl mb-1 font-semibold">
+                        Run an AD Campaign{" "}
+                      </h6>
                       <p className="mb-4 text-blueGray-500 text-sm">
-                      Launch a targeted advertising campaign to reach your desired audience with precision. Utilize advanced audience segmentation and data analytics to identify the most relevant customer segments for your products or services.                        </p>
+                        Launch a targeted advertising campaign to reach your
+                        desired audience with precision. Utilize advanced
+                        audience segmentation and data analytics to identify the
+                        most relevant customer segments for your products or
+                        services.{" "}
+                      </p>
                     </div>
                   </div>
                   <div className="w-1/2 relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-file-alt text-amaranth-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"
+                            />
                           </svg>
-
                         </i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Integrations with Facebook and google-ads</h6>
+                      <h6 className="text-xl mb-1 font-semibold">
+                        Integrations with Facebook and google-ads
+                      </h6>
                       <p className="mb-4 text-blueGray-500 text-sm">
-                      Seamlessly integrate your marketing efforts with Facebook and Google Ads platforms for enhanced reach and impact. Connect your customer data and insights to create highly targeted ad campaigns.                        </p>
+                        Seamlessly integrate your marketing efforts with
+                        Facebook and Google Ads platforms for enhanced reach and
+                        impact. Connect your customer data and insights to
+                        create highly targeted ad campaigns.{" "}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -430,11 +511,7 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-     
       </section>
-
-
-
 
       {/* Section 5 : HIDDEN REMOVE CLASS TO SHOW*/}
       <section className="flex items-center justify-center py-20 bg-white min-w-screen hidden">
@@ -613,10 +690,10 @@ const LandingPage = () => {
               </a>
             </div>
           </nav>
-          <div className="flex justify-center mt-8 space-x-6">
-            <img src={HTWLogo} className="w-14" alt='' />
+          <div className="flex justify-center mt-4 space-x-6">
+            <img src={HTWLogo} className="w-44" alt="" />
           </div>
-          <p className="mt-8 text-base leading-6 text-center text-gray-400">
+          <p className="mt-4 text-base leading-6 text-center text-gray-400">
             © 2023 Hoonartek. All rights reserved.
           </p>
         </div>

@@ -955,7 +955,7 @@ const MatchRate = () => {
                             className={`${item.STATUS.toLowerCase() === "completed"
                               ? "opacity-1 hover:text-inherit"
                               : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600`}
+                              }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on Meta ADs"
                           >
                             <img src={meta} alt="" />
@@ -968,7 +968,7 @@ const MatchRate = () => {
                             className={`${item.STATUS.toLowerCase() === "completed"
                               ? "opacity-1 hover:text-inherit"
                               : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600`}
+                              }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on Google ADs"
                           >
                            <img src={google} alt="" /> 

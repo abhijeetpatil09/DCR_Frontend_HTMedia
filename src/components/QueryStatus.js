@@ -73,7 +73,11 @@ const QueryStatus = () => {
     });
 
   const fetchMainTable = () => {
-    if (user["role"] && user["role"].includes("Publisher") && user["role"].includes("Consumer")) {
+    if (
+      user["role"] &&
+      user["role"].includes("Publisher") &&
+      user["role"].includes("Consumer")
+    ) {
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
@@ -104,9 +108,7 @@ const QueryStatus = () => {
         })
         .catch((error) => console.log(error));
     }
-
   };
-
 
   useEffect(() => {
     fetchMainTable();
@@ -219,7 +221,6 @@ const QueryStatus = () => {
                     if (response) {
                       fetchMainTable();
                       callByPassUpload();
-
                     }
                   })
                   .catch((error) => {
@@ -399,31 +400,28 @@ const QueryStatus = () => {
                         </TableCell>
                         <TableCell className="text-amaranth-900" align="center">
                           <span
-                            className={`${row.STATUS.toLowerCase() === "completed" ||
+                            className={`${
+                              row.STATUS.toLowerCase() === "completed" ||
                               row.STATUS.toLowerCase() === "true"
-                              ? "bg-green-200 text-green-700 inline"
-                              : row.STATUS === "Failed" ||
-                                row.STATUS === "false"
+                                ? "bg-green-200 text-green-700 inline"
+                                : row.STATUS === "Failed" ||
+                                  row.STATUS === "false"
                                 ? "bg-red-200 text-red-700 inline"
                                 : "text-amaranth-700 block bg-amaranth-200 h-[45px]"
-                              }  text-xs py-1 px-3 rounded-full  `}
+                            }  text-xs py-1 px-3 rounded-full  `}
                           >
                             {row.STATUS.toLowerCase() === "true"
                               ? "Approved"
                               : row.STATUS.toLowerCase() === "false"
-                                ? "Rejected"
-                                : row.STATUS}
+                              ? "Rejected"
+                              : row.STATUS}
                           </span>
                         </TableCell>
 
-                        <TableCell
-                          className="text-amaranth-900"
-                          key={"actions"}
-                          align="center"
-                        >
+                        <TableCell className="text-amaranth-900" align="center">
                           <div className="flex justify-between">
                             {row.STATUS.toLowerCase() === "failed" ||
-                              row.STATUS.toLowerCase() === "false" ? (
+                            row.STATUS.toLowerCase() === "false" ? (
                               <button
                                 onClick={() =>
                                   setRequestFailedReason({
@@ -461,10 +459,11 @@ const QueryStatus = () => {
                                 disabled={
                                   row.STATUS.toLowerCase() !== "completed"
                                 }
-                                className={`${row.STATUS.toLowerCase() === "completed"
-                                  ? "opacity-1 hover:text-inherit"
-                                  : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
+                                className={`${
+                                  row.STATUS.toLowerCase() === "completed"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                }  px-2 hover:text-amaranth-600`}
                                 title="View"
                               >
                                 <svg
@@ -488,8 +487,9 @@ const QueryStatus = () => {
                                 </svg>
                               </button>
                             )}
+
                             {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                              row.TEMPLATE_NAME === "customer_enrichment" ? (
+                            row.TEMPLATE_NAME === "customer_enrichment" ? (
                               <button
                                 onClick={() =>
                                   downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
@@ -497,10 +497,11 @@ const QueryStatus = () => {
                                 disabled={
                                   row.STATUS.toLowerCase() !== "completed"
                                 }
-                                className={`${row.STATUS.toLowerCase() === "completed"
-                                  ? "opacity-1 hover:text-inherit"
-                                  : "disabled opacity-10 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
+                                className={`${
+                                  row.STATUS.toLowerCase() === "completed"
+                                    ? "opacity-1 hover:text-inherit"
+                                    : "disabled opacity-10 hover:text-inherit"
+                                }  px-2 hover:text-amaranth-600`}
                                 title="Download file"
                               >
                                 <svg
@@ -520,17 +521,21 @@ const QueryStatus = () => {
                               </button>
                             ) : null}
                             {(row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                              row.TEMPLATE_NAME === "advertiser_match") && (user.role && user?.role?.includes("Publisher") && user?.role?.includes("Consumer")) ? (
+                              row.TEMPLATE_NAME === "advertiser_match") &&
+                            user.role &&
+                            user?.role?.includes("Publisher") &&
+                            user?.role?.includes("Consumer") ? (
                               <>
                                 <button
                                   onClick={() => showAnalyticsPage(row.RUN_ID)}
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
+                                  className={`${
+                                    row.STATUS.toLowerCase() === "completed"
+                                      ? "opacity-1 hover:text-inherit"
+                                      : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600`}
                                   title="Show Analytics"
                                 >
                                   <svg
@@ -558,11 +563,12 @@ const QueryStatus = () => {
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
-                                  title="Show Analytics"
+                                  className={`${
+                                    row.STATUS.toLowerCase() === "completed"
+                                      ? "opacity-1 hover:text-inherit"
+                                      : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600 w-8`}
+                                  title="Run Ad campaign on Meta ADs"
                                 >
                                   <img src={meta} alt="" />
                                 </button>
@@ -571,15 +577,18 @@ const QueryStatus = () => {
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
-                                  className={`${row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                    }  px-2 hover:text-amaranth-600`}
-                                  title="Show Analytics"
+                                  className={`${
+                                    row.STATUS.toLowerCase() === "completed"
+                                      ? "opacity-1 hover:text-inherit"
+                                      : "disabled opacity-10 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600 w-8`}
+                                  title="Run Ad Campaign on Google ads"
                                 >
                                   <img src={google} alt="" />
                                 </button>
-                                {uploading && row.UPL_INTO_CLI_SPACE?.toLowerCase() === "in progress" ? (
+                                {uploading &&
+                                row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                  "in progress" ? (
                                   <div>
                                     <CircularProgress
                                       style={{
@@ -595,17 +604,19 @@ const QueryStatus = () => {
                                     onClick={() => handleUploadData(row.RUN_ID)}
                                     disabled={
                                       row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                      "true" &&
+                                        "true" &&
                                       row.STATUS?.toLowerCase() === "completed"
                                     }
-                                    className={`${row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
-                                      "true" &&
+                                    className={`${
+                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                        "true" &&
                                       row.STATUS?.toLowerCase() === "completed"
-                                      ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-10 hover:text-inherit"
-                                      }  px-2 hover:text-amaranth-600`}
+                                        ? "opacity-1 hover:text-inherit"
+                                        : "disabled opacity-10 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600`}
                                     title={
-                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                      "true"
                                         ? "Already Uploaded into client ecospace"
                                         : "Upload match records into client ecospace"
                                     }
@@ -626,8 +637,6 @@ const QueryStatus = () => {
                                     </svg>
                                   </button>
                                 )}
-                                
-
                               </>
                             ) : null}
                           </div>

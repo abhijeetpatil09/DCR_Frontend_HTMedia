@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as actions from "../../redux/actions/index";
 
+import HTWLogo from "../../Assets/Logos/Data_Haven_Logo.svg";
+import DiscoverLogo from "../../Assets/Logos/Discover_Logo.svg";
+
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -75,10 +78,10 @@ const Sidebar = ({ children }) => {
             <div className="flex flex-row items-center justify-around gap-1 h-10 w-full mb-2 pt-1">
               <a
                 href={"/home"}
-                className="flex pl-6  items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
+                className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0"
               >
                 <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                  DataHaven
+                  <img src={HTWLogo} className="w-40" alt="" />
                 </span>
               </a>
               <i
@@ -341,16 +344,18 @@ const Sidebar = ({ children }) => {
 
         <div className="flex flex-col flex-grow w-full  overflow-hidden mb-8">
           {/* HEADER */}
-          <div className=" py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
-            <div className=" px-4">{/* OPTION FOR PARTNER LOGO */}</div>
+          <div className="py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
+            <div className="px-4">
+              <img
+                className="w-24 object-cover"
+                src={DiscoverLogo}
+                alt=""
+              />
+            </div>
 
             {/* <!-- user --> */}
             <div className="dropdown relative md:static pr-4">
               <button className="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
-                {/* <div className="w-8 h-8 overflow-hidden rounded-full">
-                  <img className="w-full h-full object-cover" src="https://moesaid.github.io/cleopatra/img/user.svg" />
-                </div> */}
-
                 <div
                   className="capitalize flex items-center"
                   onClick={() => setMenuIsOpened(!menuOpen)}
