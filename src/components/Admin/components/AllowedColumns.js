@@ -81,9 +81,36 @@ const AllowedColumns = ({ user }) => {
         .then((response) => {
           if (response?.data?.data) {
             let data = response?.data?.data;
-            let col_name = data[0]?.ALLOWED_COLUMNS?.split("|");
-            col_name = col_name?.map((item) => {
+            let allowedcol_name = data[0]?.ALLOWED_COLUMNS?.split("|");
+            allowedcol_name = allowedcol_name?.map((item) => {
               return item?.split(".")[1];
+            });
+            setAllColumns(allowedcol_name);
+          } else {
+            setAllColumns([]);
+          }
+        })
+        .catch((error) => console.log(error));
+    } else {
+      setAllColumns([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [publisherData.consumer, publisherData.template]);
+
+  useEffect(() => {
+    if (publisherData.consumer !== "" && publisherData.template !== "") {
+      axios
+        .get(`${baseURL}/${user.name}`, {
+          params: {
+            query: `select ALL_COLUMNS from DCR_SAMP_PROVIDER_DB.TEMPLATES.DCR_TEMPLATES where TEMPLATE_NAME = '${publisherData.template}' and CONSUMER_NAME = '${publisherData.consumer}';`,
+          },
+        })
+        .then((response) => {
+          if (response?.data?.data) {
+            let data = response?.data?.data;
+            let col_name = data[0]?.ALL_COLUMNS?.split(",");
+            col_name = col_name?.map((item) => {
+              return item;
             });
             setColumns(col_name);
           } else {
@@ -94,27 +121,8 @@ const AllowedColumns = ({ user }) => {
     } else {
       setColumns([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publisherData.consumer, publisherData.template]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${baseURL}/${user.name}`, {
-  //       params: {
-  //         query: `SELECT * FROM DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.LIST_OF_ALL_COLUMNS;`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       if (response?.data) {
-  //         setAllColumns(response?.data?.data);
-  //       } else {
-  //         setAllColumns([]);
-  //       }
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, [user?.name]);
-
-  //   UseEffect for Status buttton Enable/Disable....
 
   useEffect(() => {
     if (
@@ -318,6 +326,9 @@ const AllowedColumns = ({ user }) => {
             {columns?.map((column, index) => (
               <option key={index} value={column}>
                 {column}
+                {allColumns.includes(column) 
+                ? "✓" 
+                : "✗"}
               </option>
             ))}
           </select>
