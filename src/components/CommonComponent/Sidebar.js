@@ -346,11 +346,11 @@ const Sidebar = ({ children }) => {
           {/* HEADER */}
           <div className="py-2 w-full flex flex-row justify-between items-center sticky top-0 z-50 min-h-[48px] bg-white drop-shadow-sm">
             <div className="px-4">
-              <img
+              {/* <img
                 className="w-24 object-cover"
                 src={DiscoverLogo}
                 alt=""
-              />
+              /> */}
             </div>
 
             {/* <!-- user --> */}

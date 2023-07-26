@@ -23,11 +23,11 @@ const LandingPage = () => {
               <span className="flex flex-row items-center mx-auto text-xl font-black leading-none text-gray-900 select-none">
                 <img src={HTWLogo} className="w-52 mr-2" alt="" />
               </span>
-              <div className="md:border-l md:border-gray-200">
+              {/* <div className="md:border-l md:border-gray-200">
                 <span className="flex flex-row ml-6 items-center mt-2 mx-auto text-xl font-black leading-none text-gray-900 select-none">
                   <img src={DiscoverLogo} className="w-28 mr-2" alt="" />
                 </span>
-              </div>
+              </div> */}
             </a>
             <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">
               <a
