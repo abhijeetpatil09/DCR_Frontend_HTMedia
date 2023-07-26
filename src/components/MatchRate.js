@@ -242,36 +242,37 @@ const MatchRate = () => {
 
       if (fileExtension === "csv") {
         // Handle CSV file
-        const reader = new FileReader();
-        reader.onload = () => {
-          const csvData = reader.result;
-          Papa.parse(csvData, {
-            complete: (results) => {
-              const firstRow = results.data[0];
-              const firstElement = firstRow && firstRow[0];
+        Papa.parse(file, {
+          complete: function (results) {
+            const jsonData = results?.data;
+            // Assuming the first row contains the column names
+            const headers = jsonData[0];
 
-              if (firstRow.length > 1) {
+            if (jsonData?.length > 1) {
+              if (headers?.length > 1) {
                 setFileErrorMessage(
                   "Columns are added more than one in the CSV file"
                 );
-              } else if (firstRow.length < 1) {
+              } else if (headers?.length < 1) {
                 setFileErrorMessage("Please add one Column in the CSV file");
-              } else if (firstRow.length === 1) {
+              } else if (headers?.length === 1) {
                 if (
-                  firstElement.toUpperCase() === "EMAIL" ||
-                  firstElement.toUpperCase() === "PHONE" ||
-                  firstElement.toUpperCase() === "MAID-WIP"
+                  headers[0]?.toUpperCase() === "EMAIL" ||
+                  headers[0]?.toUpperCase() === "PHONE" ||
+                  headers[0]?.toUpperCase() === "MAID-WIP"
                 ) {
                   setFileErrorMessage("");
                 } else {
                   setFileErrorMessage("Invalid CSV file. Upload not allowed.");
                 }
+              } else {
+                setFileErrorMessage("Invalid CSV file. Upload not allowed.");
               }
-            },
-          });
-        };
-
-        reader.readAsText(file);
+            } else {
+              setFileErrorMessage("Invalid CSV file. No Data present.");
+            }
+          },
+        });
       } else if (fileExtension === "xlsx") {
         // Handle XLSX file
         const reader = new FileReader();
@@ -282,25 +283,29 @@ const MatchRate = () => {
           const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
 
           // Assuming the first row contains the column names
-          const firstRow = jsonData[0];
-          const firstElement = firstRow && firstRow[0];
-
-          if (firstRow.length > 1) {
-            setFileErrorMessage(
-              "Columns are added more than one in the XLSX file"
-            );
-          } else if (firstRow.length < 1) {
-            setFileErrorMessage("Please add one Column in the XLSX file");
-          } else if (firstRow.length === 1) {
-            if (
-              firstElement.toUpperCase() === "EMAIL" ||
-              firstElement.toUpperCase() === "PHONE" ||
-              firstElement.toUpperCase() === "MAID-WIP"
-            ) {
-              setFileErrorMessage("");
+          const headers = jsonData[0];
+          if (jsonData?.length > 1) {
+            if (headers?.length > 1) {
+              setFileErrorMessage(
+                "Columns are added more than one in the XLSX file"
+              );
+            } else if (headers?.length < 1) {
+              setFileErrorMessage("Please add one Column in the XLSX file");
+            } else if (headers?.length === 1) {
+              if (
+                headers[0]?.toUpperCase() === "EMAIL" ||
+                headers[0]?.toUpperCase() === "PHONE" ||
+                headers[0]?.toUpperCase() === "MAID-WIP"
+              ) {
+                setFileErrorMessage("");
+              } else {
+                setFileErrorMessage("Invalid XLSX file. Upload not allowed.");
+              }
             } else {
               setFileErrorMessage("Invalid XLSX file. Upload not allowed.");
             }
+          } else {
+            setFileErrorMessage("Invalid XLSX file. No Data present.");
           }
         };
 
@@ -374,8 +379,9 @@ const MatchRate = () => {
     formData.RunId = Date.now();
 
     // Upload file in Local uploadedFiles folder..
-    const fileName = `${formData.RunId + "." + formData?.file?.name?.split(".")[1]
-      }`;
+    const fileName = `${
+      formData.RunId + "." + formData?.file?.name?.split(".")[1]
+    }`;
     const modifiedFile = new File([formData?.file], fileName, {
       type: formData?.file.type,
     });
@@ -781,19 +787,20 @@ const MatchRate = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${item.STATUS.toLowerCase() === "completed"
-                        ? "bg-green-200 text-green-700"
-                        : item.STATUS.toLowerCase() === "failed" ||
-                          item.STATUS.toLowerCase() === "false"
+                      className={`${
+                        item.STATUS.toLowerCase() === "completed"
+                          ? "bg-green-200 text-green-700"
+                          : item.STATUS.toLowerCase() === "failed" ||
+                            item.STATUS.toLowerCase() === "false"
                           ? "bg-red-200 text-red-700 "
                           : "bg-amaranth-100 text-amaranth-700 "
-                        }   py-1 px-3 rounded-full text-xs`}
+                      }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                          ? "Rejected"
-                          : item.STATUS}
+                        ? "Rejected"
+                        : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -803,7 +810,7 @@ const MatchRate = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                        item.STATUS.toLowerCase() === "false" ? (
+                      item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -817,16 +824,14 @@ const MatchRate = () => {
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
+                            fill="currentColor"
                             class="w-5 h-5 text-red-600"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                              fill-rule="evenodd"
+                              d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                              clip-rule="evenodd"
                             />
                           </svg>
                         </button>
@@ -836,38 +841,35 @@ const MatchRate = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${item.STATUS.toLowerCase() === "completed"
-                            ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
-                            }  px-2 hover:text-amaranth-600`}
+                          className={`${
+                            item.STATUS.toLowerCase() === "completed"
+                              ? "opacity-1 hover:text-inherit"
+                              : "disabled opacity-10 hover:text-inherit"
+                          }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
                             viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5"
+                            fill="currentColor"
+                            class="w-5 h-5 text-amaranth-600"
                           >
+                            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                             <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              fill-rule="evenodd"
+                              d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
+                              clip-rule="evenodd"
                             />
                           </svg>
                         </button>
                       )}
                       {user.role &&
-                        user?.role?.includes("Publisher") &&
-                        user?.role?.includes("Consumer") ? (
+                      user?.role?.includes("Publisher") &&
+                      user?.role?.includes("Consumer") ? (
                         <>
-                          {uploading && item.UPL_INTO_CLI_SPACE?.toLowerCase() === "in progress" ? (
+                          {uploading &&
+                          item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                            "in progress" ? (
                             <div>
                               <CircularProgress
                                 style={{
@@ -883,94 +885,89 @@ const MatchRate = () => {
                               onClick={() => handleUploadData(item.RUN_ID)}
                               disabled={
                                 item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                "true" &&
+                                  "true" &&
                                 item.STATUS?.toLowerCase() === "completed"
                               }
-                              className={`${item.UPL_INTO_CLI_SPACE?.toLowerCase() !==
-                                "true" &&
+                              className={`${
+                                item.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                  "true" &&
                                 item.STATUS?.toLowerCase() === "completed"
-                                ? "opacity-1 hover:text-inherit"
-                                : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
+                                  ? "opacity-1 hover:text-inherit"
+                                  : "disabled opacity-10 hover:text-inherit"
+                              }  px-2 hover:text-amaranth-600`}
                               title={
-                                item.UPL_INTO_CLI_SPACE?.toLowerCase() === "true"
+                                item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                "true"
                                   ? "Already Uploaded into client ecospace"
                                   : "Upload match records into client ecospace"
                               }
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
                                 viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-5 h-5"
+                                fill="currentColor"
+                                class="w-5 h-5 text-amaranth-600"
                               >
                                 <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                                  fill-rule="evenodd"
+                                  d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z"
+                                  clip-rule="evenodd"
                                 />
                               </svg>
                             </button>
                           )}
                           <button
                             onClick={() => showAnalyticsPage(item.RUN_ID)}
-                            disabled={
-                              item.STATUS.toLowerCase() !== "completed"
-                            }
-                            className={`${item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600`}
+                            disabled={item.STATUS.toLowerCase() !== "completed"}
+                            className={`${
+                              item.STATUS.toLowerCase() === "completed"
+                                ? "opacity-1 hover:text-inherit"
+                                : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600`}
                             title="Show Analytics"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
                               viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="currentColor"
-                              className="w-4 h-4"
+                              fill="currentColor"
+                              class="w-5 h-5 text-amaranth-600"
                             >
                               <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"
+                                fill-rule="evenodd"
+                                d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"
+                                clip-rule="evenodd"
                               />
                               <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"
+                                fill-rule="evenodd"
+                                d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"
+                                clip-rule="evenodd"
                               />
                             </svg>
                           </button>
 
                           <button
                             // onClick={() => metaAd(item.RUN_ID)}
-                            disabled={
-                              item.STATUS.toLowerCase() !== "completed"
-                            }
-                            className={`${item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600 w-8`}
+                            disabled={item.STATUS.toLowerCase() !== "completed"}
+                            className={`${
+                              item.STATUS.toLowerCase() === "completed"
+                                ? "opacity-1 hover:text-inherit"
+                                : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on Meta ADs"
                           >
                             <img src={meta} alt="" />
                           </button>
                           <button
                             // onClick={() => googleAd(item.RUN_ID)}
-                            disabled={
-                              item.STATUS.toLowerCase() !== "completed"
-                            }
-                            className={`${item.STATUS.toLowerCase() === "completed"
-                              ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
-                              }  px-2 hover:text-amaranth-600 w-8`}
+                            disabled={item.STATUS.toLowerCase() !== "completed"}
+                            className={`${
+                              item.STATUS.toLowerCase() === "completed"
+                                ? "opacity-1 hover:text-inherit"
+                                : "disabled opacity-10 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on Google ADs"
                           >
-                           <img src={google} alt="" /> 
+                            <img src={google} alt="" />
                           </button>
                         </>
                       ) : null}
@@ -1360,7 +1357,7 @@ const MatchRate = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                  SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}

@@ -664,19 +664,20 @@ const Enrichment = () => {
                   </td>
                   <td className="border px-4 py-2  whitespace-nowrap">
                     <span
-                      className={`${item.STATUS.toLowerCase() === "completed"
+                      className={`${
+                        item.STATUS.toLowerCase() === "completed"
                           ? "bg-green-200 text-green-700"
                           : item.STATUS.toLowerCase() === "failed" ||
                             item.STATUS.toLowerCase() === "false"
-                            ? "bg-red-200 text-red-700 "
-                            : "bg-amaranth-100 text-amaranth-700 "
-                        }   py-1 px-3 rounded-full text-xs`}
+                          ? "bg-red-200 text-red-700 "
+                          : "bg-amaranth-100 text-amaranth-700 "
+                      }   py-1 px-3 rounded-full text-xs`}
                     >
                       {item.STATUS.toLowerCase() === "true"
                         ? "Approved"
                         : item.STATUS.toLowerCase() === "false"
-                          ? "Rejected"
-                          : item.STATUS}
+                        ? "Rejected"
+                        : item.STATUS}
                     </span>
                   </td>
                   <td className="border px-4 py-2">{item.RUN_ID}</td>
@@ -687,7 +688,7 @@ const Enrichment = () => {
                   <td className="border px-4 py-2">
                     <div className="flex justify-between">
                       {item.STATUS.toLowerCase() === "failed" ||
-                        item.STATUS.toLowerCase() === "false" ? (
+                      item.STATUS.toLowerCase() === "false" ? (
                         <button
                           onClick={() =>
                             setRequestFailedReason({
@@ -701,16 +702,14 @@ const Enrichment = () => {
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
+                            fill="currentColor"
                             class="w-5 h-5 text-red-600"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                              fill-rule="evenodd"
+                              d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                              clip-rule="evenodd"
                             />
                           </svg>
                         </button>
@@ -720,29 +719,24 @@ const Enrichment = () => {
                             fetchcsvTableData(item.TEMPLATE_NAME, item.RUN_ID)
                           }
                           disabled={item.STATUS.toLowerCase() !== "completed"}
-                          className={`${item.STATUS.toLowerCase() === "completed"
+                          className={`${
+                            item.STATUS.toLowerCase() === "completed"
                               ? "opacity-1 hover:text-inherit"
                               : "disabled opacity-10 hover:text-inherit"
-                            }  px-2 hover:text-amaranth-600`}
+                          }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
                             viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5"
+                            fill="currentColor"
+                            class="w-5 h-5 text-amaranth-600"
                           >
+                            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                             <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              fill-rule="evenodd"
+                              d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
+                              clip-rule="evenodd"
                             />
                           </svg>
                         </button>
@@ -752,24 +746,23 @@ const Enrichment = () => {
                           downloadFile(item.TEMPLATE_NAME, item.RUN_ID)
                         }
                         disabled={item.STATUS.toLowerCase() !== "completed"}
-                        className={`${item.STATUS.toLowerCase() === "completed"
+                        className={`${
+                          item.STATUS.toLowerCase() === "completed"
                             ? "opacity-1 hover:text-inherit"
                             : "disabled opacity-10 hover:text-inherit"
-                          }  px-2 hover:text-amaranth-600`}
+                        }  px-2 hover:text-amaranth-600`}
                         title="Download file"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
                           viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="w-5 h-5"
+                          fill="currentColor"
+                          class="w-5 h-5 text-amaranth-600"
                         >
                           <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            fill-rule="evenodd"
+                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-.53 14.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V8.25a.75.75 0 00-1.5 0v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
+                            clip-rule="evenodd"
                           />
                         </svg>
                       </button>
@@ -970,7 +963,7 @@ const Enrichment = () => {
               </div>
               <div className="px-4">
                 {SampleFileData?.head?.length > 0 &&
-                  SampleFileData?.rows?.length > 0 ? (
+                SampleFileData?.rows?.length > 0 ? (
                   <Table
                     head={SampleFileData?.head}
                     rows={SampleFileData?.rows}
