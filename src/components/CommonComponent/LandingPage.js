@@ -1,6 +1,6 @@
 import React from "react";
 import HTWLogo from "../../Assets/Logos/Data_Haven_Logo.svg";
-import DiscoverLogo from "../../Assets/Logos/Discover_Logo.svg";
+// import DiscoverLogo from "../../Assets/Logos/Discover_Logo.svg";
 
 import Hero1 from "../../Assets/landing/hero1.jpg";
 import Hero2 from "../../Assets/landing/hero2.jpg";

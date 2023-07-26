@@ -533,7 +533,6 @@ const MatchRate = () => {
                     if (response) {
                       fetchMainTable();
                       callByPassUpload();
-                      
                     }
                   })
                   .catch((error) => {
@@ -973,7 +972,6 @@ const MatchRate = () => {
                           >
                            <img src={google} alt="" /> 
                           </button>
-
                         </>
                       ) : null}
                     </div>

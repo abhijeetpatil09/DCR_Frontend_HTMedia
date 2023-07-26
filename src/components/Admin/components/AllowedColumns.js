@@ -121,8 +121,8 @@ const AllowedColumns = ({ user }) => {
     } else {
       setColumns([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publisherData.consumer, publisherData.template]);
-
 
   useEffect(() => {
     if (

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as actions from "../../redux/actions/index";
 
 import HTWLogo from "../../Assets/Logos/Data_Haven_Logo.svg";
-import DiscoverLogo from "../../Assets/Logos/Discover_Logo.svg";
+// import DiscoverLogo from "../../Assets/Logos/Discover_Logo.svg";
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
