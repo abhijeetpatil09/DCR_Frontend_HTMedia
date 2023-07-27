@@ -183,7 +183,7 @@ const ChartPage = () => {
                   activeTab === item.name
                     ? "bg-amaranth-100 rounded-t-lg"
                     : "bg-white"
-                } px-8 text-amaranth-900 inline-block cursor-pointer p-3`}
+                } px-8 text-amaranth-900 inline-block cursor-pointer p-3 mr-1`}
               >
                 {item.tabTitle}
               </li>
@@ -203,7 +203,7 @@ const ChartPage = () => {
           ) : chartData?.genderData?.length > 0 &&
             chartData?.ageData?.length > 0 ? (
             activeTab === "gender" ? (
-              <div className="flex  flex-row  w-full px-4">
+              <div className="flex flex-row  w-full px-4">
                 <div className="w-1/2">
                   <BarChartAnalytics data={chartData?.genderData} />
                 </div>
@@ -214,7 +214,7 @@ const ChartPage = () => {
                   />
                 </div>
               </div>
-            ) : (
+            ) : activeTab === "age" ? (
               <div className="flex  flex-row  w-full px-4">
                 <div className="w-1/2">
                   <BarChartAnalytics data={chartData?.ageData} />
@@ -226,6 +226,14 @@ const ChartPage = () => {
                   />
                 </div>
               </div>
+            ) : activeTab === "google_ads" ? (
+              <span className="text-amaranth-600 flex flex-grow m-4">
+                Currently we don't have data to display the Google Ads...
+              </span>
+            ) : (
+              <span className="text-amaranth-600 flex flex-grow m-4">
+                Currently we don't have data to display the Meta Ads...
+              </span>
             )
           ) : (
             <span className="text-amaranth-600 flex flex-grow m-4">
