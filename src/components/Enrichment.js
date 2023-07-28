@@ -722,7 +722,7 @@ const Enrichment = () => {
                           className={`${
                             item.STATUS.toLowerCase() === "completed"
                               ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
+                              : "disabled opacity-25 hover:text-inherit"
                           }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
@@ -749,7 +749,7 @@ const Enrichment = () => {
                         className={`${
                           item.STATUS.toLowerCase() === "completed"
                             ? "opacity-1 hover:text-inherit"
-                            : "disabled opacity-10 hover:text-inherit"
+                            : "disabled opacity-25 hover:text-inherit"
                         }  px-2 hover:text-amaranth-600`}
                         title="Download file"
                       >

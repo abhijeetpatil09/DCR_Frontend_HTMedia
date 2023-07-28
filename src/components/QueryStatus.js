@@ -447,69 +447,75 @@ const QueryStatus = () => {
                                 </svg>
                               </button>
                             ) : (
-                              <button
-                                onClick={() =>
-                                  fetchcsvTableData(
-                                    row.TEMPLATE_NAME,
-                                    row.RUN_ID
-                                  )
-                                }
-                                disabled={
-                                  row.STATUS.toLowerCase() !== "completed"
-                                }
-                                className={`${
-                                  row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
-                                title="View"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                  class="w-5 h-5 text-amaranth-600"
+                              <div className="flex justify-start">
+                                <button
+                                  onClick={() =>
+                                    fetchcsvTableData(
+                                      row.TEMPLATE_NAME,
+                                      row.RUN_ID
+                                    )
+                                  }
+                                  disabled={
+                                    row.STATUS.toLowerCase() !== "completed"
+                                  }
+                                  className={`${
+                                    row.STATUS.toLowerCase() === "completed"
+                                      ? "opacity-1 hover:text-inherit"
+                                      : "disabled opacity-25 hover:text-inherit"
+                                  }  px-2 hover:text-amaranth-600`}
+                                  title="View"
                                 >
-                                  <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
-                                    clip-rule="evenodd"
-                                  />
-                                </svg>
-                              </button>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    class="w-5 h-5 text-amaranth-600"
+                                  >
+                                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
+                                {(row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
+                                  row.TEMPLATE_NAME ===
+                                    "customer_enrichment") && (
+                                  <button
+                                    onClick={() =>
+                                      downloadFile(
+                                        row.TEMPLATE_NAME,
+                                        row.RUN_ID
+                                      )
+                                    }
+                                    disabled={
+                                      row.STATUS.toLowerCase() !== "completed"
+                                    }
+                                    className={`${
+                                      row.STATUS.toLowerCase() === "completed"
+                                        ? "opacity-1 hover:text-inherit"
+                                        : "disabled opacity-25 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600`}
+                                    title="Download file"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      fill="currentColor"
+                                      class="w-5 h-5 text-amaranth-600"
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-.53 14.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V8.25a.75.75 0 00-1.5 0v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
+                                        clip-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </button>
+                                )}
+                              </div>
                             )}
 
-                            {row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                            row.TEMPLATE_NAME === "customer_enrichment" ? (
-                              <button
-                                onClick={() =>
-                                  downloadFile(row.TEMPLATE_NAME, row.RUN_ID)
-                                }
-                                disabled={
-                                  row.STATUS.toLowerCase() !== "completed"
-                                }
-                                className={`${
-                                  row.STATUS.toLowerCase() === "completed"
-                                    ? "opacity-1 hover:text-inherit"
-                                    : "disabled opacity-10 hover:text-inherit"
-                                }  px-2 hover:text-amaranth-600`}
-                                title="Download file"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                  class="w-5 h-5 text-amaranth-600"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-.53 14.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V8.25a.75.75 0 00-1.5 0v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
-                                    clip-rule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            ) : null}
                             {(row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
                               row.TEMPLATE_NAME === "advertiser_match") &&
                             user.role &&
@@ -542,7 +548,7 @@ const QueryStatus = () => {
                                         "true" &&
                                       row.STATUS?.toLowerCase() === "completed"
                                         ? "opacity-1 hover:text-inherit"
-                                        : "disabled opacity-10 hover:text-inherit"
+                                        : "disabled opacity-25 hover:text-inherit"
                                     }  px-2 hover:text-amaranth-600`}
                                     title={
                                       row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
@@ -573,7 +579,7 @@ const QueryStatus = () => {
                                   className={`${
                                     row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-10 hover:text-inherit"
+                                      : "disabled opacity-25 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600`}
                                   title="Show Analytics"
                                 >
@@ -603,7 +609,7 @@ const QueryStatus = () => {
                                   className={`${
                                     row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-10 hover:text-inherit"
+                                      : "disabled opacity-25 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600 w-8`}
                                   title="Run Ad campaign on Meta ADs"
                                 >
@@ -617,7 +623,7 @@ const QueryStatus = () => {
                                   className={`${
                                     row.STATUS.toLowerCase() === "completed"
                                       ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-10 hover:text-inherit"
+                                      : "disabled opacity-25 hover:text-inherit"
                                   }  px-2 hover:text-amaranth-600 w-8`}
                                   title="Run Ad Campaign on Google ads"
                                 >

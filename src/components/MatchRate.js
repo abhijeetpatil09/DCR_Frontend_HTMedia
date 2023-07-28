@@ -844,7 +844,7 @@ const MatchRate = () => {
                           className={`${
                             item.STATUS.toLowerCase() === "completed"
                               ? "opacity-1 hover:text-inherit"
-                              : "disabled opacity-10 hover:text-inherit"
+                              : "disabled opacity-25 hover:text-inherit"
                           }  px-2 hover:text-amaranth-600`}
                           title="View"
                         >
@@ -893,7 +893,7 @@ const MatchRate = () => {
                                   "true" &&
                                 item.STATUS?.toLowerCase() === "completed"
                                   ? "opacity-1 hover:text-inherit"
-                                  : "disabled opacity-10 hover:text-inherit"
+                                  : "disabled opacity-25 hover:text-inherit"
                               }  px-2 hover:text-amaranth-600`}
                               title={
                                 item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
@@ -922,7 +922,7 @@ const MatchRate = () => {
                             className={`${
                               item.STATUS.toLowerCase() === "completed"
                                 ? "opacity-1 hover:text-inherit"
-                                : "disabled opacity-10 hover:text-inherit"
+                                : "disabled opacity-25 hover:text-inherit"
                             }  px-2 hover:text-amaranth-600`}
                             title="Show Analytics"
                           >
@@ -951,7 +951,7 @@ const MatchRate = () => {
                             className={`${
                               item.STATUS.toLowerCase() === "completed"
                                 ? "opacity-1 hover:text-inherit"
-                                : "disabled opacity-10 hover:text-inherit"
+                                : "disabled opacity-25 hover:text-inherit"
                             }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on Meta ADs"
                           >
@@ -963,7 +963,7 @@ const MatchRate = () => {
                             className={`${
                               item.STATUS.toLowerCase() === "completed"
                                 ? "opacity-1 hover:text-inherit"
-                                : "disabled opacity-10 hover:text-inherit"
+                                : "disabled opacity-25 hover:text-inherit"
                             }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on Google ADs"
                           >
