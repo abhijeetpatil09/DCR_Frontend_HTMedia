@@ -538,7 +538,7 @@ const MatchRate = () => {
                   .then((response) => {
                     if (response) {
                       fetchMainTable();
-                      // callByPassUpload();
+                      callByPassUpload();
                     }
                   })
                   .catch((error) => {
