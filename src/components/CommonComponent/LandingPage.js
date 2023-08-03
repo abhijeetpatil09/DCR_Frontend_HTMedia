@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import HTWLogo from "../../Assets/Logos/Data_Haven_Logo.svg";
 // import DiscoverLogo from "../../Assets/Logos/Discover_Logo.svg";
 
@@ -7,13 +9,17 @@ import Hero2 from "../../Assets/landing/hero2.jpg";
 import Hero3 from "../../Assets/landing/hero3.jpg";
 import Hero4 from "../../Assets/landing/hero4.jpg";
 import Hero5 from "../../Assets/landing/hero5.jpg";
-import Hero6 from "../../Assets/landing/hero6.jpg";
+// import Hero6 from "../../Assets/landing/hero6.jpg";
+import PrivacyFirst from "../../Assets/landing/Privacy_First.webp";
+import DataGovernance from "../../Assets/landing/Data_goveranance.webp";
 
-const LandingPage = () => {
+const LandingPage = ({ children }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       {/* Section 1 */}
-      <section className="w-full px-8 text-gray-700 bg-white">
+      <section className="w-full px-8 text-gray-700 bg-white fixed bg-white z-10">
         <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
           <div className="relative flex flex-col md:flex-row">
             <a
@@ -73,7 +79,7 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Section 2 */}
-      <section className="px-2 py-12 bg-white md:px-0">
+      <section className="px-2 pt-28 bg-white md:px-0">
         <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
           <div className="flex flex-wrap items-start sm:-mx-3">
             <div className="w-full md:w-1/2  ">
@@ -129,11 +135,30 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Section 3 */}
-      <section
-        id="features"
-        className="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24"
-      >
-        <div className="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16">
+      <section id="features" className="w-full bg-white pb-7 md:pb-24">
+        <div className="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-10 md:flex-row max-w-7xl lg:px-16">
+          {/* Content */}
+          <div className="box-border w-full text-black border-solid md:w-1/2 md:pl-6 xl:pl-30 ml-10">
+            <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
+              Privacy First
+            </h2>
+            <p className="pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-10 lg:text-lg">
+              Meet compliance by stripping off all PII (personally identifiable
+              information) before sharing with advertisers to protect the
+              privacy of consumers.
+            </p>
+          </div>
+          {/* End  Content */}
+          {/* Image */}
+          <div className="w-full h-96  relative overflow-hidden rounded-md shadow-xl sm:rounded-xl md:w-1/2">
+            <img
+              src={PrivacyFirst}
+              className="h-96 w-full object-cover"
+              alt=""
+            />
+          </div>
+        </div>
+        <div className="box-border flex flex-col items-center content-center px-8 mx-auto mt-10 pt-10 leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16">
           {/* Image */}
           <div className="w-full h-96  relative overflow-hidden rounded-md shadow-xl sm:rounded-xl md:w-1/2 ">
             <img src={Hero2} className="h-96 w-full" alt="" />
@@ -336,7 +361,11 @@ const LandingPage = () => {
           {/* End  Content */}
           {/* Image */}
           <div className="w-full h-96  relative overflow-hidden rounded-md shadow-xl sm:rounded-xl md:w-1/2">
-            <img src={Hero6} className="object-cover w-full h-96" alt="" />
+            <img
+              src={DataGovernance}
+              className="object-cover w-full h-96"
+              alt=""
+            />
           </div>
         </div>
       </section>
@@ -503,11 +532,11 @@ const LandingPage = () => {
                         </i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
-                        Integrations with Facebook and google-ads
+                        Integrations with Meta Ads and Google Ads
                       </h6>
                       <p className="mb-4 text-blueGray-500 text-sm">
-                        Seamlessly integrate your marketing efforts with
-                        Facebook and Google Ads platforms for enhanced reach and
+                        Seamlessly integrate your marketing efforts with Meta
+                        Ads and Google Ads platforms for enhanced reach and
                         impact. Connect your customer data and insights to
                         create highly targeted ad campaigns.{" "}
                       </p>
@@ -674,27 +703,28 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      <main className="flex flex-col w-full overflow-auto h-full">
+        <div className="flex flex-grow w-full h-full">{children}</div>
+      </main>
       {/* Section 7 */}
       <section className="bg-white">
         <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
           <nav className="flex flex-wrap justify-center -mx-5 -my-2">
             <div className="px-5 py-2">
-              <a
-                href="/privacy-policy"
-                target="_blank"
-                className="text-base leading-6 text-gray-500 hover:text-gray-900"
+              <span
+                onClick={() => navigate("/privacy-policy")}
+                className="text-base leading-6 text-gray-500 hover:text-gray-900 cursor-pointer"
               >
                 Privacy policy
-              </a>
+              </span>
             </div>
             <div className="px-5 py-2">
-              <a
-                href="/terms-and-conditions"
-                target="_blank"
-                className="text-base leading-6 text-gray-500 hover:text-gray-900"
+              <span
+                onClick={() => navigate("/terms-and-conditions")}
+                className="text-base leading-6 text-gray-500 hover:text-gray-900 cursor-pointer"
               >
                 Terms of services
-              </a>
+              </span>
             </div>
           </nav>
           <div className="flex justify-center mt-4 space-x-6">

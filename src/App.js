@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import AccessDenined from './components/CommonComponent/AccessDenied';
+import AccessDenined from "./components/CommonComponent/AccessDenied";
 import LandingPage from "./components/CommonComponent/LandingPage";
 import Login from "./components/CommonComponent/Login";
 import Register from "./components/CommonComponent/Register";
@@ -67,4 +67,3 @@ const PrivateRouter = () => {
     </div>
   );
 };
-
