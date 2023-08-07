@@ -91,6 +91,7 @@ const Enrichment = () => {
   const handleClose = () => {
     setLoading(false);
     setOpen(false);
+    setFormData({ ...formData, Column_Names: [] });
   };
 
   // Result Modal

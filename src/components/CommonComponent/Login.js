@@ -217,8 +217,8 @@ const Login = () => {
 
   return (
     <div className="bg-stone-300 flex flex-row  p-12 lg:p-24 xl:p-26 min-h-screen ">
-      <div className="flex flex-row mx-auto max-w-[70%] max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
-        <div className="w-1/2 px-6 py-4">
+      <div className="flex flex-row mx-auto max-w-[40%] max-h-auto bg-white rounded-3xl shadow-lg shadow-stone-400">
+        <div className="w-full px-6 py-4">
           <div className=" flex flex-row items-start justify-start py-4 ">
             <a
               href="/"
@@ -229,8 +229,13 @@ const Login = () => {
               </span>
             </a>
           </div>
+          <div flex flex-col items-center my-6>
+            <h1 className="text-4xl text-center font-bold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">
+              Secure data collaboration with DataHaven
+            </h1>
+          </div>
           <div className="flex flex-col items-center my-6">
-            <h2 className="mt-10 mb-2 text-center text-6xl font-extrabold  tracking-tight    leading-9 text-amaranth-600 ">
+            <h2 className="mt-8 mb-2 text-center text-6xl font-extrabold  tracking-tight    leading-9 text-amaranth-600 ">
               Hi there!
             </h2>
             <span className="text-center font-normal text-stone-800 text-sm">
@@ -245,15 +250,6 @@ const Login = () => {
               renderForm
             )}
           </div>
-        </div>
-        <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">
-          {/* <h2 className="font-light text-4xl tracking-tighter text-purple-800">Proudly made by</h2> */}
-          <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amaranth-600 to-purple-800">
-            Secure data collaboration with DataHaven
-            <span className="font-bold text-4xl text-amaranth-500">.</span>
-          </h1>
-          {/* <h3 className="absolute w-4/5 text-2xl font-semibold  bottom-10 left-4 text-white z-40">Go anywhere you want in a Galaxy full of wonders!</h3> */}
-          {/* <img src={Astro} className="absolute z-10 top-0 h-full object-cover rounded-r-3xl brightness-120  opacity-90" /> */}
         </div>
       </div>
     </div>
