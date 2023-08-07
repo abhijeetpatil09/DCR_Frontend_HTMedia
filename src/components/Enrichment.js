@@ -449,14 +449,26 @@ const Enrichment = () => {
       })
       .then((response) => {
         if (response) {
-          // getStatusApi();
-          dispatch(
-            actions.ConsumerQueryForm({
-              RequestId: formData?.RunId,
-              fetchData: true,
+          axios
+            .get(`${baseURL}/${formData?.Provider_Name}`, {
+              params: {
+                query: `insert into DCR_SAMP_PROVIDER_DB.ADMIN.RUNID_TABLE(run_id) values('${formData.RunId}');`,
+              },
             })
-          );
-          callByPassAPI();
+            .then((response) => {
+              if (response) {
+                dispatch(
+                  actions.ConsumerQueryForm({
+                    RequestId: formData?.RunId,
+                    fetchData: true,
+                  })
+                );
+                callByPassAPI();
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
       })
       .catch((error) => {
