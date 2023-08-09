@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 
-import lvideo from "../Assets/DataCleanRoom_video.mp4";
+import video1 from "../Assets/HowToVideos/DataCleanRoom_video.mp4";
 import enrichment from "../Assets/Personal data _Monochromatic.svg";
 import match from "../Assets/enrichment.svg";
 import analyticsIllustration from "../Assets/Pie chart _Monochromatic.svg";
@@ -252,7 +252,7 @@ const Home = () => {
                 controls
                 className="w-full rounded-t-lg"
               >
-                <source src={lvideo} type="video/mp4" />
+                <source src={video1} type="video/mp4" />
                 {/* <source src="movie.ogg" type="video/ogg" /> */}
                 Your browser does not support the video tag.
               </video>
