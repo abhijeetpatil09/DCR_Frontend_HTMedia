@@ -77,9 +77,21 @@ const Register = () => {
     else return false;
   };
 
+  // const isValidInput = (input) => {
+  //   const pattern = /^[a-zA-Z\s]+$/;
+  //   return pattern.test(input);
+  // };
   const isValidInput = (input) => {
+    const specialCharactersRegex = /[!@#$%^&*~`()_+\-=[\]{};':"\\|,.<>/?]+/;
     const pattern = /^[a-zA-Z\s]+$/;
-    return pattern.test(input);
+
+    if (specialCharactersRegex.test(input)) {
+      return "specialCharacter";
+    } else if (!pattern.test(input)) {
+      return "number";
+    } else {
+      return "";
+    }
   };
 
   const validatePassword = (password) => {
@@ -99,28 +111,36 @@ const Register = () => {
     const inputValue = e.target.value;
 
     if (inputName === "fullName") {
+      let character = isValidInput(inputValue);
       if (inputValue === "") {
         setErrors({ ...errors, fullName: emptyMsg });
-      } else if (!isValidInput(inputValue)) {
+      } else if (character === "specialCharacter") {
+        setErrors({
+          ...errors,
+          fullName: "Special Characters are not allowed",
+        });
+      } else if (character === "number") {
         setErrors({ ...errors, fullName: "Numbers are not allowed" });
       } else {
         setErrors({ ...errors, fullName: null });
       }
     } else if (inputName === "designation") {
+      let character = isValidInput(inputValue);
       if (inputValue === "") {
         setErrors({ ...errors, designation: emptyMsg });
-      } else if (!isValidInput(inputValue)) {
+      } else if (character === "specialCharacter") {
+        setErrors({
+          ...errors,
+          designation: "Special Characters are not allowed",
+        });
+      } else if (character === "number") {
         setErrors({ ...errors, designation: "Numbers are not allowed" });
-        return;
       } else {
         setErrors({ ...errors, designation: null });
       }
     } else if (inputName === "company") {
       if (inputValue === "") {
         setErrors({ ...errors, company: emptyMsg });
-      } else if (!isValidInput(inputValue)) {
-        setErrors({ ...errors, company: "Numbers are not allowed" });
-        return;
       } else {
         setErrors({ ...errors, company: null });
       }
@@ -455,9 +475,7 @@ const Register = () => {
         </div>
         {errors.password !== null && (
           <span className="text-[#f44336] text-sm">
-            Password Policy : Password only contains more than 8 digits with
-            Characters(Uppercase or Lowercase) and numbers. No special
-            characters are allowed.
+            Password Policy : Password must be between 8 and 16 characters long and must contain one letters and numbers (special character is NOT allowed).
           </span>
         )}
       </div>

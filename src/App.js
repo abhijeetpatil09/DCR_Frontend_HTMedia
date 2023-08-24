@@ -18,6 +18,7 @@ import AdminConsole from "./components/Admin";
 import Videos from "./components/Videos";
 import PrivacyPolicy from "./components/CommonComponent/CommonPages/PrivacyPolicy";
 import TermsAndConditions from "./components/CommonComponent/CommonPages/TermsAndConditions";
+import ForgotPassword from "./components/CommonComponent/ForgotPassword";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route element={<PrivateRouter />}>
           <Route

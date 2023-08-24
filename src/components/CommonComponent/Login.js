@@ -212,6 +212,14 @@ const Login = () => {
           )}
         </button>
       </div>
+      <div className="my-2">
+        <span
+          className="text-sm font-medium leading-6 text-amaranth-600 cursor-pointer"
+          onClick={() => navigate('/forgot-password')}
+        >
+          Forgot password?
+        </span>
+      </div>
     </div>
   );
 
