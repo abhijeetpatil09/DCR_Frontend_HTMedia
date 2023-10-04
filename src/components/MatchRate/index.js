@@ -7,17 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Papa from "papaparse";
 import { read, utils } from "xlsx";
 import { useNavigate } from "react-router-dom";
-import { handleDate, isObjectEmpty } from "../utils/commonFunctions";
+import { handleDate, isObjectEmpty } from "../../utils/commonFunctions";
 
-import * as actions from "../redux/actions/index";
-import Table from "./CommonComponent/Table";
-import match from "../Assets/enrichment.svg";
-import email from "../Assets/Personal data _Monochromatic.svg";
-import CommonModal from "./CommonComponent/Modal";
-import SampTemp from "../Assets/CSVTemplates/Sample_template.xlsx";
+import * as actions from "../../redux/actions/index";
+import Table from "../CommonComponent/Table";
+import match from "../../Assets/enrichment.svg";
+import email from "../../Assets/Personal data _Monochromatic.svg";
+import CommonModal from "../CommonComponent/Modal";
+import SampTemp from "../../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
-import meta from "../Assets/META.svg";
-import google from "../Assets/GoogleAd.svg";
+import meta from "../../Assets/META.svg";
+import google from "../../Assets/GoogleAd.svg";
+import ModalForMetaAds from "./ModalForMetaAds";
+
 const baseURL = process.env.REACT_APP_BASE_URL;
 const nodeURL = process.env.REACT_APP_NODE_URL;
 
@@ -122,6 +124,15 @@ const MatchRate = () => {
   const handleCloseDisableTemplate = () => {
     setDisableTemplate(!disableTemplate);
   };
+
+  const [showMetaAds, setShowMetaAds] = useState({
+    openModal: false,
+    data: {
+      runId: "",
+      template_name: "",
+      campaign: [],
+    },
+  });
 
   // useEffect for set match attribute values..
   useEffect(() => {
@@ -582,7 +593,6 @@ const MatchRate = () => {
   /// View the sample data...
 
   const handleViewSample = () => {
-    console.log("isObjectEmpty(SampleFileData)", typeof SampleFileData);
     if (
       SampleFileData &&
       SampleFileData !== "undefined" &&
@@ -688,6 +698,18 @@ const MatchRate = () => {
       })
     );
     navigate("/analytics");
+  };
+
+  const handleClickMetaAds = (runId, template_name) => {
+    const templateName = template_name.replace(/ /g, "_");
+    setShowMetaAds({
+      ...showMetaAds,
+      openModal: true,
+      data: {
+        runId: runId,
+        template_name: templateName,
+      },
+    });
   };
 
   return (
@@ -959,7 +981,12 @@ const MatchRate = () => {
                           </button>
 
                           <button
-                            // onClick={() => metaAd(item.RUN_ID)}
+                            onClick={() =>
+                              handleClickMetaAds(
+                                item.RUN_ID,
+                                item.TEMPLATE_NAME
+                              )
+                            }
                             disabled={item.STATUS.toLowerCase() !== "completed"}
                             className={`${
                               item.STATUS.toLowerCase() === "completed"
@@ -1433,6 +1460,22 @@ const MatchRate = () => {
             message={requestFailedReason.message}
             buttons={false}
             textColor={"text-red-600"}
+          />
+        ) : null}
+
+        {/* Show Meta ad's modal */}
+        {showMetaAds.openModal ? (
+          <ModalForMetaAds
+            open={showMetaAds.openModal}
+            handleClose={() =>
+              setShowMetaAds({
+                ...showMetaAds,
+                openModal: false,
+                runId: "",
+                template_name: "",
+              })
+            }
+            data={showMetaAds.data}
           />
         ) : null}
       </div>

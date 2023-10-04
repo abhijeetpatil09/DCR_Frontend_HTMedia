@@ -24,6 +24,7 @@ import {
 import * as actions from "../redux/actions/index";
 import CustomTable from "./CommonComponent/Table";
 import CommonModal from "./CommonComponent/Modal";
+import ModalForMetaAds from "./MatchRate/ModalForMetaAds";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -71,6 +72,15 @@ const QueryStatus = () => {
       openModal: false,
       queryName: "",
     });
+
+  const [showMetaAds, setShowMetaAds] = useState({
+    openModal: false,
+    data: {
+      runId: "",
+      template_name: "",
+      campaign: [],
+    },
+  });
 
   const fetchMainTable = () => {
     if (
@@ -259,6 +269,18 @@ const QueryStatus = () => {
           setUploading(false);
         });
     }, 2000);
+  };
+
+  const handleClickMetaAds = (runId, template_name) => {
+    const templateName = template_name.replace(/ /g, "_");
+    setShowMetaAds({
+      ...showMetaAds,
+      openModal: true,
+      data: {
+        runId: runId,
+        template_name: templateName,
+      },
+    });
   };
 
   return (
@@ -602,7 +624,12 @@ const QueryStatus = () => {
                                   </svg>
                                 </button>
                                 <button
-                                  // onClick={() => metaAd(row.RUN_ID)}
+                                  onClick={() =>
+                                    handleClickMetaAds(
+                                      row.RUN_ID,
+                                      row.TEMPLATE_NAME
+                                    )
+                                  }
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
@@ -700,6 +727,22 @@ const QueryStatus = () => {
           message={requestFailedReason.message}
           buttons={false}
           textColor={"text-red-600"}
+        />
+      ) : null}
+
+      {/* Show Meta ad's modal */}
+      {showMetaAds.openModal ? (
+        <ModalForMetaAds
+          open={showMetaAds.openModal}
+          handleClose={() =>
+            setShowMetaAds({
+              ...showMetaAds,
+              openModal: false,
+              runId: "",
+              template_name: "",
+            })
+          }
+          data={showMetaAds.data}
         />
       ) : null}
     </div>
