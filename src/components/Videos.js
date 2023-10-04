@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import video1 from "../Assets/HowToVideos/DataCleanRoom_video.mp4";
-import video2 from "../Assets/HowToVideos/Login_Match_Rate.mp4";
+import video2 from "../Assets/HowToVideos/Login_Match_Rate_Trim_final.mp4";
 import video3 from "../Assets/HowToVideos/Customer_Enrichment.mp4";
 import video4 from "../Assets/HowToVideos/Admin_console_status.mp4";
 import { useNavigate } from "react-router-dom";
