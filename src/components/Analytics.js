@@ -227,78 +227,12 @@ const ChartPage = () => {
               </div>
             ) : activeTab === "google_ads" ? (
               <div className="flex flex-col w-full px-4">
-                <div className="flex flex-row w-full">
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 1</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 2</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 3</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 4</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-row w-full">
-                  <div className="w-1/2">
-                    <BarChartAnalytics data={chartData?.ageData} />
-                  </div>
-                  <div className="w-1/2">
-                    <BarChartAnalytics data={chartData?.genderData} />
-                  </div>
-                </div>
+                
 
               </div>
             ) : (
               <div className="flex flex-col w-full px-4">
-                <div className="flex flex-row w-full">
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 1</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 2</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 3</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 p-4">
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">Card 4</h2>
-                      <p>Some informative content here.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-row w-full">
-                  <div className="w-1/2">
-                    <BarChartAnalytics data={chartData?.ageData} />
-                  </div>
-                  <div className="w-1/2">
-                    <BarChartAnalytics data={chartData?.genderData} />
-                  </div>
-                </div>
+                
 
               </div>
             )
