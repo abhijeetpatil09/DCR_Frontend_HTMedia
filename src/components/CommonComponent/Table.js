@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-const OutputTable = ({ id, head, rows, pagination }) => {
+const OutputTable = ({ id, head, rows, pagination, status }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -31,7 +31,13 @@ const OutputTable = ({ id, head, rows, pagination }) => {
           Request Id - <strong className="font-bold">{id}</strong>
         </span>
       </div>
-
+      {status && (
+        <div className="pb-4">
+          <span className="text-amaranth-700">
+            Status - <strong className="font-bold">{status}</strong>
+          </span>
+        </div>
+      )}
       <TableContainer className="mb-4">
         <Table
           sx={{ minWidth: 650, borderRadius: 0 }}
