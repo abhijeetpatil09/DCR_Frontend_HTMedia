@@ -120,13 +120,9 @@ const MetaAdsAnalytics = ({ runId }) => {
                 >
                   Campaign Name
                 </label>
-                <input
-                  type="text"
-                  id="campaign_name"
-                  name="campaign_name"
-                  value={metaAdsAnalysisData?.campaign_name}
-                  className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 bg-cement text-amaranth-900 "
-                ></input>
+                <span className="text-amaranth-900">
+                  {metaAdsAnalysisData?.campaign_name}
+                </span>
               </div>
               <div className="mb-4 bg-white p-4 rounded-lg shadow">
                 <label
@@ -135,13 +131,9 @@ const MetaAdsAnalytics = ({ runId }) => {
                 >
                   Ad Set Name
                 </label>
-                <input
-                  type="text"
-                  id="ad_set_name"
-                  name="ad_set_name"
-                  value={metaAdsAnalysisData?.adset_name}
-                  className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 bg-cement text-amaranth-900 "
-                ></input>
+                <span className="text-amaranth-900">
+                  {metaAdsAnalysisData?.adset_name}
+                </span>
               </div>
               <div className="mb-4 bg-white p-4 rounded-lg shadow">
                 <label
@@ -150,13 +142,9 @@ const MetaAdsAnalytics = ({ runId }) => {
                 >
                   Ad Name
                 </label>
-                <input
-                  type="text"
-                  id="ad_name"
-                  name="ad_name"
-                  value={metaAdsAnalysisData?.ad_name}
-                  className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 bg-cement text-amaranth-900 "
-                ></input>
+                <span className="text-amaranth-900">
+                  {metaAdsAnalysisData?.ad_name}
+                </span>
               </div>
               <div className="mb-4 bg-white p-4 rounded-lg shadow">
                 <label
@@ -165,13 +153,9 @@ const MetaAdsAnalytics = ({ runId }) => {
                 >
                   Current Status
                 </label>
-                <input
-                  type="text"
-                  id="current_status"
-                  name="current_status"
-                  value={metaAdsAnalysisData?.STATUS}
-                  className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 bg-cement text-amaranth-900 "
-                ></input>
+                <span className="text-amaranth-900">
+                  {metaAdsAnalysisData?.STATUS}
+                </span>
               </div>
             </div>
 
@@ -232,7 +216,7 @@ const MetaAdsAnalytics = ({ runId }) => {
 
             <div className="mt-4">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
+                className="px-12 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-amaranth-600 border border-transparent rounded-md active:bg-amaranth-700 focus:outline-none focus:shadow-outline-amaranth hover:bg-amaranth-700"
                 onClick={handleLogs}
               >
                 Log
