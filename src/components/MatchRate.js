@@ -149,6 +149,21 @@ const MatchRate = () => {
   // UseEffect used for Inserting the Provider...
 
   useEffect(() => {
+    //DONE
+    /*
+    const payload ={
+       account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
+    };
+    try{
+      const response = await API.getAllProvidersList(payload)
+       if ( response.status === 200 && response?.data?.data) {
+          let provider_name = response?.data?.data?.[0];
+          setFormData({ ...formData, Provider_Name: provider_name.PROVIDER });
+        }
+          }
+    catch(error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -167,6 +182,31 @@ const MatchRate = () => {
 
   const createNewRequest = () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
+     // PENDING... endpoint not found.
+      /*
+    const payload ={
+
+    };
+    try{
+      const response = await API.demo(payload)
+      
+      if ( response.status === 200 && response?.data?.data?.length > 0) {
+            let status = response?.data?.data[0]?.TEMPLATE_STATUS;
+            if (status) {
+              setOpen(!open);
+            } else {
+              setDisableTemplate(!disableTemplate);
+            }
+          } else {
+            setDisableTemplate(!disableTemplate);
+          }
+    }
+    catch(error){
+      
+          setDisableTemplate(!disableTemplate);
+          console.log(error);
+}
+    */
       axios
         .get(`${baseURL}/${user.name}`, {
           params: {
@@ -193,6 +233,19 @@ const MatchRate = () => {
   };
 
   const fetchMainTable = () => {
+    //DONE..
+    /*
+    const payload ={
+      account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      template_name: "ADVERTISER MATCH",
+        };
+    try{
+      const response = await API.fetchData(payload)
+      setData(response.data.data) 
+    }
+    catch(error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -324,6 +377,19 @@ const MatchRate = () => {
   // };
 
   useEffect(() => {
+    //DONE..
+    /*
+    const payload ={
+      account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      template_name: "ADVERTISER MATCH",
+    };
+    try{
+      const response = await API.fetchData(payload)
+      setData(response.data.data)
+    }
+    catch(error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -340,6 +406,33 @@ const MatchRate = () => {
     setByPassAPICalled(true);
     // fetchMainTable();
     handleClose();
+    //PENDING... endpoint 
+    /*
+    const payload ={
+
+    };
+    try{
+      const response = await API.demo(payload)
+       
+      if (response.status === 200 ) {
+          setByPassAPICalled(false);
+          fetchMainTable();
+        } else {
+          setByPassAPICalled(false);
+          fetchMainTable();
+          dispatch(
+            actions.PublisherForm({
+              fetchData: false,
+            })
+          );
+        }
+    }
+    catch(error){
+      console.log(error);
+      setByPassAPICalled(false);
+      fetchMainTable();
+    }
+    */
     axios
       .get(`${baseURL}/${user?.name}/procedure`, {
         params: {
@@ -391,6 +484,39 @@ const MatchRate = () => {
 
     localFile.append("myFile", modifiedFile);
 
+    // ******************DOUBT******************* 
+    /*
+    const payload ={};
+    try{
+        const payload ={};
+         if (parseInt(response?.status) === 200) {
+              try{
+                  const payload ={};
+                   if (response?.data?.data === true) {
+                     fetchMainTable();
+                      try{
+                              const payload ={};
+                              if (response) {
+                                  try{ 
+                                    if (response) {
+                                        dispatch(
+                                          actions.PublisherForm({
+                                            RequestId: formData?.RunId,
+                                            fetchData: true,
+                                          })
+                                        );
+                                        callByPassAPI();
+                                    }
+
+                                    }     
+                                  catch(error){console.log(error);}
+                          }     
+                  catch(error){console.log(error);}
+                  }      
+              catch(error){console.log(error);}
+        }     
+    catch(error){console.log(error);}
+    */
     axios
       .post(`${nodeURL}/api/localFileUpload`, localFile, {
         headers: {
@@ -418,6 +544,7 @@ const MatchRate = () => {
                   })
                   .then((response) => {
                     if (response) {
+                      
                       axios
                         .get(`${baseURL}/${formData?.Provider_Name}`, {
                           params: {
@@ -483,6 +610,27 @@ const MatchRate = () => {
 
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
+    //DONE...
+    /*
+    const payload ={
+      account_name: user?.Consumer,
+        templateName: templateName,
+        run_id: runId,
+        consumer_database_name: user?.consumerDBName,
+    };
+    try{
+      const response = await API.viewRequestDataMatchRate(payload)
+      
+      if ( response.status === 200 && response?.data?.data) {
+          fetchTable(response?.data?.data, runId);
+          handleResultModalOpen();
+        }
+    }
+    catch(error){
+      //console.log(error);
+    console.log("In API catch", error);
+  }
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -503,6 +651,25 @@ const MatchRate = () => {
   const callByPassUpload = () => {
     setTimeout(() => {
       fetchMainTable();
+      //pending... endpoint..
+      /*
+    const payload ={
+
+    };
+    try{
+      const response = await API.demo(payload)
+      response.status === 200 &&
+      if (response) {
+            fetchMainTable();
+            setUploading(false);
+          } 
+    }
+    catch(error){
+      console.log(error);
+      fetchMainTable();
+      setUploading(false);
+  }
+    */
       axios
         .get(`${baseURL}/${user?.name}/procedure`, {
           params: {
@@ -525,6 +692,37 @@ const MatchRate = () => {
 
   const handleUploadData = async (runId) => {
     setUploading(true);
+    // PENDING.. endpoint 
+    /*const payload ={};
+    try{
+          const payload ={};
+          const response = await API.demo(payload)
+        select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';
+        if (response?.data?.data) {
+          let data = response?.data?.data?.[0];
+ 
+          try{
+            insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');
+                  const response = await API.demo(payload)
+                  if (response.status === 200 &&) { 
+                  const payload ={};
+                      try{
+                        update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';
+                        const response = await API.demo(payload)
+                        
+                        if (response.status === 200 &&) {
+                            fetchMainTable();
+                            callByPassUpload();
+                          } 
+                          
+                          }
+                      catch(error){console.log(error);}                
+              }
+          catch(error){console.log(error);}
+            }
+            catch (error){console.log(error);}
+    */
+    
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -534,7 +732,7 @@ const MatchRate = () => {
       .then((response) => {
         if (response?.data?.data) {
           let data = response?.data?.data?.[0];
-          axios
+           axios
             .get(`${baseURL}/${user?.name}`, {
               params: {
                 query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
@@ -542,7 +740,7 @@ const MatchRate = () => {
             })
             .then((response) => {
               if (response) {
-                axios
+                 axios
                   .get(`${baseURL}/${user?.name}`, {
                     params: {
                       query: `update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';`,
@@ -590,6 +788,35 @@ const MatchRate = () => {
     ) {
       setOpenSampleData(true);
     } else {
+      //PENDING........ endpoint
+      /*
+    const payload ={
+
+    };
+    try{
+      select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;
+      const response = await API.demo(payload)
+      
+       if (response.status === 200 && response?.data?.data) {
+            let head = [];
+            let row = [];
+            let data = response?.data?.data;
+            if (data?.length > 0) {
+              head = data && Object.keys(data[0]);
+              data?.map((obj) => {
+                return row.push(head?.map((key) => obj[key]));
+              });
+            }
+            setOpenSampleData(true);
+            dispatch(
+              actions.ConsumerQueryForm({
+                SampleFileData: { head: head, rows: row },
+              })
+            );
+          } 
+    }
+    catch(error){console.log(error);}
+    */
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
@@ -661,6 +888,24 @@ const MatchRate = () => {
 
   const sendEmail = () => {
     setEmailLoading(true);
+    //PENDING...
+    /*
+    const payload ={
+
+    };
+    try{
+      const response = await API.demo(payload)
+      
+      if (response.status === 200) {
+          setNote("** Our Expert team will connect with you, very soon. **");
+          setEmailLoading(false);
+        } else {
+          setNote("");
+          setEmailLoading(false);
+        } 
+    }
+    catch(error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/mailtoadmin`, {
         params: {

@@ -78,6 +78,55 @@ const QueryStatus = () => {
       user["role"].includes("Publisher") &&
       user["role"].includes("Consumer")
     ) {
+      //DONE...
+     /*
+      const payload ={
+         account_name: user?.Consumer,
+         db_name: user?.consumerDBName,
+      };
+      try{
+        const response = await API.getAllRequestData(payload);
+          if (response.status === 200 ) {
+            let data = response?.data?.data;
+            setData(data);
+          }
+        })
+        .catch((error) => console.log(error));
+    } else {
+        const payload ={
+           account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      providerNames:
+        filteredData?.providerName?.length > 0
+          ? filteredData?.providerName?.join(",")
+          : "all",
+      templateNames:
+        filteredData?.templateName?.length > 0
+          ? filteredData?.templateName?.join(",")
+          : "all",
+      statuses:
+        filteredData?.status?.length > 0
+          ? filteredData?.status?.join(",")
+          : "all",
+      date: finalDate,
+        };
+      try{
+        const response = await API.filterStatusTable(payload);
+          if (response.status === 200 ) {
+            let data = response?.data?.data;
+            setData(data);
+          }
+      }
+      catch(error)
+      {
+        console.log(error);
+      }
+      }
+      catch(error)
+      {
+        console.log(error);
+      }
+      */
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
@@ -117,6 +166,27 @@ const QueryStatus = () => {
 
   const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
     TEMPLATE_NAME = TEMPLATE_NAME.replace(/\s/g, "_");
+    //DONE....
+    /*
+      const payload ={account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      templateName: TEMPLATE_NAME,
+      run_id: RUN_ID,
+    };
+      try{
+        const response = await API.downloadFileAPI(payload);
+        if (response.status === 200 && response?.data) {
+          const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
+          downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
+        } else {
+          console.log("File cannnot be downloaded...");
+        }
+      }
+      catch(error)
+      {
+        console.error("Error:", error);
+      }
+      */
     axios
       .get(`${baseURL}/${user?.name}`, {
         responseType: "json",
@@ -153,6 +223,31 @@ const QueryStatus = () => {
 
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
+    //DONE...
+     /*
+      const payload ={
+        account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      templateName: templateName,
+      run_id: runId,
+      };
+      try{
+        const response = await API.viewSampleData(payload);
+         
+        if (response.status === 200 && response?.data?.data) {
+          fetchTable(response?.data?.data, runId);
+          setViewTemplate({
+            ...viewTemplate,
+            openModal: true,
+            queryName: templateName,
+          });
+        }
+      }
+      catch(error)
+      {
+        console.log("In API catch", error);
+      }
+      */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -194,6 +289,47 @@ const QueryStatus = () => {
 
   const handleUploadData = async (runId) => {
     setUploading(true);
+    //  pending....    
+     /*
+      const payload ={};
+      try{
+         query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
+        const response = await API.Demo(payload);
+            if (response.status === 200 && response?.data?.data) {
+            let data = response?.data?.data?.[0];            
+                    
+                      const payload ={};
+                      try{
+                         query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
+                        const response = await API.Demo(payload);
+                        if (response.status === 200) {      
+                                const payload ={};
+                                try{
+                                  update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';
+                                  const response = await API.Demo(payload);
+                                   
+                                  if (response.status === 200 ) {
+                                     fetchMainTable();
+                                     callByPassUpload();
+                                     }
+                                
+                                }
+                                catch(error)
+                                {
+                                  console.log(error);
+                                }      
+                      }}
+                      catch(error)
+                      {
+                        console.log(error);
+                      }
+                    }
+                      }
+    catch(error)
+      {
+        console.log(error);
+      }
+      */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -241,6 +377,25 @@ const QueryStatus = () => {
   const callByPassUpload = () => {
     setTimeout(() => {
       fetchMainTable();
+      //PENDING...
+      /*
+      const payload ={
+     };
+      try{
+        const response = await API.Demo(payload);
+          if (response.status === 200) {
+            fetchMainTable();
+            setUploading(false);
+          }
+ 
+      }
+      catch(error)
+      {
+        console.log(error);
+        fetchMainTable();
+        setUploading(false);
+      }
+      */
       axios
         .get(`${baseURL}/${user?.name}/procedure`, {
           params: {

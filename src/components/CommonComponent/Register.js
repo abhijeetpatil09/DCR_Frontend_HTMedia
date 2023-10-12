@@ -192,6 +192,30 @@ const Register = () => {
 
   const sendEmail = () => {
     setEmailLoading(true);
+    //DONE...
+    /*
+    const payload ={
+      const payload = {
+      mailusedfor: "Forgot",
+      recipient: data?.EMAIL,
+      user_name: data?.USER,
+      password: data?.PASSWORD,
+      email_id: data?.EMAIL,
+    };
+    try {
+      const response = await API.mailtoadmin(payload);
+      if (response.status ===200) {
+          setNote(
+            "** Our Expert team will connect with you within next 24 hours for the further process. **"
+          );
+          setEmailLoading(false);
+        } else {
+          setNote("");
+          setEmailLoading(false);
+        }
+    }
+    catch (error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/mailtoadmin`, {
         params: {
@@ -227,6 +251,19 @@ const Register = () => {
   };
 
   const registerUser = () => {
+  //PENDING..
+    /*
+    const payload ={};
+    try {
+      const response = await API.DEMO(payload);
+      if (response.status === 200) {
+          sendEmail();
+        } else {
+          setNote("Please, try Again to register.");
+        }
+    }
+    catch (error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/Provider`, {
         params: {

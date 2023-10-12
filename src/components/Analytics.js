@@ -39,6 +39,68 @@ const ChartPage = () => {
           loader: true,
         })
       );
+      //PENDING.........
+      /*
+      const payload ={};
+      try{
+        select advertiser_match,age_0_6, age_7_16, age_17_25, age_26_40, age_41_above, male, female from DCR_SAMP_CONSUMER1.PUBLIC.advertiser_match_${RequestId}_insights;
+        const response = await API.Demo(payload);
+         
+         if (response.status === 200 && response?.data?.data) {
+            let data = response?.data?.data[0];
+            let age_data = [
+              { name: "AGE_0_6", value: data?.AGE_0_6 },
+              { name: "AGE_7_16", value: data?.AGE_7_16 },
+              { name: "AGE_17_25", value: data?.AGE_17_25 },
+              { name: "AGE_26_40", value: data?.AGE_26_40 },
+              { name: "AGE_41_ABOVE", value: data?.AGE_41_ABOVE },
+            ];
+            let gender_data = [
+              { name: "MALE", value: data?.MALE },
+              { name: "FEMALE", value: data?.FEMALE },
+            ];
+            let total = data?.ADVERTISER_MATCH;
+            setChartData({
+              ...chartData,
+              ageData: age_data,
+              genderData: gender_data,
+              total: total,
+            });
+            dispatch(
+              actions.AnalyticsData({
+                loader: false,
+              })
+            );
+          } else {
+            setChartData({
+              ...chartData,
+              ageData: [],
+              genderData: [],
+              total: null,
+            });
+          }
+          dispatch(
+            actions.AnalyticsData({
+              loader: false,
+            })
+          );
+      }
+      catch(error)
+      {
+        console.log(error);
+        setChartData({
+            ...chartData,
+            ageData: [],
+            genderData: [],
+            total: null,
+          });
+          dispatch(
+            actions.AnalyticsData({
+              loader: false,
+            })
+          );
+      }
+      */
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {

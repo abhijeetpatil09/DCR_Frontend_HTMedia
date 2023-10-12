@@ -120,6 +120,26 @@ const Enrichment = () => {
   // UseEffect used for Calling API for the table if request...
 
   useEffect(() => {
+    //DONE...
+    /*
+    const payload ={
+        account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
+    };
+    try {
+      const response = await API.getAllProvidersList(payload);
+      if (response.status === 200 && response?.data?.data) {
+          let res = response?.data?.data;
+          setData(res);
+        } else {
+          setData([]);
+        }
+      }
+    catch(error)
+    {
+       console.log(error);
+    }
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -139,6 +159,26 @@ const Enrichment = () => {
   }, [user?.name, callTable]);
 
   const getStatusApi = () => {
+    //DONE....
+     /* const payload ={
+        account_name: user?.name,
+        db_name: user?.consumerDBName,
+    };
+    try {
+      const response = await API.getAllProvidersList(payload);
+      if (response.status === 200 && response?.data?.data) {
+          let res = response?.data?.data;
+          setData(res);
+        } else {
+          setData([]);
+        } 
+    }
+    catch(error)
+    {
+       console.log(error);
+    }
+    */
+
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -173,6 +213,27 @@ const Enrichment = () => {
   // UseEffect used for Inserting the Provider...
 
   useEffect(() => {
+    //DONE.........
+    /*
+      const payload = {
+        account_name: user?.name,
+        db_name: user?.consumerDBName,
+    };
+    try {
+      const response = await API.getAllProvidersList(payload);
+        if (response.status === 200 && response?.data?.data) {
+          let provider_name = response?.data?.data?.[0];
+          setFormData({ ...formData, Provider_Name: provider_name.PROVIDER });
+          getDatabaseName(provider_name.PROVIDER);
+        }
+
+    }
+    catch(error)
+    {
+       console.log(error);
+    }
+    */
+
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -194,6 +255,38 @@ const Enrichment = () => {
 
   useEffect(() => {
     if (databaseName !== "" && formData["Query_Name"] !== "") {
+     //done....
+    /* const payload = {
+          account_name: user?.Consumer,
+          databaseName: databaseName,
+          Query_Name: formData["Query_Name"],
+        };
+    try {
+      const response = await API.getAllowedColumns(payload);
+        if (response.status === 200 && response?.data) {
+            let col_name = response?.data?.data[0]?.ALLOWED_COLUMNS?.split("|");
+            col_name = col_name?.map((item) => {
+              return item?.split(".")[1];
+            });
+            let finalArr = [{ value: "all", name: "All" }];
+            let temp = [];
+            col_name?.map((value) => {
+              return temp.push({ value: value, name: value });
+            });
+            temp = temp?.sort((a, b) => {
+              return a?.name?.localeCompare(b?.name);
+            });
+            finalArr.push(...temp);
+            setColumns(finalArr);
+          }
+
+    }
+    catch(error)
+    {
+       console.log(error);
+    }
+    */
+
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
@@ -218,7 +311,7 @@ const Enrichment = () => {
             setColumns(finalArr);
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error)); 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [databaseName, formData["Query_Name"]]);
@@ -226,6 +319,25 @@ const Enrichment = () => {
   /// Get database name for other API's..
 
   const getDatabaseName = (selectedProvider) => {
+
+      //DONE...........
+    /*
+    const payload = {
+      account_name: user?.Consumer,
+      selectedProvider: selectedProvider,
+      consumer_database_name: user?.consumerDBName,
+    };
+    try{
+            const response = await API.getDatabaseName(payload);
+      if ( response.status === 200 && response?.data) {
+        let db_name = response?.data?.data;
+        setDatabaseName(db_name[0]?.DATABASE);
+      } else {
+        setDatabaseName("");
+      }
+    }
+    catch(error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -245,6 +357,34 @@ const Enrichment = () => {
 
   const createNewRequest = () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
+      //Check new payload create 
+      /*const payload ={
+        account_name: user?.Consumer,
+        db_name : user?.consumerDBName,
+        template_name : formData?.Query_Name,
+        consumer_name : user?.Consumer,
+
+    };
+    try{
+          const response = await API.getTemplateStatus(payload);
+          if (response.status === 200 && response?.data?.data?.length > 0) {
+            let status = response?.data?.data[0]?.TEMPLATE_STATUS;
+            if (status) {
+              setOpen(!open);
+             }
+            else {
+              setDisableTemplate(!disableTemplate);
+            }
+           } 
+          else {
+            setDisableTemplate(!disableTemplate);
+          }
+    }
+    catch(error){
+      setDisableTemplate(!disableTemplate);
+      console.log(error);
+    }
+    */     
       axios
         .get(`${baseURL}/${user.name}`, {
           params: {
@@ -281,6 +421,35 @@ const Enrichment = () => {
     ) {
       setOpenSampleData(true);
     } else {
+       //PENDING........ backend query not found..
+/*const payload ={
+
+    };
+    try{
+
+      const response = await API.demo(payload);
+      select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;
+      if (response.status === 200 && response?.data?.data) {
+            let head = [];
+            let row = [];
+            let data = response?.data?.data;
+            if (data?.length > 0) {
+              head = data && Object.keys(data[0]);
+              data?.map((obj) => {
+                return row.push(head?.map((key) => obj[key]));
+              });
+            }
+            setOpenSampleData(true);
+            dispatch(
+              actions.ConsumerQueryForm({
+                SampleFileData: { head: head, rows: row },
+              })
+            );
+          }  
+        }
+    catch(error){console.log(error);}
+    */
+
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
@@ -349,6 +518,48 @@ const Enrichment = () => {
   const callByPassAPI = () => {
     setByPassAPICalled(true);
     setTimeout(() => {
+      
+      //DONE........
+      /*
+     const payload = {
+      account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      providerAccIdentifier: providerAccIdentifier,
+      newReqId: newReqId,
+      template_name: "CUSTOMER ENRICHMENT",
+    };
+    try{
+      const response = await API.callProcedureMatchRate(payload);
+        if ( response.status === 200 && response) {
+            // fetchcsvTableData();
+            setByPassAPICalled(false);
+            setCallTable(false);
+            getStatusApi();
+          } else {
+            setByPassAPICalled(false);
+            setCallTable(false);
+            getStatusApi();
+            dispatch(
+              actions.ConsumerQueryForm({
+                fetchData: false,
+              })
+            );
+          }
+      }
+    catch(error){
+    
+      console.log(error);
+                setByPassAPICalled(false);
+          setCallTable(false);
+          getStatusApi();
+          dispatch(
+            actions.ConsumerQueryForm({
+              fetchData: false,
+            })
+          );
+    }
+    
+    */  
       axios
         .get(`${baseURL}/${user?.name}/procedure`, {
           params: {
@@ -394,6 +605,30 @@ const Enrichment = () => {
 
   const downloadFile = (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
+         //DONE.......
+     /*const payload ={
+        account_name: user?.name,
+      db_name: user?.consumerDBName,
+      templateName: TEMPLATE_NAME,
+      run_id: RUN_ID,
+    };
+    try{
+      const response = await API.downloadFileAPI(payload);
+        if (response.status === 200 && response?.data) {
+          const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
+          downloadFileInCSV(csvData, templateName, runId);
+        } else {
+          console.log("File cannnot be downloaded...");
+        }
+      }
+    }
+    catch(error){
+    
+      console.log(error);
+    }
+    */ 
+
+
     axios
       .get(`${baseURL}/${user?.name}`, {
         responseType: "json", // Set the response type to JSON
@@ -440,6 +675,43 @@ const Enrichment = () => {
     }
 
     formData.RunId = Date.now();
+     //DONE..........
+  /*
+  const payload = {
+            account_name: user?.Consumer,
+            template_name: formData?.Query_Name,
+            provider_name: formData?.Provider_Name,
+            columns: selectedColumns,
+            consumer_name: formData?.Consumer_Name,
+            run_id: formData?.RunId,
+            attribute_value: formData?.Attribute_Value,
+            consumer_database_name: user?.consumerDBName,
+          };
+    try{
+     const response = await API.insertEnrichmentRequest(payload);
+       if (response.status === 200 ) {
+       
+        const payload = {
+                account_name: formData?.Provider_Name,
+                db_name: user?.providerDBName,
+                run_id: formData.RunId,
+        try{
+        const response = await API.insertRunId(payload);
+        if ( response.status === 200 ) {
+                dispatch(
+                  actions.ConsumerQueryForm({
+                    RequestId: formData?.RunId,
+                    fetchData: true,
+                  })
+                );
+                callByPassAPI();
+              }
+            }
+      }
+      catch (error){consol.log(error);}
+    }
+    catch(error){console.log(error);}
+    */ 
 
     axios
       .get(`${baseURL}/${user?.name}`, {
@@ -499,6 +771,29 @@ const Enrichment = () => {
 
   const fetchcsvTableData = async (templateName, runId) => {
     templateName = templateName.replace(/\s/g, "_");
+    
+    //DONE...........
+   /*
+    const payload ={
+      account_name: user?.name,
+      db_name: user?.consumerDBName,
+      templateName: templateName,
+      run_id: runId,
+    };
+    try{
+      const response = await API.viewSampleData(payload);
+       if (response.status === 200 && response?.data?.data) {
+          fetchTable(response?.data?.data, runId);
+          handleResultModalOpen();
+        }
+      }
+    catch(error){
+    
+      console.log("In API catch", error);
+      //console.log(error);
+    }
+    */
+   
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {

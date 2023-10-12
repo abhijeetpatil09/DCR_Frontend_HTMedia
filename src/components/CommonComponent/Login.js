@@ -49,6 +49,29 @@ const Login = () => {
   };
 
   const getAllConsumers = async (userRole) => {
+    //PENDING...
+    /*
+    const payload = {
+    }
+    try{
+      const response = await API.DEMO(payload);
+       if ( response.status === 200 && response?.data?.data) {
+          setIsSubmitted(true);
+
+          let data = response?.data?.data?.[0];
+          dispatch(
+            actions.loginRequest({
+              isLoggedIn: true,
+              name: loginDetails?.userName,
+              role: userRole,
+              Consumer: data?.USER,
+            })
+          );
+          navigate("/home");
+        }
+    }
+    catch (error){console.log(error);}
+    */
     await axios
       .get(`${baseURL}/${loginDetails?.userName}`, {
         params: {
@@ -89,6 +112,66 @@ const Login = () => {
 
     if (loginDetails?.userName !== "") {
       setLoading(true);
+    //DONE...
+    /*
+    const payload = {
+      account_name: userName,
+      user_name: userName,
+    };
+    try{
+      const response = await API.getUserData(payload);
+      if (response?.data?.data) {
+            let data = response?.data?.data; // Find user login info
+
+            const userData = data ? data[0] : [];
+
+            // Compare user info
+            if (userData) {
+              if (userData.PASSWORD !== loginDetails?.password) {
+                setErrors({ ...errors, password: "Invalid Password" });
+                setLoading(false);
+              } else {
+                const userRole = [];
+                if (userData?.PUBLISHER?.toLowerCase() === "true") {
+                  userRole.push("Publisher");
+                }
+                if (userData?.PROVIDER?.toLowerCase() === "true") {
+                  userRole.push("Provider");
+                }
+                if (userData?.CONSUMER?.toLowerCase() === "true") {
+                  userRole.push("Consumer");
+                }
+                if (
+                  userData?.PROVIDER?.toLowerCase() === "true" &&
+                  userData?.ADMIN?.toLowerCase() === "true"
+                ) {
+                  userRole.push("Provider_Admin");
+                }
+
+                if (
+                  userData?.PROVIDER?.toLowerCase() !== "true" &&
+                  userData?.ADMIN?.toLowerCase() === "true"
+                ) {
+                  userRole.push("Consumer_Admin");
+                }
+                getAllConsumers(userRole);
+              }
+            } else {
+              // Username not found
+              setLoading(false);
+              setErrors({ ...errors, userName: "User name not found" });
+              toast.error(
+                "You entered an incorrect username, password or both."
+              );
+            }
+          }
+    }
+    catch (error){
+      setErrors({ ...errors, userName: "User name not found" });
+      setLoading(false);
+      console.log(error);
+    }
+  */
       await axios
         .get(`${baseURL}/${loginDetails?.userName}`, {
           params: {

@@ -32,6 +32,22 @@ const AllowedColumns = ({ user }) => {
   //   UseEffect for Consumer List....
 
   useEffect(() => {
+    //done..
+    /*
+      const payload = {
+        account_name: user.name,
+        provider_database_name: user?.providerDBName,
+      };
+      try{
+           const response = await API.getConsumerName(payload)
+           if (response?.data) {
+          setConsumers(response?.data?.data);
+        } else {
+          setConsumers([]);
+        }
+      }
+      catch (error){console.log(erroe);}
+    */
     axios
       .get(`${baseURL}/${user.name}`, {
         params: {
@@ -52,6 +68,23 @@ const AllowedColumns = ({ user }) => {
   //   UseEffect for Template List....
 
   useEffect(() => {
+    //done..
+    /*
+      const payload = {
+        account_name: user.name,
+          provider_database_name: user?.providerDBName,
+          user: publisherData?.consumer,
+      };
+      try{
+           const response = await API.getTemplates(payload)
+           if (response?.data) {
+          setTemplateNames(response?.data?.data);
+        } else {
+          setTemplateNames([]);
+        }
+      }
+      catch (error){console.log(erroe);}
+    */
     axios
       .get(`${baseURL}/${user.name}`, {
         params: {
@@ -72,6 +105,30 @@ const AllowedColumns = ({ user }) => {
 
  useEffect(() => {
   if (publisherData.consumer !== "" && publisherData.template !== "") {
+    //done...
+    /*
+      const payload = {
+        account_name: user.name,
+          provider_database_name: user?.providerDBName,
+          user: publisherData?.consumer,
+          template_name: publisherData.template,
+      };
+      try{
+           const response = await API.getAllowedColumnsConsole(payload)
+           if (response?.data?.data) {
+          let data = response?.data?.data;
+          let allowed_columns = data[0]?.ALLOWED_COLUMNS?.split("|");
+          allowed_columns = allowed_columns?.map((item) => {
+            return item?.split(".")[1];
+          });
+          setAllowedColumns(allowed_columns);
+        } else {
+          setAllowedColumns([]);
+        }
+
+      }
+      catch (error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user.name}`, {
         params: {
@@ -91,7 +148,24 @@ const AllowedColumns = ({ user }) => {
         }
       })
       .catch((error) => console.log(error));
-
+    
+      /*
+      //payload are same for last function.
+      try{
+           const response = await API.getAllColumnsConsole(payload)
+           if (response?.data?.data) {
+          let data = response?.data?.data;
+          let all_columns = data[0]?.ALL_COLUMNS?.split(",");
+          all_columns = all_columns?.map((item) => {
+            return item;
+          });
+          setAllColumns(all_columns);
+        } else {
+          setAllColumns([]);
+        }
+      }
+      catch (error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user.name}`, {
         params: {
@@ -121,6 +195,29 @@ const AllowedColumns = ({ user }) => {
       publisherData.template !== "" &&
       publisherData.column_name !== ""
     ) {
+      //DONE..
+      /*
+      const payload = {
+         account_name: user.name,
+          provider_database_name: user?.providerDBName,
+          user: publisherData?.consumer,
+          template_name: publisherData.template,
+          column_name: publisherData.column_name,
+      };
+      try{
+           const response = await API.fetchAllowedColumnStatus(payload)
+           if (response?.data?.data?.length > 0) {
+            let data = response?.data?.data;
+            setPublisherData({
+              ...publisherData,
+              status: parseInt(Object.values(data[0])) === 1 ? true : false,
+            });
+          } else {
+            setPublisherData({ ...publisherData, status: "" });
+          }
+      }
+      catch (error){console.log(error);}
+    */
       axios
         .get(`${baseURL}/${user.name}`, {
           params: {
@@ -152,6 +249,26 @@ const AllowedColumns = ({ user }) => {
   const handleClickYes = () => {
     setOpenModal(!openModal);
     setLoading(true);
+    //DONE.......
+    /*
+      const payload = {
+         account_name: user.name,
+      db_name: user?.providerDBName,
+      result: JSON.stringify({
+        Consumer_Name: publisherData?.consumer,
+        Template_Name: publisherData?.template,
+        column_name: publisherData?.column_name,
+        Tag: publisherData?.status === true ? "remove" : "add",
+      };
+      try{
+           const response = await API.updateAllowedColumns(payload)
+           if (response) {
+          callByPass();
+        }
+          }
+      catch (error){toast.error("Fetching error...");
+      console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user.name}`, {
         params: {
@@ -197,6 +314,27 @@ const AllowedColumns = ({ user }) => {
 
   const callByPass = () => {
     setTimeout(() => {
+      //DONE...
+      /*
+      const payload = {
+        account_name: user.name,
+        provider_database_name: user?.providerDBName,
+      };
+      try{
+          
+           const response = await API.procedureUpdateAllowedColumns(payload)
+           setLoading(false);
+          setPublisherData({
+            consumer: "",
+            template: "",
+            column_name: "",
+            status: "",
+          });
+          toast.success(response?.data?.data?.[0]?.PROC_NEW_11);
+      }
+      catch (error){setLoading(false);
+          console.log(error);}
+    */
       axios
         .get(`${baseURL}/${user.name}`, {
           params: {
