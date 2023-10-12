@@ -26,6 +26,19 @@ const QueryTemplate = ({ user }) => {
   };
 
   useEffect(() => {
+    //pending..
+    /*
+    const payload ={};
+    try {
+      const response = await API.DEMO(payload)
+      if (response.status ===200 && response?.data) {
+        setConsumers(response?.data?.data);
+      } else {
+        setConsumers([]);
+      }
+    }
+    catch (error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -44,6 +57,21 @@ const QueryTemplate = ({ user }) => {
   }, [user?.name]);
 
   useEffect(() => {
+
+    //pending..
+    /*
+    const payload ={};
+    try {
+      const response = await API.DEMO(payload)
+      if (response.status ===200 && response?.data) {
+         setTemplateNames(response?.data?.data);
+        } else {
+          setTemplateNames([]);
+        }
+    
+      }
+    catch (error){console.log(error);}
+    */
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -62,6 +90,24 @@ const QueryTemplate = ({ user }) => {
 
   useEffect(() => {
     if (queryData.consumer !== "" && queryData.template !== "") {
+
+      //pending..
+    /*
+    const payload ={};
+    try {
+      const response = await API.DEMO(payload)
+      if (response.status ===200 && response?.data?.data?.length > 0) {
+       setQueryData({
+              ...queryData,
+              status: response?.data?.data[0]?.TEMPLATE_STATUS,
+            });
+          } else {
+            setQueryData({ ...queryData, status: "" });
+          }
+    
+      }
+    catch (error){console.log(error);}
+    */
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
@@ -86,6 +132,22 @@ const QueryTemplate = ({ user }) => {
   const handleClickYes = () => {
     setOpenModal(!openModal);
     setLoading(true);
+     //pending..
+    /*
+    const payload ={};
+    try {
+      const response = await API.DEMO(payload)
+      if (response.status ===200 ) {
+          callByPass();
+        }
+    
+      }
+    catch (error){
+      toast.error("Fetching error...");
+      console.log(error);
+    }
+    */
+    
     axios
       .get(`${baseURL}/${user?.name}`, {
         params: {
@@ -124,6 +186,23 @@ const QueryTemplate = ({ user }) => {
 
   const callByPass = () => {
     setTimeout(() => {
+       //pending..
+    /*
+    const payload ={};
+    try {
+      const response = await API.DEMO(payload)
+      if (response.status ===200 ) {
+          setLoading(false);
+          setQueryData({ consumer: "", template: "", status: "" });
+          toast.success(response?.data?.data?.[0]?.UPDATETEMPLATESTATUS);
+        }
+    
+      }
+    catch (error){
+      setLoading(false);
+      console.log(error);
+    }
+    */
       axios
         .get(`${baseURL}/${user?.name}`, {
           params: {
