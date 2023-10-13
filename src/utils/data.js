@@ -3,8 +3,8 @@
 export const analysticsTabs = [
   { name: "gender", tabTitle: "Gender distribution" },
   { name: "age", tabTitle: "Age distribution" },
-  { name: "google_ads", tabTitle: "Google Ad's" },
   { name: "meta_ads", tabTitle: "Meta Ad's" },
+  { name: "google_ads", tabTitle: "Google Ad's" },
 ];
 
 // Tabs for Admin Console for Consumer...

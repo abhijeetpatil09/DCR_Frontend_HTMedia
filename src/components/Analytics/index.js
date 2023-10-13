@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 
-import BarChartAnalytics from "./CommonComponent/Charts/BarChart";
-import PieChartAnalytics from "./CommonComponent/Charts/PieChart";
-import * as actions from "../redux/actions/index";
+import BarChartAnalytics from "./components/BarChart";
+import PieChartAnalytics from "./components/PieChart";
+import * as actions from "../../redux/actions/index";
 
-import { analysticsTabs } from "../utils/data";
-
-const baseURL = process.env.REACT_APP_BASE_URL;
+import { analysticsTabs } from "../../utils/data";
+import MetaAdsAnalytics from "./components/metaAds";
+import API from "../apiServices/api";
 
 const ChartPage = () => {
   const dispatch = useDispatch();
@@ -39,75 +38,13 @@ const ChartPage = () => {
           loader: true,
         })
       );
-      //PENDING.........
-      /*
-      const payload ={};
-      try{
-        select advertiser_match,age_0_6, age_7_16, age_17_25, age_26_40, age_41_above, male, female from DCR_SAMP_CONSUMER1.PUBLIC.advertiser_match_${RequestId}_insights;
-        const response = await API.Demo(payload);
-         
-         if (response.status === 200 && response?.data?.data) {
-            let data = response?.data?.data[0];
-            let age_data = [
-              { name: "AGE_0_6", value: data?.AGE_0_6 },
-              { name: "AGE_7_16", value: data?.AGE_7_16 },
-              { name: "AGE_17_25", value: data?.AGE_17_25 },
-              { name: "AGE_26_40", value: data?.AGE_26_40 },
-              { name: "AGE_41_ABOVE", value: data?.AGE_41_ABOVE },
-            ];
-            let gender_data = [
-              { name: "MALE", value: data?.MALE },
-              { name: "FEMALE", value: data?.FEMALE },
-            ];
-            let total = data?.ADVERTISER_MATCH;
-            setChartData({
-              ...chartData,
-              ageData: age_data,
-              genderData: gender_data,
-              total: total,
-            });
-            dispatch(
-              actions.AnalyticsData({
-                loader: false,
-              })
-            );
-          } else {
-            setChartData({
-              ...chartData,
-              ageData: [],
-              genderData: [],
-              total: null,
-            });
-          }
-          dispatch(
-            actions.AnalyticsData({
-              loader: false,
-            })
-          );
-      }
-      catch(error)
-      {
-        console.log(error);
-        setChartData({
-            ...chartData,
-            ageData: [],
-            genderData: [],
-            total: null,
-          });
-          dispatch(
-            actions.AnalyticsData({
-              loader: false,
-            })
-          );
-      }
-      */
-      axios
-        .get(`${baseURL}/${user?.name}`, {
-          params: {
-            query: `select advertiser_match,age_0_6, age_7_16, age_17_25, age_26_40, age_41_above, male, female from DCR_SAMP_CONSUMER1.PUBLIC.advertiser_match_${RequestId}_insights;`,
-          },
-        })
-        .then((response) => {
+      const payload = {
+        account_name: user?.Consumer,
+        run_id: RequestId,
+      };
+      const getAnalyticsData = async () => {
+        try {
+          let response = await API.getAnalyticsData(payload);
           if (response?.data?.data) {
             let data = response?.data?.data[0];
             let age_data = [
@@ -146,8 +83,7 @@ const ChartPage = () => {
               loader: false,
             })
           );
-        })
-        .catch((error) => {
+        } catch (error) {
           console.log(error);
           setChartData({
             ...chartData,
@@ -160,7 +96,9 @@ const ChartPage = () => {
               loader: false,
             })
           );
-        });
+        }
+      };
+      getAnalyticsData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [RequestId, user?.name]);
@@ -241,10 +179,11 @@ const ChartPage = () => {
             return (
               <li
                 onClick={() => setActiveTab(item.name)}
-                className={`${activeTab === item.name
-                  ? "bg-amaranth-100 rounded-t-lg"
-                  : "bg-white"
-                  } px-8 text-amaranth-900 inline-block cursor-pointer p-3 mr-1`}
+                className={`${
+                  activeTab === item.name
+                    ? "bg-amaranth-100 rounded-t-lg"
+                    : "bg-white"
+                } px-8 text-amaranth-900 inline-block cursor-pointer p-3 mr-1`}
               >
                 {item.tabTitle}
               </li>
@@ -289,14 +228,51 @@ const ChartPage = () => {
               </div>
             ) : activeTab === "google_ads" ? (
               <div className="flex flex-col w-full px-4">
-                
-
+                <div className="flex flex-row w-full">
+                  <div className="w-1/5 p-4">
+                    <div className="bg-white p-4 rounded-lg shadow">
+                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">
+                        Card 1
+                      </h2>
+                      <p>Some informative content here.</p>
+                    </div>
+                  </div>
+                  <div className="w-1/5 p-4">
+                    <div className="bg-white p-4 rounded-lg shadow">
+                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">
+                        Card 2
+                      </h2>
+                      <p>Some informative content here.</p>
+                    </div>
+                  </div>
+                  <div className="w-1/5 p-4">
+                    <div className="bg-white p-4 rounded-lg shadow">
+                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">
+                        Card 3
+                      </h2>
+                      <p>Some informative content here.</p>
+                    </div>
+                  </div>
+                  <div className="w-1/5 p-4">
+                    <div className="bg-white p-4 rounded-lg shadow">
+                      <h2 className="text-xl font-bold text-amaranth-700 mb-2">
+                        Card 4
+                      </h2>
+                      <p>Some informative content here.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row w-full">
+                  <div className="w-1/2">
+                    <BarChartAnalytics data={chartData?.ageData} />
+                  </div>
+                  <div className="w-1/2">
+                    <BarChartAnalytics data={chartData?.genderData} />
+                  </div>
+                </div>
               </div>
             ) : (
-              <div className="flex flex-col w-full px-4">
-                
-
-              </div>
+              <MetaAdsAnalytics runId={RequestId} />
             )
           ) : (
             <span className="text-amaranth-600 flex flex-grow m-4">

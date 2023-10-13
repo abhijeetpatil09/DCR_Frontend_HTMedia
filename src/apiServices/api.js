@@ -150,87 +150,6 @@ const filterStatusTable = (payload) =>
     `/filter_table?account_name=${payload.account_name}&providerNames=${payload.providerNames}&templateNames=${payload.templateNames}&statuses=${payload.statuses}&date=${payload.date}`
   );
 
-// Search Page API's
-
-const getIntegratedProviders = (payload) =>
-  api.get(
-    `/Search_provider?account_name=${payload.account_name}&CONSUMER_NAME=${payload.CONSUMER_NAME}`
-  );
-const getAllCatalog = (payload) =>
-  api.get(`/Search_all_catalog?account_name=${payload.account_name}`);
-
-const getConsumerSourceTable = (payload) =>
-  api.get(
-    `/get_consumer_table?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}`
-  );
-
-const getProviderNameSearch = (payload) =>
-  api.get(`/get_provider_name?account_name=${payload.account_name}`);
-
-const getCategoriesList = (payload) =>
-  api.get(`/get_category_list?account_name=${payload.account_name}`);
-
-const getSubCategoriesSearch = (payload) =>
-  api.get(
-    `/get_categories?account_name=${payload.account_name}&Category=${payload.categories}`
-  );
-const filterSearchTable = (payload) =>
-  api.get(
-    `/filter_search_table?account_name=${payload.account_name}&categories=${payload.categories}&subCategories=${payload.subCategories}&providers=${payload.providers}`
-  );
-
-const viewProvidersCatalogue = (payload) =>
-  api.get(
-    `/view_provider_catalog?account_name=${payload.account_name}&provider_name=${payload.provider_name}&entity_name=${payload.entity_name}`
-  );
-
-const getPartyAccount = (payload) =>
-  api.get(
-    `/get_party_account?account_name=${payload.account_name}&provider_name=${payload.provider_name}`
-  );
-
-const insertIntegrateConsumer = (payload) =>
-  api.get(
-    `/integrate_consumer?account_name=${payload.account_name}&CONSUMER_ACCOUNT=${payload.CONSUMER_ACCOUNT}&PROVIDER_ACCOUNT=${payload.PROVIDER_ACCOUNT}&provider_name=${payload.provider_name}&CONSUMER_NAME=${payload.CONSUMER_NAME}`
-  );
-
-const integrateConsumer = (payload) =>
-  api.get(
-    `/consumerintegrate?CONSUMER_ACCOUNT=${payload.CONSUMER_ACCOUNT}&PROVIDER_ACCOUNT=${payload.PROVIDER_ACCOUNT}&provider_name=${payload.provider_name}&CONSUMER_NAME=${payload.CONSUMER_NAME}`
-  );
-
-// Upload new Cataloge
-const getSubCategories = (payload) =>
-  api.get(`/get_sub_category?account_name=${payload.account_name}`);
-const insertUpdateCatalogue = (payload) =>
-  api.get(
-    `/insert_update_catalog?account_name=${payload.account_name}&result=${payload.result}`
-  );
-const procedureInsertCatalogue = (payload) =>
-  api.get(`/procedure_insertcatalog?account_name=${payload.account_name}`);
-
-// Update existing cataloge upload
-const getAllEntities = (payload) =>
-  api.get(
-    `/get_entities?account_name=${payload.account_name}&user=${payload.user}`
-  );
-const deleteEntity = (payload) =>
-  api.get(
-    `/delete_entity?account_name=${payload.account_name}&entity_name=${payload.entity_name}`
-  );
-const getEntityRecord = (payload) =>
-  api.get(
-    `/get_records_entities?account_name=${payload.account_name}&provider_name=${payload.provider_name}&entity_name=${payload.entity_name}`
-  );
-const deleteAttribute = (payload) =>
-  api.get(
-    `/delete_attribute?account_name=${payload.account_name}&provider_name=${payload.provider_name}&entity_name=${payload.entity_name}&ATTRIBUTE_NAME=${payload.attribute_name}`
-  );
-const procedureAddAttribute = (payload) =>
-  api.get(`/procedure_add_attribute?account_name=${payload.account_name}`);
-const procedureUpdateAttribute = (payload) =>
-  api.get(`/procedure_update_attribute?account_name=${payload.account_name}`);
-
 // Admin Console API's
 const fetchUserProfileIntegration = (payload) =>
   api.get(`/fetch_user_profile?account_name=${payload.account_name}`);
@@ -291,6 +210,46 @@ const filterLogTable = (payload) =>
     `/filter_logs?account_name=${payload.account_name}&consumerNames=${payload.consumerNames}&providerNames=${payload.providerNames}&templateNames=${payload.templateNames}&statuses=${payload.statuses}&date=${payload.date}`
   );
 
+// Analytics
+
+const getAnalyticsData = (payload) =>
+  api.get(
+    `/analysis_data?account_name=${payload.account_name}&run_id=${payload.run_id}`
+  );
+
+// Meta Ads
+
+const getAnalyticsReport = (payload) =>
+  api.get(
+    `/analysis_report?account_name=${payload.account_name}&run_id=${payload.run_id}`
+  );
+const getAnalyticsLogsReport = (payload) =>
+  api.get(
+    `/analysis_log_report?account_name=${payload.account_name}&run_id=${payload.run_id}`
+  );
+const fetch_campaigns = (payload) =>
+  api.get(`/fetching_campaign?account_name=${payload.account_name}`);
+
+const display_logs = (payload) =>
+  api.get(
+    `/display_adlog?account_name=${payload.account_name}&run_id=${payload.run_id}`
+  );
+
+const uploadAudience = (payload) =>
+  api.get(
+    `/fetch_sf_ads_data?account_name=${payload.account_name}&run_id=${payload.run_id}&templateName=${payload.templateName}&campaign_id=${payload.campaign_id}&consumer_database_name=${payload.consumer_database_name}`
+  );
+
+const publishMetaAds = (payload) =>
+  api.get(
+    `/publishads_meta?account_name=${payload.account_name}&run_id=${payload.run_id}&campaign_id=${payload.campaign_id}`
+  );
+
+const stopMetaAds = (payload) =>
+  api.get(
+    `/stoppingads_meta?account_name=${payload.account_name}&run_id=${payload.run_id}&campaign_id=${payload.campaign_id}`
+  );
+
 const API = {
   checkBlockedUser,
   getAuthorisationApi,
@@ -335,32 +294,6 @@ const API = {
   getAllRequestData,
   filterStatusTable,
 
-  // Search Catalog
-  getIntegratedProviders,
-  getAllCatalog,
-  getConsumerSourceTable,
-  getProviderNameSearch,
-  getCategoriesList,
-  getSubCategoriesSearch,
-  filterSearchTable,
-  viewProvidersCatalogue,
-  getPartyAccount,
-  insertIntegrateConsumer,
-  integrateConsumer,
-
-  // New cataloge upload
-  getSubCategories,
-  insertUpdateCatalogue,
-  procedureInsertCatalogue,
-
-  // Update existing cataloge upload
-  getAllEntities,
-  deleteEntity,
-  getEntityRecord,
-  deleteAttribute,
-  procedureAddAttribute,
-  procedureUpdateAttribute,
-
   // Admin Console
   fetchUserProfileIntegration,
   fetchUserProfile,
@@ -377,6 +310,18 @@ const API = {
   updateTemplates,
   getLogsData,
   filterLogTable,
+
+  // Analytics
+  getAnalyticsData,
+
+  // Meta Ad's
+  getAnalyticsReport,
+  getAnalyticsLogsReport,
+  fetch_campaigns,
+  display_logs,
+  uploadAudience,
+  publishMetaAds,
+  stopMetaAds,
 };
 
 export default API;

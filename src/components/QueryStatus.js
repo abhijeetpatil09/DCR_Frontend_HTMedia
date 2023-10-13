@@ -16,6 +16,8 @@ import {
   TablePagination,
 } from "@mui/material";
 
+import API from "../apiServices/api";
+
 import {
   jsonToCsv,
   handleDate,
@@ -24,6 +26,7 @@ import {
 import * as actions from "../redux/actions/index";
 import CustomTable from "./CommonComponent/Table";
 import CommonModal from "./CommonComponent/Modal";
+import ModalForMetaAds from "./MatchRate/ModalForMetaAds";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -72,90 +75,48 @@ const QueryStatus = () => {
       queryName: "",
     });
 
-  const fetchMainTable = () => {
+  const [showMetaAds, setShowMetaAds] = useState({
+    openModal: false,
+    data: {
+      runId: "",
+      template_name: "",
+      campaign: [],
+    },
+  });
+
+  const fetchMainTable = async () => {
     if (
       user["role"] &&
       user["role"].includes("Publisher") &&
       user["role"].includes("Consumer")
     ) {
-      //DONE...
-     /*
-      const payload ={
-         account_name: user?.Consumer,
-         db_name: user?.consumerDBName,
+      const payload = {
+        account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
       };
-      try{
+      try {
         const response = await API.getAllRequestData(payload);
-          if (response.status === 200 ) {
-            let data = response?.data?.data;
-            setData(data);
-          }
-        })
-        .catch((error) => console.log(error));
-    } else {
-        const payload ={
-           account_name: user?.Consumer,
-      db_name: user?.consumerDBName,
-      providerNames:
-        filteredData?.providerName?.length > 0
-          ? filteredData?.providerName?.join(",")
-          : "all",
-      templateNames:
-        filteredData?.templateName?.length > 0
-          ? filteredData?.templateName?.join(",")
-          : "all",
-      statuses:
-        filteredData?.status?.length > 0
-          ? filteredData?.status?.join(",")
-          : "all",
-      date: finalDate,
-        };
-      try{
-        const response = await API.filterStatusTable(payload);
-          if (response.status === 200 ) {
-            let data = response?.data?.data;
-            setData(data);
-          }
-      }
-      catch(error)
-      {
+        if (response.status === 200 && response?.data?.data) {
+          let data = response?.data?.data;
+          setData(data);
+        }
+      } catch (error) {
         console.log(error);
       }
-      }
-      catch(error)
-      {
+    } else {
+      const payload = {
+        account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
+      };
+      try {
+        const response = await API.getAllRequestData(payload);
+        if (response.status === 200 && response?.data?.data) {
+          let data = response?.data?.data;
+          setData(data);
+        }
+      } catch (error) {
         console.log(error);
       }
-      */
-      axios
-        .get(`${baseURL}/${user?.name}`, {
-          params: {
-            query:
-              "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE order by RUN_ID desc;",
-          },
-        })
-        .then((response) => {
-          if (response) {
-            let data = response?.data?.data;
-            setData(data);
-          }
-        })
-        .catch((error) => console.log(error));
-    } else {
-      axios
-        .get(`${baseURL}/${user?.name}`, {
-          params: {
-            query:
-              "select * from DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE where TEMPLATE_NAME = 'ADVERTISER MATCH' order by run_id desc;",
-          },
-        })
-        .then((response) => {
-          if (response) {
-            let data = response?.data?.data;
-            setData(data);
-          }
-        })
-        .catch((error) => console.log(error));
     }
   };
 
@@ -164,47 +125,25 @@ const QueryStatus = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const downloadFile = (TEMPLATE_NAME, RUN_ID) => {
-    TEMPLATE_NAME = TEMPLATE_NAME.replace(/\s/g, "_");
-    //DONE....
-    /*
-      const payload ={account_name: user?.Consumer,
+  const downloadFile = async (TEMPLATE_NAME, RUN_ID) => {
+    const template_name = TEMPLATE_NAME?.replace(/\s/g, "_");
+    const payload = {
+      account_name: user?.Consumer,
       db_name: user?.consumerDBName,
-      templateName: TEMPLATE_NAME,
+      templateName: template_name,
       run_id: RUN_ID,
     };
-      try{
-        const response = await API.downloadFileAPI(payload);
-        if (response.status === 200 && response?.data) {
-          const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
-          downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
-        } else {
-          console.log("File cannnot be downloaded...");
-        }
+    try {
+      const response = await API.downloadFileAPI(payload);
+      if (response.status === 200 && response?.data) {
+        const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
+        downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
+      } else {
+        console.log("File cannnot be downloaded...");
       }
-      catch(error)
-      {
-        console.error("Error:", error);
-      }
-      */
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        responseType: "json",
-        params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${TEMPLATE_NAME}_${RUN_ID};`,
-        },
-      })
-      .then((response) => {
-        if (response?.data) {
-          const csvData = jsonToCsv(response?.data); // Create a Blob from the CSV data
-          downloadFileInCSV(csvData, TEMPLATE_NAME, RUN_ID);
-        } else {
-          console.log("File cannnot be downloaded...");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const fetchTable = (data, runId) => {
@@ -222,51 +161,27 @@ const QueryStatus = () => {
   };
 
   const fetchcsvTableData = async (templateName, runId) => {
-    templateName = templateName.replace(/\s/g, "_");
-    //DONE...
-     /*
-      const payload ={
-        account_name: user?.Consumer,
+    const template_name = templateName.replace(/\s/g, "_");
+    const payload = {
+      account_name: user?.Consumer,
       db_name: user?.consumerDBName,
-      templateName: templateName,
+      templateName: template_name,
       run_id: runId,
-      };
-      try{
-        const response = await API.viewSampleData(payload);
-         
-        if (response.status === 200 && response?.data?.data) {
-          fetchTable(response?.data?.data, runId);
-          setViewTemplate({
-            ...viewTemplate,
-            openModal: true,
-            queryName: templateName,
-          });
-        }
+    };
+    try {
+      const response = await API.viewSampleData(payload);
+
+      if (response.status === 200 && response?.data?.data) {
+        fetchTable(response?.data?.data, runId);
+        setViewTemplate({
+          ...viewTemplate,
+          openModal: true,
+          queryName: templateName,
+        });
       }
-      catch(error)
-      {
-        console.log("In API catch", error);
-      }
-      */
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.${templateName}_${runId}_sample;`,
-        },
-      })
-      .then((response) => {
-        if (response?.data?.data) {
-          fetchTable(response?.data?.data, runId);
-          setViewTemplate({
-            ...viewTemplate,
-            openModal: true,
-            queryName: templateName,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log("In API catch", error);
-      });
+    } catch (error) {
+      console.log("In API catch", error);
+    }
   };
 
   const showAnalyticsPage = (runId) => {
@@ -289,8 +204,8 @@ const QueryStatus = () => {
 
   const handleUploadData = async (runId) => {
     setUploading(true);
-    //  pending....    
-     /*
+    //  pending....
+    /*
       const payload ={};
       try{
          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
@@ -414,6 +329,18 @@ const QueryStatus = () => {
           setUploading(false);
         });
     }, 2000);
+  };
+
+  const handleClickMetaAds = (runId, template_name) => {
+    const templateName = template_name.replace(/ /g, "_");
+    setShowMetaAds({
+      ...showMetaAds,
+      openModal: true,
+      data: {
+        runId: runId,
+        template_name: templateName,
+      },
+    });
   };
 
   return (
@@ -757,7 +684,12 @@ const QueryStatus = () => {
                                   </svg>
                                 </button>
                                 <button
-                                  // onClick={() => metaAd(row.RUN_ID)}
+                                  onClick={() =>
+                                    handleClickMetaAds(
+                                      row.RUN_ID,
+                                      row.TEMPLATE_NAME
+                                    )
+                                  }
                                   disabled={
                                     row.STATUS.toLowerCase() !== "completed"
                                   }
@@ -855,6 +787,22 @@ const QueryStatus = () => {
           message={requestFailedReason.message}
           buttons={false}
           textColor={"text-red-600"}
+        />
+      ) : null}
+
+      {/* Show Meta ad's modal */}
+      {showMetaAds.openModal ? (
+        <ModalForMetaAds
+          open={showMetaAds.openModal}
+          handleClose={() =>
+            setShowMetaAds({
+              ...showMetaAds,
+              openModal: false,
+              runId: "",
+              template_name: "",
+            })
+          }
+          data={showMetaAds.data}
         />
       ) : null}
     </div>
