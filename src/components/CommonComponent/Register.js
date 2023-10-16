@@ -38,7 +38,6 @@ const Register = () => {
 
   const [formValidated, setFormValidated] = useState(false);
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [note, setNote] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
 
@@ -614,11 +613,7 @@ const Register = () => {
             </div>
 
             <div className="flex items-start justify-center my-auto">
-              {isSubmitted ? (
-                <div>User is successfully logged in</div>
-              ) : (
-                renderForm
-              )}
+              {renderForm}
             </div>
           </div>
           <div className="w-1/2 h-full flex flex-col items-center justify-center overflow-hidden relative bg-gradient-to-br from-amaranth-100 to-purple-200 rounded-r-3xl px-6">

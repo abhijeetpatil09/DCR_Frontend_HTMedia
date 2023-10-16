@@ -8,7 +8,7 @@ import * as actions from "../../redux/actions/index";
 
 import { analysticsTabs } from "../../utils/data";
 import MetaAdsAnalytics from "./components/metaAds";
-import API from "../apiServices/api";
+import API from "../../apiServices/api";
 
 const ChartPage = () => {
   const dispatch = useDispatch();

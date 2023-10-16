@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
 import CommonModal from "../../CommonComponent/Modal";
-import API from "../apiServices/api";
+import API from "../../../apiServices/api";
 
 const AllowedColumns = ({ user }) => {
   const [publisherData, setPublisherData] = useState({

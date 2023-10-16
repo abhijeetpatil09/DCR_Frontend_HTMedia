@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Box, Modal } from "@mui/material";
 import CustomTable from "../../CommonComponent/Table";
 import { handleDate } from "../../../utils/commonFunctions";
-import API from "../apiServices/api";
+import API from "../../../apiServices/api";
 
 // Modal style
 const resultstyle = {

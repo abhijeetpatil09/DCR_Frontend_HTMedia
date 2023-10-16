@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import API from "../apiServices/api";
+import API from "../../../apiServices/api";
 
 import CommonModal from "../../CommonComponent/Modal";
 

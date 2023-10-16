@@ -7,7 +7,7 @@ import SelectDropdown from "./CommonComponent/SelectDropdown";
 import * as actions from "../redux/actions/index";
 import enrichment from "../Assets/Personal data _Monochromatic.svg";
 import CommonModal from "./CommonComponent/Modal";
-import API from "../../apiServices/api";
+import API from "../apiServices/api";
 
 import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
