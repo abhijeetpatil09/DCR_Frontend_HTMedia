@@ -354,7 +354,7 @@ const MatchRate = () => {
     axios
       .get(`${baseURL}/${user?.name}/procedure`, {
         params: {
-          query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_BYPASS_1();`,
+          query: `call DCR_SAMP_CONSUMER1.PUBLIC.PROC_DATAHAVEN();`,
         },
       })
       .then((response) => {
