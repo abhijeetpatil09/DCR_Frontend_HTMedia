@@ -34,6 +34,7 @@ const ModalForMetaAds = ({ open, handleClose, data }) => {
 
   const [status, setStatus] = useState("");
   const [audienceUploaded, setAudienceUploaded] = useState(false);
+  const [checkClosedStatus, setCheckClosedStatus] = useState(false);
 
   const [buttonStatus, setButtonStatus] = useState("Activate");
   const [loader, setLoader] = useState({
@@ -50,6 +51,15 @@ const ModalForMetaAds = ({ open, handleClose, data }) => {
     }
     setCampaignData(selectedObject);
   };
+
+  // Use effect for disable page
+  useEffect(() => {
+    if (checkClosedStatus) {
+      document.body.classList.add("overlay");
+    } else {
+      document.body.classList.remove("overlay");
+    }
+  }, [checkClosedStatus]);
 
   useEffect(() => {
     axios
@@ -105,6 +115,23 @@ const ModalForMetaAds = ({ open, handleClose, data }) => {
   }, [user?.Consumer, data?.runId]);
 
   const handleUploadAudience = () => {
+    const url =
+      "https://adsmanager.facebook.com/adsmanager/manage/adsets/edit?act=797211008551568&business_id=931243647962059&filter_set=CAMPAIGN_GROUP_SELECTED-STRING_SET%1EIN%1E[%2223860594356580003%22]&selected_campaign_ids=23860594356580003&selected_adset_ids=23860594362260003&breakdown_regrouping=true"; // Replace with the URL you want to open
+
+    const windowName = "popupWindow";
+    const windowFeatures =
+      "width=" + window.innerWidth + ",height=" + window.innerHeight;
+    // Open the URL in a new pop-up window
+    const newWin = window.open(url, windowName, windowFeatures);
+    setCheckClosedStatus(true);
+
+    const statusCheck = setInterval(() => {
+      if (newWin && newWin.closed) {
+        clearInterval(statusCheck);
+        setCheckClosedStatus(false);
+      }
+    }, 1000);
+
     setLoader({ ...loader, audienceLoader: true });
     axios
       .get(`${baseURL}/fetch_sf_ads_data`, {

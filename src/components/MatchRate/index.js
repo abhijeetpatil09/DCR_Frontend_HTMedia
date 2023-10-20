@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Papa from "papaparse";
 import { read, utils } from "xlsx";
 import { useNavigate } from "react-router-dom";
+
 import { handleDate, isObjectEmpty } from "../../utils/commonFunctions";
 
 import * as actions from "../../redux/actions/index";
@@ -90,6 +91,7 @@ const MatchRate = () => {
   const [fileErrorMessage, setFileErrorMessage] = useState("");
 
   const [emailLoading, setEmailLoading] = useState(false);
+  const [loginAccessToken, setLoginAccessToken] = useState(false);
 
   // Create query Modal
   const [open, setOpen] = React.useState(false);
@@ -702,15 +704,38 @@ const MatchRate = () => {
 
   const handleClickMetaAds = (runId, template_name) => {
     const templateName = template_name.replace(/ /g, "_");
-    setShowMetaAds({
-      ...showMetaAds,
-      openModal: true,
-      data: {
-        runId: runId,
-        template_name: templateName,
+    setLoginAccessToken(true);
+    window.FB.login(
+      function (response) {
+        console.log("response ==>", response);
+        setLoginAccessToken(false);
+        if (response?.status === "connected") {
+          // need to post auth response
+          setShowMetaAds({
+            ...showMetaAds,
+            openModal: true,
+            data: {
+              runId: runId,
+              template_name: templateName,
+            },
+          });
+        }
       },
-    });
+      { scope: "ads_management,ads_read" }
+    );
   };
+
+  // Use effect for disable page
+  useEffect(() => {
+    if (loginAccessToken) {
+      document.body.classList.add("overlay");
+    } else {
+      document.body.classList.remove("overlay");
+    }
+  }, [loginAccessToken]);
+
+  // Function to handle the Google ads
+  const handleGoogleAds = () => {};
 
   return (
     <>
@@ -998,7 +1023,7 @@ const MatchRate = () => {
                             <img src={meta} alt="" />
                           </button>
                           <button
-                            // onClick={() => googleAd(item.RUN_ID)}
+                            onClick={() => handleGoogleAds(item.RUN_ID)}
                             disabled={item.STATUS.toLowerCase() !== "completed"}
                             className={`${
                               item.STATUS.toLowerCase() === "completed"

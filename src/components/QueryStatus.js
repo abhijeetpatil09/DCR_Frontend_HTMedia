@@ -56,6 +56,8 @@ const QueryStatus = () => {
   const [tableRows, setTableRows] = useState([]);
   const [requestId, setRequestId] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [loginAccessToken, setLoginAccessToken] = useState(false);
+
   const [requestFailedReason, setRequestFailedReason] = React.useState({
     openModal: false,
     message: "",
@@ -271,17 +273,39 @@ const QueryStatus = () => {
     }, 2000);
   };
 
+ 
   const handleClickMetaAds = (runId, template_name) => {
     const templateName = template_name.replace(/ /g, "_");
-    setShowMetaAds({
-      ...showMetaAds,
-      openModal: true,
-      data: {
-        runId: runId,
-        template_name: templateName,
+    setLoginAccessToken(true);
+    window.FB.login(
+      function (response) {
+        console.log("response ==>", response);
+        setLoginAccessToken(false);
+        if (response?.status === "connected") {
+          // need to post auth response
+          setShowMetaAds({
+            ...showMetaAds,
+            openModal: true,
+            data: {
+              runId: runId,
+              template_name: templateName,
+            },
+          });
+        }
       },
-    });
+      { scope: "ads_management,ads_read" }
+    );
   };
+
+  // Use effect for disable page
+  useEffect(() => {
+    if (loginAccessToken) {
+      document.body.classList.add("overlay");
+    } else {
+      document.body.classList.remove("overlay");
+    }
+  }, [loginAccessToken]);
+
 
   return (
     <div className="flex flex-col w-full h-full ">
