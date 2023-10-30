@@ -41,18 +41,23 @@ const ChartPage = () => {
       const payload = {
         account_name: user?.Consumer,
         run_id: RequestId,
+        db_name: user?.consumerDBName,
       };
       const getAnalyticsData = async () => {
         try {
           let response = await API.getAnalyticsData(payload);
-          if (response?.data?.data) {
+          if (
+            response?.status === 200 &&
+            response?.data?.data &&
+            response?.data?.data?.length > 0
+          ) {
             let data = response?.data?.data[0];
             let age_data = [
               { name: "AGE_0_6", value: data?.AGE_0_6 },
               { name: "AGE_7_16", value: data?.AGE_7_16 },
               { name: "AGE_17_25", value: data?.AGE_17_25 },
               { name: "AGE_26_40", value: data?.AGE_26_40 },
-              { name: "AGE_41_ABOVE", value: data?.AGE_41_ABOVE },
+              { name: "AGE_40_ABOVE", value: data?.AGE_40_ABOVE },
             ];
             let gender_data = [
               { name: "MALE", value: data?.MALE },

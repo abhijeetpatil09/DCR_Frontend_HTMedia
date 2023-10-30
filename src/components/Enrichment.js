@@ -138,9 +138,10 @@ const Enrichment = () => {
     const payload = {
       account_name: user?.name,
       db_name: user?.consumerDBName,
+      template_name: "CUSTOMER ENRICHMENT",
     };
     try {
-      const response = await API.getAllProvidersList(payload);
+      const response = await API.fetchData(payload);
       if (response.status === 200 && response?.data?.data) {
         let res = response?.data?.data;
         setData(res);
@@ -647,7 +648,7 @@ const Enrichment = () => {
               </tr>
             </thead>
             <tbody className="text-amaranth-950 text-sm font-light">
-              {data.map((item, index) => (
+              {data?.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b border-gray-200 hover:bg-amaranth-50"

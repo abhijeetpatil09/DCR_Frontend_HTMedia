@@ -153,10 +153,6 @@ const filterStatusTable = (payload) =>
 // Admin Console API's
 const fetchUserProfileIntegration = (payload) =>
   api.get(`/fetch_user_profile?account_name=${payload.account_name}`);
-const fetchUserProfile = (payload) =>
-  api.get(
-    `/fetch_profile?account_name=${payload.account_name}&UserRole=${payload.UserRole}&partyAccount=${payload.partyAccount}`
-  );
 const updateUserProfile = (payload) =>
   api.get(
     `/update_user_profile?account_name=${payload.account_name}&role=${payload.role}&status=${payload.status}&userName=${payload.user_name}`
@@ -190,9 +186,12 @@ const procedureUpdateAllowedColumns = (payload) =>
     `/procedure_templates?account_name=${payload.account_name}&provider_database_name=${payload.provider_database_name}`
   );
 
+const fetchUserProfile = (payload) =>
+  api.get(
+    `/fetch_user_profile?account_name=${payload.account_name}&role=${payload.role}`
+  );
+
 // Itemised Bills
-const getConsumerAdmin = (payload) =>
-  api.get(`/get_consumer_admin?account_name=${payload.account_name}`);
 const fetchTemplateStatus = (payload) =>
   api.get(
     `/get_template_status?account_name=${payload.account_name}&user=${payload.user}&template_name=${payload.template_name}&provider_database_name=${payload.provider_database_name}`
@@ -201,20 +200,16 @@ const updateTemplates = (payload) =>
   api.get(
     `/update_template?account_name=${payload.account_name}&user=${payload.user}&template_name=${payload.template_name}&template_status=${payload.status}&provider_database_name=${payload.provider_database_name}`
   );
-
-// Logs
-const getLogsData = (payload) =>
-  api.get(`/get_logs?account_name=${payload.account_name}`);
-const filterLogTable = (payload) =>
+const getConsumerAdmin = (payload) =>
   api.get(
-    `/filter_logs?account_name=${payload.account_name}&consumerNames=${payload.consumerNames}&providerNames=${payload.providerNames}&templateNames=${payload.templateNames}&statuses=${payload.statuses}&date=${payload.date}`
+    `/get_consumer_itemised_bills?account_name=${payload.account_name}&provider_database_name=${payload.provider_database_name}`
   );
 
 // Analytics
 
 const getAnalyticsData = (payload) =>
   api.get(
-    `/analysis_data?account_name=${payload.account_name}&run_id=${payload.run_id}`
+    `/analytics?account_name=${payload.account_name}&run_id=${payload.run_id}&consumer_database_name=${payload.db_name}`
   );
 
 // Meta Ads
@@ -308,8 +303,6 @@ const API = {
   getConsumerAdmin,
   fetchTemplateStatus,
   updateTemplates,
-  getLogsData,
-  filterLogTable,
 
   // Analytics
   getAnalyticsData,
