@@ -58,6 +58,8 @@ const QueryStatus = () => {
   const [tableRows, setTableRows] = useState([]);
   const [requestId, setRequestId] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [loadingTable, setLoadingTable] = useState(false);
+
   const [requestFailedReason, setRequestFailedReason] = React.useState({
     openModal: false,
     message: "",
@@ -99,8 +101,12 @@ const QueryStatus = () => {
         if (response.status === 200 && response?.data?.data) {
           let data = response?.data?.data;
           setData(data);
+          setLoadingTable(false);
+        } else {
+          setLoadingTable(false);
         }
       } catch (error) {
+        setLoadingTable(false);
         console.log(error);
       }
     } else {
@@ -113,14 +119,19 @@ const QueryStatus = () => {
         if (response.status === 200 && response?.data?.data) {
           let data = response?.data?.data;
           setData(data);
+          setLoadingTable(false);
+        } else {
+          setLoadingTable(false);
         }
       } catch (error) {
         console.log(error);
+        setLoadingTable(false);
       }
     }
   };
 
   useEffect(() => {
+    setLoadingTable(true);
     fetchMainTable();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -348,225 +359,219 @@ const QueryStatus = () => {
       <div className="flex h-12 sticky top-0 z-30 px-5  py-2 bg-amaranth-800 flex-row items-center justify-between w-full">
         <h3 className="  text-lg font-light text-white">Query status</h3>
       </div>
-      <div className="flex flex-col w-full px-5 mt-4 ">
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 650, borderRadius: 0 }}
-            stickyHeader
-            size="small"
-            classes={{ root: "w-100" }}
-            aria-label="simple table"
-          >
-            <TableHead>
-              <TableRow
-                sx={{
-                  "& th": {
-                    fontSize: "0.9rem",
-                    fontWeight: 900,
-                    // color: "#8c0f45",
-                    // backgroundColor: "#fff1f4",
-                    borderRadius: 0,
-                    borderTop: 1,
-                    borderLeft: 1,
-                    borderColor: "#d6d3d1",
-                  },
-                  "& th:first-of-type": {
-                    borderLeft: 1,
-                    borderColor: "#d6d3d1",
-                  },
-                  "& th:last-child": {
-                    borderRight: 1,
-                    borderColor: "#d6d3d1",
-                  },
-                }}
-              >
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={0}
-                  align="center"
+      {!loadingTable ? (
+        <div className="flex flex-col w-full px-5 mt-4 ">
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 650, borderRadius: 0 }}
+              stickyHeader
+              size="small"
+              classes={{ root: "w-100" }}
+              aria-label="simple table"
+            >
+              <TableHead>
+                <TableRow
+                  sx={{
+                    "& th": {
+                      fontSize: "0.9rem",
+                      fontWeight: 900,
+                      // color: "#8c0f45",
+                      // backgroundColor: "#fff1f4",
+                      borderRadius: 0,
+                      borderTop: 1,
+                      borderLeft: 1,
+                      borderColor: "#d6d3d1",
+                    },
+                    "& th:first-of-type": {
+                      borderLeft: 1,
+                      borderColor: "#d6d3d1",
+                    },
+                    "& th:last-child": {
+                      borderRight: 1,
+                      borderColor: "#d6d3d1",
+                    },
+                  }}
                 >
-                  Request ID
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={1}
-                  align="center"
-                >
-                  Template Name
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={2}
-                  align="center"
-                >
-                  Column Names
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={3}
-                  align="center"
-                >
-                  Identifier Type
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={4}
-                  align="center"
-                >
-                  Match Attribute
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={5}
-                  align="center"
-                >
-                  Match Count
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={6}
-                  align="center"
-                >
-                  Status
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={"Actions"}
-                  align="center"
-                >
-                  Actions
-                </TableCell>
-                <TableCell
-                  className="bg-amaranth-50 text-amaranth-900"
-                  key={7}
-                  align="center"
-                >
-                  Requested
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data &&
-                data
-                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  ?.map((row, index) => {
-                    return (
-                      <TableRow
-                        className="border-gray-200 hover:bg-amaranth-50"
-                        key={index}
-                        sx={{
-                          "& td:last-child": {
-                            borderRight: 1,
-                            borderColor: "#d6d3d1",
-                          },
-                          "& td": { borderLeft: 1, borderColor: "#d6d3d1" },
-                        }}
-                      >
-                        <TableCell className="text-amaranth-900" align="center">
-                          {row.RUN_ID}
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {row.TEMPLATE_NAME}
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {row.COLOUMNS}
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {row.IDENTIFIER_TYPE}
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {row.ATTRIBUTE}
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {row.MATCH_COUNT}
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          <span
-                            className={`${
-                              row.STATUS.toLowerCase() === "completed" ||
-                              row.STATUS.toLowerCase() === "true"
-                                ? "bg-green-200 text-green-700 inline"
-                                : row.STATUS === "Failed" ||
-                                  row.STATUS === "false"
-                                ? "bg-red-200 text-red-700 inline"
-                                : "text-amaranth-700 block bg-amaranth-200 h-[45px]"
-                            }  text-xs py-1 px-3 rounded-full  `}
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={0}
+                    align="center"
+                  >
+                    Request ID
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={1}
+                    align="center"
+                  >
+                    Template Name
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={2}
+                    align="center"
+                  >
+                    Column Names
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={3}
+                    align="center"
+                  >
+                    Identifier Type
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={4}
+                    align="center"
+                  >
+                    Match Attribute
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={5}
+                    align="center"
+                  >
+                    Match Count
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={6}
+                    align="center"
+                  >
+                    Status
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={"Actions"}
+                    align="center"
+                  >
+                    Actions
+                  </TableCell>
+                  <TableCell
+                    className="bg-amaranth-50 text-amaranth-900"
+                    key={7}
+                    align="center"
+                  >
+                    Requested
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data &&
+                  data
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    ?.map((row, index) => {
+                      return (
+                        <TableRow
+                          className="border-gray-200 hover:bg-amaranth-50"
+                          key={index}
+                          sx={{
+                            "& td:last-child": {
+                              borderRight: 1,
+                              borderColor: "#d6d3d1",
+                            },
+                            "& td": { borderLeft: 1, borderColor: "#d6d3d1" },
+                          }}
+                        >
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
                           >
-                            {row.STATUS.toLowerCase() === "true"
-                              ? "Approved"
-                              : row.STATUS.toLowerCase() === "false"
-                              ? "Rejected"
-                              : row.STATUS}
-                          </span>
-                        </TableCell>
+                            {row.RUN_ID}
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            {row.TEMPLATE_NAME}
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            {row.COLOUMNS}
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            {row.IDENTIFIER_TYPE}
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            {row.ATTRIBUTE}
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            {row.MATCH_COUNT}
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            <span
+                              className={`${
+                                row.STATUS.toLowerCase() === "completed" ||
+                                row.STATUS.toLowerCase() === "true"
+                                  ? "bg-green-200 text-green-700 inline"
+                                  : row.STATUS === "Failed" ||
+                                    row.STATUS === "false"
+                                  ? "bg-red-200 text-red-700 inline"
+                                  : "text-amaranth-700 block bg-amaranth-200 h-[45px]"
+                              }  text-xs py-1 px-3 rounded-full  `}
+                            >
+                              {row.STATUS.toLowerCase() === "true"
+                                ? "Approved"
+                                : row.STATUS.toLowerCase() === "false"
+                                ? "Rejected"
+                                : row.STATUS}
+                            </span>
+                          </TableCell>
 
-                        <TableCell className="text-amaranth-900" align="center">
-                          <div className="flex justify-between">
-                            {row.STATUS.toLowerCase() === "failed" ||
-                            row.STATUS.toLowerCase() === "false" ? (
-                              <button
-                                onClick={() =>
-                                  setRequestFailedReason({
-                                    ...requestFailedReason,
-                                    openModal: true,
-                                    message: row.ERROR,
-                                  })
-                                }
-                                className="opacity-1 px-2 hover:text-inherit"
-                                title="Request Error"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                  class="w-5 h-5 text-red-600"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
-                                    clip-rule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            ) : (
-                              <div className="flex justify-start">
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            <div className="flex justify-between">
+                              {row.STATUS.toLowerCase() === "failed" ||
+                              row.STATUS.toLowerCase() === "false" ? (
                                 <button
                                   onClick={() =>
-                                    fetchcsvTableData(
-                                      row.TEMPLATE_NAME,
-                                      row.RUN_ID
-                                    )
+                                    setRequestFailedReason({
+                                      ...requestFailedReason,
+                                      openModal: true,
+                                      message: row.ERROR,
+                                    })
                                   }
-                                  disabled={
-                                    row.STATUS.toLowerCase() !== "completed"
-                                  }
-                                  className={`${
-                                    row.STATUS.toLowerCase() === "completed"
-                                      ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-25 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
-                                  title="View"
+                                  className="opacity-1 px-2 hover:text-inherit"
+                                  title="Request Error"
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    class="w-5 h-5 text-amaranth-600"
+                                    class="w-5 h-5 text-red-600"
                                   >
-                                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                     <path
                                       fill-rule="evenodd"
-                                      d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
+                                      d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
                                       clip-rule="evenodd"
                                     />
                                   </svg>
                                 </button>
-                                {(row.TEMPLATE_NAME === "CUSTOMER ENRICHMENT" ||
-                                  row.TEMPLATE_NAME ===
-                                    "customer_enrichment") && (
+                              ) : (
+                                <div className="flex justify-start">
                                   <button
                                     onClick={() =>
-                                      downloadFile(
+                                      fetchcsvTableData(
                                         row.TEMPLATE_NAME,
                                         row.RUN_ID
                                       )
@@ -579,7 +584,7 @@ const QueryStatus = () => {
                                         ? "opacity-1 hover:text-inherit"
                                         : "disabled opacity-25 hover:text-inherit"
                                     }  px-2 hover:text-amaranth-600`}
-                                    title="Download file"
+                                    title="View"
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -587,57 +592,124 @@ const QueryStatus = () => {
                                       fill="currentColor"
                                       class="w-5 h-5 text-amaranth-600"
                                     >
+                                      <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                       <path
                                         fill-rule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-.53 14.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V8.25a.75.75 0 00-1.5 0v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
+                                        d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z"
                                         clip-rule="evenodd"
                                       />
                                     </svg>
                                   </button>
-                                )}
-                              </div>
-                            )}
+                                  {(row.TEMPLATE_NAME ===
+                                    "CUSTOMER ENRICHMENT" ||
+                                    row.TEMPLATE_NAME ===
+                                      "customer_enrichment") && (
+                                    <button
+                                      onClick={() =>
+                                        downloadFile(
+                                          row.TEMPLATE_NAME,
+                                          row.RUN_ID
+                                        )
+                                      }
+                                      disabled={
+                                        row.STATUS.toLowerCase() !== "completed"
+                                      }
+                                      className={`${
+                                        row.STATUS.toLowerCase() === "completed"
+                                          ? "opacity-1 hover:text-inherit"
+                                          : "disabled opacity-25 hover:text-inherit"
+                                      }  px-2 hover:text-amaranth-600`}
+                                      title="Download file"
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="w-5 h-5 text-amaranth-600"
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-.53 14.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V8.25a.75.75 0 00-1.5 0v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z"
+                                          clip-rule="evenodd"
+                                        />
+                                      </svg>
+                                    </button>
+                                  )}
+                                </div>
+                              )}
 
-                            {(row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
-                              row.TEMPLATE_NAME === "advertiser_match") &&
-                            user.role &&
-                            user?.role?.includes("Publisher") &&
-                            user?.role?.includes("Consumer") ? (
-                              <>
-                                {uploading &&
-                                row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                  "in progress" ? (
-                                  <div>
-                                    <CircularProgress
-                                      style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        color: "amaranth-600",
-                                      }}
-                                      title="Wait uploading is going on"
-                                    />
-                                  </div>
-                                ) : (
+                              {(row.TEMPLATE_NAME === "ADVERTISER MATCH" ||
+                                row.TEMPLATE_NAME === "advertiser_match") &&
+                              user.role &&
+                              user?.role?.includes("Publisher") &&
+                              user?.role?.includes("Consumer") ? (
+                                <>
+                                  {uploading &&
+                                  row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                    "in progress" ? (
+                                    <div>
+                                      <CircularProgress
+                                        style={{
+                                          width: "16px",
+                                          height: "16px",
+                                          color: "amaranth-600",
+                                        }}
+                                        title="Wait uploading is going on"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={() =>
+                                        handleUploadData(row.RUN_ID)
+                                      }
+                                      disabled={
+                                        row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                          "true" &&
+                                        row.STATUS?.toLowerCase() ===
+                                          "completed"
+                                      }
+                                      className={`${
+                                        row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
+                                          "true" &&
+                                        row.STATUS?.toLowerCase() ===
+                                          "completed"
+                                          ? "opacity-1 hover:text-inherit"
+                                          : "disabled opacity-25 hover:text-inherit"
+                                      }  px-2 hover:text-amaranth-600`}
+                                      title={
+                                        row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
+                                        "true"
+                                          ? "Already Uploaded into client ecospace"
+                                          : "Upload match records into client ecospace"
+                                      }
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="w-5 h-5 text-amaranth-600"
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z"
+                                          clip-rule="evenodd"
+                                        />
+                                      </svg>
+                                    </button>
+                                  )}
                                   <button
-                                    onClick={() => handleUploadData(row.RUN_ID)}
+                                    onClick={() =>
+                                      showAnalyticsPage(row.RUN_ID)
+                                    }
                                     disabled={
-                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                        "true" &&
-                                      row.STATUS?.toLowerCase() === "completed"
+                                      row.STATUS.toLowerCase() !== "completed"
                                     }
                                     className={`${
-                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() !==
-                                        "true" &&
-                                      row.STATUS?.toLowerCase() === "completed"
+                                      row.STATUS.toLowerCase() === "completed"
                                         ? "opacity-1 hover:text-inherit"
                                         : "disabled opacity-25 hover:text-inherit"
                                     }  px-2 hover:text-amaranth-600`}
-                                    title={
-                                      row.UPL_INTO_CLI_SPACE?.toLowerCase() ===
-                                      "true"
-                                        ? "Already Uploaded into client ecospace"
-                                        : "Upload match records into client ecospace"
-                                    }
+                                    title="Show Analytics"
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -647,98 +719,86 @@ const QueryStatus = () => {
                                     >
                                       <path
                                         fill-rule="evenodd"
-                                        d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z"
+                                        d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"
+                                        clip-rule="evenodd"
+                                      />
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"
                                         clip-rule="evenodd"
                                       />
                                     </svg>
                                   </button>
-                                )}
-                                <button
-                                  onClick={() => showAnalyticsPage(row.RUN_ID)}
-                                  disabled={
-                                    row.STATUS.toLowerCase() !== "completed"
-                                  }
-                                  className={`${
-                                    row.STATUS.toLowerCase() === "completed"
-                                      ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-25 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600`}
-                                  title="Show Analytics"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    class="w-5 h-5 text-amaranth-600"
+                                  <button
+                                    onClick={() =>
+                                      handleClickMetaAds(
+                                        row.RUN_ID,
+                                        row.TEMPLATE_NAME
+                                      )
+                                    }
+                                    disabled={
+                                      row.STATUS.toLowerCase() !== "completed"
+                                    }
+                                    className={`${
+                                      row.STATUS.toLowerCase() === "completed"
+                                        ? "opacity-1 hover:text-inherit"
+                                        : "disabled opacity-25 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600 w-8`}
+                                    title="Run Ad campaign on Meta ADs"
                                   >
-                                    <path
-                                      fill-rule="evenodd"
-                                      d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"
-                                      clip-rule="evenodd"
-                                    />
-                                    <path
-                                      fill-rule="evenodd"
-                                      d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"
-                                      clip-rule="evenodd"
-                                    />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleClickMetaAds(
-                                      row.RUN_ID,
-                                      row.TEMPLATE_NAME
-                                    )
-                                  }
-                                  disabled={
-                                    row.STATUS.toLowerCase() !== "completed"
-                                  }
-                                  className={`${
-                                    row.STATUS.toLowerCase() === "completed"
-                                      ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-25 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600 w-8`}
-                                  title="Run Ad campaign on Meta ADs"
-                                >
-                                  <img src={meta} alt="" />
-                                </button>
-                                <button
-                                  // onClick={() => googleAd(row.RUN_ID)}
-                                  disabled={
-                                    row.STATUS.toLowerCase() !== "completed"
-                                  }
-                                  className={`${
-                                    row.STATUS.toLowerCase() === "completed"
-                                      ? "opacity-1 hover:text-inherit"
-                                      : "disabled opacity-25 hover:text-inherit"
-                                  }  px-2 hover:text-amaranth-600 w-8`}
-                                  title="Run Ad Campaign on Google ads"
-                                >
-                                  <img src={google} alt="" />
-                                </button>
-                              </>
-                            ) : null}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-amaranth-900" align="center">
-                          {handleDate(row.RUN_ID)}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          component="div"
-          count={data?.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </div>
+                                    <img src={meta} alt="" />
+                                  </button>
+                                  <button
+                                    // onClick={() => googleAd(row.RUN_ID)}
+                                    disabled={
+                                      row.STATUS.toLowerCase() !== "completed"
+                                    }
+                                    className={`${
+                                      row.STATUS.toLowerCase() === "completed"
+                                        ? "opacity-1 hover:text-inherit"
+                                        : "disabled opacity-25 hover:text-inherit"
+                                    }  px-2 hover:text-amaranth-600 w-8`}
+                                    title="Run Ad Campaign on Google ads"
+                                  >
+                                    <img src={google} alt="" />
+                                  </button>
+                                </>
+                              ) : null}
+                            </div>
+                          </TableCell>
+                          <TableCell
+                            className="text-amaranth-900"
+                            align="center"
+                          >
+                            {handleDate(row.RUN_ID)}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={data?.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
+      ) : (
+        <div className="flex justify-center mt-8 ">
+          <CircularProgress
+            style={{
+              width: "48px",
+              height: "48px",
+              color: "#234885",
+            }}
+          />
+        </div>
+      )}
       <Modal
         open={viewTemplate.openModal}
         onClose={handleResultModalClose}
