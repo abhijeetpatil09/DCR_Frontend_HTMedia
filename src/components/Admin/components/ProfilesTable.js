@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Switch from "@mui/material/Switch";
 import { Box, CircularProgress, Modal } from "@mui/material";
 
@@ -12,8 +11,6 @@ import {
   TableRow,
 } from "@mui/material";
 import API from "../../../apiServices/api";
-
-const baseURL = process.env.REACT_APP_BASE_URL;
 
 const ProfileTable = ({ user, UserRole }) => {
   const [data, setData] = useState([]);
@@ -62,64 +59,27 @@ const ProfileTable = ({ user, UserRole }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, UserRole]);
 
-  const handleConsumerRole = (status, userName) => {
+  const handleRole = async (status, userName, role) => {
     setLoading(true);
     setDisableTemplate(!disableTemplate);
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query: `update DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.CONSUMER_ATTRIBUTES set CONSUMER = '${status}' where user= '${userName}';`,
-        },
-      })
-      .then((response) => {
-        if (response?.data?.data) {
-          fetchProfileTable();
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.log("In API catch", error);
-      });
-  };
 
-  const handlePublisherRole = (status, userName) => {
-    setLoading(true);
-    setDisableTemplate(!disableTemplate);
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query: `update DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.CONSUMER_ATTRIBUTES set PUBLISHER = '${status}' where user= '${userName}';`,
-        },
-      })
-      .then((response) => {
-        if (response?.data?.data) {
-          fetchProfileTable();
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.log("In API catch", error);
-      });
-  };
-
-  const handleAdminRole = (status, userName) => {
-    setLoading(true);
-    setDisableTemplate(!disableTemplate);
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query: `update DCR_SAMP_PROVIDER_DB.SHARED_SCHEMA.CONSUMER_ATTRIBUTES set ADMIN = '${status}' where user= '${userName}';`,
-        },
-      })
-      .then((response) => {
-        if (response?.data?.data) {
-          fetchProfileTable();
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.log("In API catch", error);
-      });
+    const payload = {
+      account_name: user?.Consumer,
+      provider_database_name: user?.providerDBName,
+      role: role,
+      status: status,
+      userName: userName,
+    };
+    try {
+      const response = await API.updateUserProfile(payload);
+      if (response.status === 200 && response?.data?.data) {
+        fetchProfileTable();
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoadingTable(false);
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -217,11 +177,12 @@ const ProfileTable = ({ user, UserRole }) => {
                           <Switch
                             checked={row.CONSUMER.toLowerCase() === "true"}
                             onChange={() =>
-                              handleConsumerRole(
+                              handleRole(
                                 row.CONSUMER.toLowerCase() === "true"
                                   ? "FALSE"
                                   : "TRUE",
-                                row.USER
+                                row.USER,
+                                "CONSUMER"
                               )
                             }
                             inputProps={{ "aria-label": "controlled" }}
@@ -251,11 +212,12 @@ const ProfileTable = ({ user, UserRole }) => {
                           <Switch
                             checked={row.PUBLISHER.toLowerCase() === "true"}
                             onChange={() =>
-                              handlePublisherRole(
+                              handleRole(
                                 row.PUBLISHER.toLowerCase() === "true"
                                   ? "FALSE"
                                   : "TRUE",
-                                row.USER
+                                row.USER,
+                                "PUBLISHER"
                               )
                             }
                             inputProps={{ "aria-label": "controlled" }}
@@ -307,11 +269,12 @@ const ProfileTable = ({ user, UserRole }) => {
                           <Switch
                             checked={row.ADMIN.toLowerCase() === "true"}
                             onChange={() =>
-                              handleAdminRole(
+                              handleRole(
                                 row.ADMIN.toLowerCase() === "true"
                                   ? "FALSE"
                                   : "TRUE",
-                                row.USER
+                                row.USER,
+                                "ADMIN"
                               )
                             }
                             inputProps={{ "aria-label": "controlled" }}
@@ -529,7 +492,7 @@ const ProfileTable = ({ user, UserRole }) => {
               color: "#234885",
             }}
           />
-         </div>
+        </div>
       )}
       <Modal
         open={disableTemplate}

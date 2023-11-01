@@ -345,6 +345,8 @@ const Enrichment = () => {
 
   const callByPassAPI = () => {
     setByPassAPICalled(true);
+    handleClose();
+
     setTimeout(async () => {
       const payload = {
         account_name: user?.Consumer,
@@ -374,10 +376,6 @@ const Enrichment = () => {
           })
         );
       }
-
-      setTimeout(() => {
-        handleClose();
-      }, 2000);
     }, 2000);
   };
 
@@ -385,13 +383,13 @@ const Enrichment = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // handleClose();
 
     setLoading(true);
     setError1("");
 
-    const delimiter = "&";
-    const selectedColumns = `#${formData.Column_Names?.join(delimiter)}#`;
+    // const delimiter = "&";
+    // const selectedColumns = `#${formData.Column_Names?.join(delimiter)}#`;
+    const selectedColumns = `${formData.Column_Names?.join(",")}`;
 
     if (byPassAPICalled) {
       toast.error(
