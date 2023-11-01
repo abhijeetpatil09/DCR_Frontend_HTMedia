@@ -524,72 +524,73 @@ const MatchRate = () => {
   };
 
   const callByPassUpload = () => {
-    setTimeout(() => {
+    setTimeout( async () => {
       fetchMainTable();
-      axios
-        .get(`${baseURL}/${user?.name}/procedure`, {
-          params: {
-            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
-          },
-        })
-        .then((response) => {
-          if (response) {
-            fetchMainTable();
-            setUploading(false);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+      const payload ={
+        account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
+      };
+      try{
+        
+        const response = await API.callMatchedDataProcedure(payload);
+        if (response.status === 200) {
           fetchMainTable();
           setUploading(false);
-        });
-    }, 2000);
+        }
+      }
+      catch(error){console.log(error); fetchMainTable();
+        setUploading(false);};
+      }, 2000);
   };
 
-  const handleUploadData = async (runId) => {
+const handleUploadData = async (runId) => {
     setUploading(true);
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
-        },
-      })
-      .then((response) => {
-        if (response?.data?.data) {
-          let data = response?.data?.data?.[0];
-          axios
-            .get(`${baseURL}/${user?.name}`, {
-              params: {
-                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
-              },
-            })
-            .then((response) => {
-              if (response) {
-                axios
-                  .get(`${baseURL}/${user?.name}`, {
-                    params: {
-                      query: `update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';`,
-                    },
-                  })
-                  .then((response) => {
-                    if (response) {
-                      fetchMainTable();
-                      callByPassUpload();
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+const payload ={
+  account_name: user?.Consumer,
+  db_name: user?.consumerDBName,
+  run_id: runId,
+};
+try{
+  const response = await API.queryRequests(payload);
+  if (response.status === 200 && response?.data?.data) {
+    let data = response?.data?.data?.[0];
+     const payload = {
+      account_name: user?.Consumer,
+      template_name: formData?.Query_Name,
+      provider_name: formData?.Provider_Name,
+      columns: formData?.Column_Names,
+      consumer_name: formData?.Consumer_Name,
+      run_id: runId,
+      file_name: formData?.File_Name,
+      attribute_name: formData?.Match_Attribute,
+      attribute_value: formData?.Match_Attribute_Value,
+      consumer_database_name: user?.consumerDBName,
+      tag: formData?.attachment_type,
+         };
+    try{
+      const response =await API.insert_requestUplToClientSpace(payload);
+      if (response.status === 200) {
+        const payload ={
+          account_name: user?.Consumer,
+          db_name: user?.consumerDBName,
+          run_id: runId,
+        };
+        try { 
+          const response = await API.updateDashboardTableStatus(payload);
+          if (response.status === 200) {
+            fetchMainTable();
+            callByPassUpload();
+          }
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        catch (error) {console.log(error);}
+
+    }
+  }
+    catch (error){console.log(error);}
+
+} }
+catch (error) {console.log(error);}
+ 
   };
 
   const downloadNewFile = () => {

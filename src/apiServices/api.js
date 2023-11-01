@@ -55,6 +55,10 @@ const getAllProviders = (account_name) =>
 
 // Match Rate and Enrichment common API
 
+const enrichmentCustomerSampleView = (payload) =>
+  api.get(
+    `/enrichment_customer_sample_view?account_name=${payload.account_name}&consumer_database_name1=${payload.db_name}`
+  );
 const getAllProvidersList = (payload) =>
   api.get(
     `/provider_list?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}`
@@ -117,7 +121,26 @@ const viewRequestDataMatchRate = (payload) =>
   api.get(
     `/view_request_data?account_name=${payload.account_name}&templateName=${payload.templateName}&run_id=${payload.run_id}&consumer_database_name=${payload.consumer_database_name}`
   );
+ 
+  const queryRequests = (payload) =>
+  api.get(
+    `/Query_Requests?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&run_id=${payload.run_id}`
+  ); 
+  
+const insert_requestUplToClientSpace = (payload) =>
+api.get(
+  `/insert_request_upl_to_client_space?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}`
+);
 
+const updateDashboardTableStatus = (payload) =>
+api.get(
+  `/update_dashboard_table_status?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&run_id=${payload.run_id}`
+);
+
+const callMatchedDataProcedure = (payload) =>
+api.get(
+  `/call_matched_data_procedure?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}`
+);
 // Enrichment Page API's
 
 const getAllowedColumns = (payload) =>
@@ -267,6 +290,7 @@ const API = {
   fetchData,
   viewSampleData,
   downloadFileAPI,
+  enrichmentCustomerSampleView,
 
   //Match Rate
   getTemplateStatus,
@@ -278,6 +302,10 @@ const API = {
   insertMatchRateRequest,
   insertRunId,
   viewRequestDataMatchRate,
+  queryRequests,
+  insert_requestUplToClientSpace,
+  updateDashboardTableStatus,
+  callMatchedDataProcedure,
 
   // Enrichment
   getAllowedColumns,

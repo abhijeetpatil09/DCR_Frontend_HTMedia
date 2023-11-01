@@ -279,10 +279,14 @@ const Enrichment = () => {
       !isObjectEmpty(SampleFileData)
     ) {
       setOpenSampleData(true);
+      console.log("handleViewSample if block ");
     } else {
-      const payload = {};
+      const payload = {
+        account_name: user?.name,
+        db_name: user?.consumerDBName,
+      };
       try {
-        const response = await API.demo(payload);
+        const response = await API.enrichmentCustomerSampleView(payload);
         // select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;
         if (response.status === 200 && response?.data?.data) {
           let head = [];
