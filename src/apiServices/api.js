@@ -210,7 +210,7 @@ const fetchUserProfileIntegration = (payload) =>
   api.get(`/fetch_user_profile?account_name=${payload.account_name}`);
 const updateUserProfile = (payload) =>
   api.get(
-    `/update_user_profile?account_name=${payload.account_name}&role=${payload.role}&status=${payload.status}&userName=${payload.user_name}`
+    `/admin_console_update_profile?account_name=${payload.account_name}&role=${payload.role}&status=${payload.status}&userName=${payload.userName}&provider_database_name=${payload.provider_database_name}`
   );
 const getConsumerName = (payload) =>
   api.get(
