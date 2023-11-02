@@ -161,6 +161,38 @@ const insertEnrichmentRequest = (payload) =>
     `/insert_request_data_enrichment?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}`
   );
 
+//campaign API's
+
+const fetchingLinkedinCampaignGroups = (payload) =>
+  api.get(
+    `/fetching_linkedin_campaign_groups?account_name=${payload.account_name}`
+  );
+
+const fetchingLinkedinCampaign = (payload) =>
+  api.get(
+    `/fetching_linkedin_campaign?account_name=${payload.account_name}&campaign_group_id=${payload.campaign_group_id}`
+  );
+
+const uploadLinkedinAudience = (payload) =>
+  api.get(
+    `/upload_linkedin_audience?account_name=${payload.account_name}&templateName=${payload.template_name}&linkedin_account_name=${payload.linkedin_account_name}&run_id=${payload.run_id}&consumer_database_name=${payload.consumer_database_name}`
+  );
+
+const updateCampaignWithAudienceList = (payload) =>
+  api.get(
+    `/update_campaign_with_audience_list?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}&run_id=${payload.run_id}`
+  );
+  
+const activateLinkedinCampaign = (payload) =>
+  api.get(
+    `/activate_linkedin_campaign?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}`
+  );
+  
+const deActivateLinkedinCampaign = (payload) =>
+  api.get(
+    `/de_activate_linkedin_campaign?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}`
+  );
+
 // Status page API's
 
 const getAllRequestData = (payload) =>
@@ -343,6 +375,16 @@ const API = {
   uploadAudience,
   publishMetaAds,
   stopMetaAds,
+
+  //campaign API's
+
+  fetchingLinkedinCampaignGroups,
+  fetchingLinkedinCampaign,
+  uploadLinkedinAudience,
+  updateCampaignWithAudienceList,
+  activateLinkedinCampaign,
+  deActivateLinkedinCampaign,
+
 };
 
 export default API;

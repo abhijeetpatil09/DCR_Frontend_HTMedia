@@ -170,7 +170,7 @@ const MatchRate = () => {
         const response = await API.getAllProvidersList(payload);
         if (response.status === 200 && response?.data?.data) {
           let provider_name = response?.data?.data?.[0];
-          setFormData({ ...formData, Provider_Name: provider_name.PROVIDER });
+          setFormData({ ...formData, Provider_Name: provider_name?.PROVIDER });
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -438,7 +438,6 @@ const MatchRate = () => {
                   consumer_database_name: user?.consumerDBName,
                   tag: formData?.attachment_type,
                 };
-
                 const response = await API.insertMatchRateRequest(payload);
                 if (response.status === 200) {
                   try {
@@ -558,16 +557,18 @@ try{
       account_name: user?.Consumer,
       template_name: formData?.Query_Name,
       provider_name: formData?.Provider_Name,
-      columns: formData?.Column_Names,
+      columns: data?.COLUMNS,
       consumer_name: formData?.Consumer_Name,
       run_id: runId,
-      file_name: formData?.File_Name,
-      attribute_name: formData?.Match_Attribute,
-      attribute_value: formData?.Match_Attribute_Value,
+      file_name: data?.FILE_NAME,
+      attribute_name: data?.ATTRIBUTE_NAME,
+      attribute_value: data?.ATTRIBUTE_VALUE,
       consumer_database_name: user?.consumerDBName,
       tag: formData?.attachment_type,
          };
     try{
+      console.log(formData?.Column_Names);
+
       const response =await API.insert_requestUplToClientSpace(payload);
       if (response.status === 200) {
         const payload ={
