@@ -19,6 +19,7 @@ import "intro.js/introjs.css";
 import meta from "../../Assets/META.svg";
 import google from "../../Assets/GoogleAd.svg";
 import ModalForMetaAds from "./ModalForMetaAds";
+import ModalForLinkedIn from "./ModalForLinkedIn";
 import API from "../../apiServices/api";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
@@ -127,6 +128,14 @@ const MatchRate = () => {
   };
 
   const [showMetaAds, setShowMetaAds] = useState({
+    openModal: false,
+    data: {
+      runId: "",
+      template_name: "",
+      campaign: [],
+    },
+  });
+  const [showLinkedInAds, setShowLinkedInAds] = useState({
     openModal: false,
     data: {
       runId: "",
@@ -754,6 +763,18 @@ catch (error) {console.log(error);}
     });
   };
 
+  const handleClickLinkedInAds = (runId, template_name) => {
+    const templateName = template_name.replace(/ /g, "_");
+    setShowLinkedInAds({
+      ...showLinkedInAds,
+      openModal: true,
+      data: {
+        runId: runId,
+        template_name: templateName,
+      },
+    });
+  };
+
   return (
     <>
       <Steps
@@ -1051,6 +1072,25 @@ catch (error) {console.log(error);}
                           >
                             <img src={google} alt="" />
                           </button>
+                          {/* LinkedInButton Added */}
+                          <button
+                            onClick={() =>
+                              handleClickLinkedInAds(
+                                item.RUN_ID,
+                                item.TEMPLATE_NAME
+                              )
+                            }
+                            disabled={item.STATUS.toLowerCase() !== "completed"}
+                            className={`${
+                              item.STATUS.toLowerCase() === "completed"
+                                ? "opacity-1 hover:text-inherit"
+                                : "disabled opacity-25 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600 w-8`}
+                            title="Run Ad campaign on LinkedIn ADs"
+                          >
+                            <img src={meta} alt="" />
+                          </button>
+
                         </>
                       ) : null}
                     </div>
@@ -1518,6 +1558,22 @@ catch (error) {console.log(error);}
               })
             }
             data={showMetaAds.data}
+          />
+        ) : null}
+        
+         {/* Show LinkedIn ad's modal */}
+         {showLinkedInAds.openModal ? (
+          <ModalForLinkedIn
+            open={showLinkedInAds.openModal}
+            handleClose={() =>
+              setShowLinkedInAds({
+                ...showLinkedInAds,
+                openModal: false,
+                runId: "",
+                template_name: "",
+              })
+            }
+            data={showLinkedInAds.data}
           />
         ) : null}
       </div>
