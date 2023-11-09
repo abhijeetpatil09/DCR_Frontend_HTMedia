@@ -279,7 +279,6 @@ const Enrichment = () => {
       !isObjectEmpty(SampleFileData)
     ) {
       setOpenSampleData(true);
-      console.log("handleViewSample if block ");
     } else {
       const payload = {
         account_name: user?.name,

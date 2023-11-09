@@ -29,10 +29,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const [selectedCampaignId, setSelectedCampaignId] = useState("");
   const [selectedCreativeAdId, setSelectedCreativeAdId] = useState("");
 
-  const [campaignData, setCampaignData] = useState({
-    id: "",
-    name: "",
-  });
+  const [campaignData, setCampaignData] = useState(initialState);
   const [campaignData1, setCampaignData1] = useState({});
   const [campaignData2, setCampaignData2] = useState({});
 
@@ -49,13 +46,17 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const user = state?.user;
 
   const handleCampaignGroup = (event) => {
-    const selectedObject = campaignGroup.find((item) => item.name === event.target.value);
+    const selectedObject = campaignGroup.find(
+      (item) => item.name === event.target.value
+    );
     setCampaignData(selectedObject);
     setSelectedCampaignGroupId(selectedObject.id);
   };
 
   const handleCampaign = (event) => {
-    const selectedObject = campaignList.find((item) => item.name === event.target.value);
+    const selectedObject = campaignList.find(
+      (item) => item.name === event.target.value
+    );
     setCampaignData1(selectedObject);
     console.log(selectedObject);
     setSelectedCampaignId(selectedObject.id);
@@ -65,7 +66,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
 
   const handleCreativeAd = (event) => {
     setSelectedCreativeAdId(event.target.value);
-    const selectedObject = creativeAds.find((item) => item.name === event.target.value);
+    const selectedObject = creativeAds.find(
+      (item) => item.name === event.target.value
+    );
     setCampaignData2(selectedObject);
     console.log(selectedObject);
     setSelectedCampaignId(selectedObject.id);
@@ -112,6 +115,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       };
       campaignListFun();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCampaignGroupId, user?.Consumer]);
 
   useEffect(() => {
@@ -134,7 +138,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       };
       campaignAdFun();
     }
-  }, [selectedCampaignId]);
+  }, [selectedCampaignId, user?.Consumer]);
 
   const handleUploadAudience = async () => {
     setLoader({ ...loader, audienceLoader: true });
@@ -205,7 +209,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
           const result = response?.data?.data[0];
           setLoader({ ...loader, activateLoader: false });
           setButtonStatus("Activate");
-          setStatus(`${result.STATUS} at ${handleDate(result?.DEACTIVATED_TS)}`);
+          setStatus(
+            `${result.STATUS} at ${handleDate(result?.DEACTIVATED_TS)}`
+          );
         } else {
           setLoader({ ...loader, activateLoader: false });
         }
@@ -223,7 +229,10 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style} className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg">
+      <Box
+        sx={style}
+        className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg"
+      >
         <div className="text-amaranth-900 text-xl font-bold">LinkedIn Ad's</div>
         <div className="w-full mt-2 pb-21 flex flex-col">
           <label className="block text-sm font-medium leading-6 text-amaranth-600">
@@ -263,14 +272,14 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
         >
           <option value="">Please select</option>
           {campaignList && campaignList.length > 0 ? (
-    campaignList.map((item) => (
-      <option value={item.name} key={item.id}>
+            campaignList.map((item) => (
+              <option value={item.name} key={item.id}>
                 {item.name}
               </option>
-    ))
-  ) : (
-    <option value="">No campaigns available</option>
-  )}
+            ))
+          ) : (
+            <option value="">No campaigns available</option>
+          )}
         </select>
         {campaignData1.id !== "" && (
           <div className="w-full pb-21 flex flex-col">
@@ -335,7 +344,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
             {!loader.activateLoader ? (
               <button
                 onClick={() =>
-                  handleActivate(buttonStatus === "Activate" ? "Activate" : "De-activate")
+                  handleActivate(
+                    buttonStatus === "Activate" ? "Activate" : "De-activate"
+                  )
                 }
                 className="bg-amaranth-600 opacity-1 flex items-center px-4 py-2 text-sm text-white rounded-md"
               >

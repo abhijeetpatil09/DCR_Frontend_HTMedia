@@ -17,7 +17,7 @@ import CommonModal from "../CommonComponent/Modal";
 import SampTemp from "../../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
 import meta from "../../Assets/META.svg";
-import Linkedin from "../../Assets/Linkedin.png";
+// import Linkedin from "../../Assets/Linkedin.png";
 import google from "../../Assets/GoogleAd.svg";
 import ModalForMetaAds from "./ModalForMetaAds";
 import ModalForLinkedIn from "./ModalForLinkedIn";
@@ -534,75 +534,77 @@ const MatchRate = () => {
   };
 
   const callByPassUpload = () => {
-    setTimeout( async () => {
+    setTimeout(async () => {
       fetchMainTable();
-      const payload ={
+      const payload = {
         account_name: user?.Consumer,
         db_name: user?.consumerDBName,
       };
-      try{
-        
+      try {
         const response = await API.callMatchedDataProcedure(payload);
         if (response.status === 200) {
           fetchMainTable();
           setUploading(false);
         }
+      } catch (error) {
+        console.log(error);
+        fetchMainTable();
+        setUploading(false);
       }
-      catch(error){console.log(error); fetchMainTable();
-        setUploading(false);};
-      }, 2000);
+    }, 2000);
   };
 
-const handleUploadData = async (runId) => {
+  const handleUploadData = async (runId) => {
     setUploading(true);
-const payload ={
-  account_name: user?.Consumer,
-  db_name: user?.consumerDBName,
-  run_id: runId,
-};
-try{
-  const response = await API.queryRequests(payload);
-  if (response.status === 200 && response?.data?.data) {
-    let data = response?.data?.data?.[0];
-     const payload = {
+    const payload = {
       account_name: user?.Consumer,
-      template_name: formData?.Query_Name,
-      provider_name: formData?.Provider_Name,
-      columns: data?.COLUMNS,
-      consumer_name: formData?.Consumer_Name,
+      db_name: user?.consumerDBName,
       run_id: runId,
-      file_name: data?.FILE_NAME,
-      attribute_name: data?.ATTRIBUTE_NAME,
-      attribute_value: data?.ATTRIBUTE_VALUE,
-      consumer_database_name: user?.consumerDBName,
-      tag: formData?.attachment_type,
-         };
-    try{
-      console.log(formData?.Column_Names);
-
-      const response =await API.insert_requestUplToClientSpace(payload);
-      if (response.status === 200) {
-        const payload ={
+    };
+    try {
+      const response = await API.queryRequests(payload);
+      if (response.status === 200 && response?.data?.data) {
+        let data = response?.data?.data?.[0];
+        const payload = {
           account_name: user?.Consumer,
-          db_name: user?.consumerDBName,
+          template_name: formData?.Query_Name,
+          provider_name: formData?.Provider_Name,
+          columns: data?.COLUMNS,
+          consumer_name: formData?.Consumer_Name,
           run_id: runId,
+          file_name: data?.FILE_NAME,
+          attribute_name: data?.ATTRIBUTE_NAME,
+          attribute_value: data?.ATTRIBUTE_VALUE,
+          consumer_database_name: user?.consumerDBName,
+          tag: formData?.attachment_type,
         };
-        try { 
-          const response = await API.updateDashboardTableStatus(payload);
+        try {
+          console.log(formData?.Column_Names);
+
+          const response = await API.insert_requestUplToClientSpace(payload);
           if (response.status === 200) {
-            fetchMainTable();
-            callByPassUpload();
+            const payload = {
+              account_name: user?.Consumer,
+              db_name: user?.consumerDBName,
+              run_id: runId,
+            };
+            try {
+              const response = await API.updateDashboardTableStatus(payload);
+              if (response.status === 200) {
+                fetchMainTable();
+                callByPassUpload();
+              }
+            } catch (error) {
+              console.log(error);
+            }
           }
+        } catch (error) {
+          console.log(error);
         }
-        catch (error) {console.log(error);}
-
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
-    catch (error){console.log(error);}
-
-} }
-catch (error) {console.log(error);}
- 
   };
 
   const downloadNewFile = () => {
@@ -1090,9 +1092,9 @@ catch (error) {console.log(error);}
                             }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on LinkedIn ADs"
                           >
-                            <img src={Linkedin} alt="" />
+                            <LinkedIn className="text-amaranth-600" />
+                            {/* <img src={Linkedin} alt="" /> */}
                           </button>
-
                         </>
                       ) : null}
                     </div>
@@ -1563,8 +1565,8 @@ catch (error) {console.log(error);}
           />
         ) : null}
 
-         {/* Show LinkedIn ad's modal */}
-         {showLinkedInAds.openModal ? (
+        {/* Show LinkedIn ad's modal */}
+        {showLinkedInAds.openModal ? (
           <ModalForLinkedIn
             open={showLinkedInAds.openModal}
             handleClose={() =>
