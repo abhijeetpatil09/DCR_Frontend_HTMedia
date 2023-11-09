@@ -173,9 +173,14 @@ const fetchingLinkedinCampaign = (payload) =>
     `/fetching_linkedin_campaign?account_name=${payload.account_name}&campaign_group_id=${payload.campaign_group_id}`
   );
 
+ const fetchingLinkedinCreativeAd = (payload) =>
+  api.get(
+    `/fetching_linkedin_creative_ad?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}`
+  );
+
 const uploadLinkedinAudience = (payload) =>
   api.get(
-    `/upload_linkedin_audience?account_name=${payload.account_name}&templateName=${payload.template_name}&linkedin_account_name=${payload.linkedin_account_name}&run_id=${payload.run_id}&consumer_database_name=${payload.consumer_database_name}`
+    `/upload_linkedin_audience?account_name=${payload.account_name}&templateName=${payload.templateName}&linkedin_account_name=${payload.linkedin_account_name}&run_id=${payload.run_id}&consumer_database_name=${payload.consumer_database_name}`
   );
 
 const updateCampaignWithAudienceList = (payload) =>
@@ -380,6 +385,7 @@ const API = {
 
   fetchingLinkedinCampaignGroups,
   fetchingLinkedinCampaign,
+  fetchingLinkedinCreativeAd,
   uploadLinkedinAudience,
   updateCampaignWithAudienceList,
   activateLinkedinCampaign,

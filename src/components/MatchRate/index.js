@@ -17,10 +17,12 @@ import CommonModal from "../CommonComponent/Modal";
 import SampTemp from "../../Assets/CSVTemplates/Sample_template.xlsx";
 import "intro.js/introjs.css";
 import meta from "../../Assets/META.svg";
+import Linkedin from "../../Assets/Linkedin.png";
 import google from "../../Assets/GoogleAd.svg";
 import ModalForMetaAds from "./ModalForMetaAds";
 import ModalForLinkedIn from "./ModalForLinkedIn";
 import API from "../../apiServices/api";
+import { LinkedIn } from "@material-ui/icons";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const nodeURL = process.env.REACT_APP_NODE_URL;
@@ -1088,7 +1090,7 @@ catch (error) {console.log(error);}
                             }  px-2 hover:text-amaranth-600 w-8`}
                             title="Run Ad campaign on LinkedIn ADs"
                           >
-                            <img src={meta} alt="" />
+                            <img src={Linkedin} alt="" />
                           </button>
 
                         </>
@@ -1560,7 +1562,7 @@ catch (error) {console.log(error);}
             data={showMetaAds.data}
           />
         ) : null}
-        
+
          {/* Show LinkedIn ad's modal */}
          {showLinkedInAds.openModal ? (
           <ModalForLinkedIn

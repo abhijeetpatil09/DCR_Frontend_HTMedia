@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Modal } from "@mui/material";
 import { useSelector } from "react-redux";
 import API from "../../apiServices/api";
-
 import { handleDate } from "../../utils/commonFunctions";
 
-// Modal style
 const style = {
   position: "absolute",
   top: "50%",
@@ -23,117 +21,120 @@ const initialState = {
 };
 
 const ModalForLinkedIn = ({ open, handleClose, data }) => {
-  const state = useSelector((state) => state);
-  const user = state && state.user;
-
   const [campaignGroup, setCampaignGroup] = useState([]);
   const [campaignList, setCampaignList] = useState([]);
+  const [creativeAds, setCreativeAds] = useState([]);
 
-  const [campaignData, setCampaignData] = useState(initialState);
-  const [campaignData1, setCampaignData1] = useState(initialState);
-  const [campaignData2, setCampaignData2] = useState(initialState);
+  const [selectedCampaignGroupId, setSelectedCampaignGroupId] = useState("");
+  const [selectedCampaignId, setSelectedCampaignId] = useState("");
+  const [selectedCreativeAdId, setSelectedCreativeAdId] = useState("");
+
+  const [campaignData, setCampaignData] = useState({
+    id: "",
+    name: "",
+  });
+  const [campaignData1, setCampaignData1] = useState({});
+  const [campaignData2, setCampaignData2] = useState({});
 
   const [status, setStatus] = useState("");
   const [audienceUploaded, setAudienceUploaded] = useState(false);
-
   const [buttonStatus, setButtonStatus] = useState("Activate");
+
   const [loader, setLoader] = useState({
     audienceLoader: false,
     activateLoader: false,
   });
 
+  const state = useSelector((state) => state);
+  const user = state?.user;
+
   const handleCampaignGroup = (event) => {
-    let selectedObject = initialState;
-    if (event.target.value !== "") {
-      selectedObject = campaignGroup?.find(
-        (item) => item?.name === event.target.value
-      );
-    }
+    const selectedObject = campaignGroup.find((item) => item.name === event.target.value);
     setCampaignData(selectedObject);
-  };
-  const handleCampaign = (event) => {
-    let selectedObject = initialState;
-    if (event.target.value !== "") {
-      selectedObject = campaignGroup?.find(
-        (item) => item?.name === event.target.value
-      );
-    }
-    setCampaignData1(selectedObject);
+    setSelectedCampaignGroupId(selectedObject.id);
   };
 
-  const handleCampaignAd = (event) => {
-    let selectedObject = initialState;
-    if (event.target.value !== "") {
-      selectedObject = campaignGroup?.find(
-        (item) => item?.name === event.target.value
-      );
-    }
+  const handleCampaign = (event) => {
+    const selectedObject = campaignList.find((item) => item.name === event.target.value);
+    setCampaignData1(selectedObject);
+    console.log(selectedObject);
+    setSelectedCampaignId(selectedObject.id);
+    console.log(selectedCampaignId);
+    setSelectedCreativeAdId("");
+  };
+
+  const handleCreativeAd = (event) => {
+    setSelectedCreativeAdId(event.target.value);
+    const selectedObject = creativeAds.find((item) => item.name === event.target.value);
     setCampaignData2(selectedObject);
+    console.log(selectedObject);
+    setSelectedCampaignId(selectedObject.id);
+    console.log(selectedCampaignId);
+    setSelectedCreativeAdId("");
   };
 
   useEffect(() => {
-    const fetch_campaigns = async () => {
-      const payload = {
-        account_name: user?.Consumer,
-        run_id: data?.runId,
+    if (campaignData.id === "") {
+      const campaignGroupList = async () => {
+        const payload = {
+          account_name: user?.Consumer,
+          run_id: data?.runId,
+        };
+        try {
+          const response = await API.fetchingLinkedinCampaignGroups(payload);
+          if (response?.status === 200 && response?.data?.data) {
+            setCampaignGroup(response?.data?.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       };
-      try {
-        const response = await API.fetchingLinkedinCampaignGroups(payload);
-        if (response.status === 200 && response?.data?.data) {
-          let fetchResult = response?.data?.data;
-          setCampaignGroup(fetchResult);
-           const payload ={
-            account_name: user?.Consumer,
-            campaign_group_id: campaignGroup?.id,
-           };
-         try{
+      campaignGroupList();
+    }
+  }, [campaignData.id, user?.Consumer, data?.runId]);
+
+  useEffect(() => {
+    if (selectedCampaignGroupId !== "") {
+      const campaignListFun = async () => {
+        const payload = {
+          account_name: user?.Consumer,
+          campaign_group_id: selectedCampaignGroupId,
+        };
+        try {
           const response = await API.fetchingLinkedinCampaign(payload);
           if (response.status === 200 && response?.data?.data) {
-            let fetchResult = response?.data?.data;
-            setCampaignList(fetchResult);
-
-          try {
-            const response = await API.fetchingLinkedinCampaign(payload);
-            if (
-              response.status === 200 &&
-              response?.data?.data &&
-              response?.data?.data?.length > 0
-            ) {
-              let result = response?.data?.data[0];
-              setStatus(
-                `${result.STATUS} at ${handleDate(
-                  result?.UPLOAD_TS ||
-                    result?.ACTIVATED_TS ||
-                    result?.DEACTIVATED_TS
-                )}`
-              );
-              setButtonStatus(
-                result?.ACTIVATED_TS === null ? "Activate" : "De-activate"
-              );
-              setAudienceUploaded(
-                result?.UPLOAD_TS === null ||
-                  result?.ACTIVATED_TS === null ||
-                  result?.DEACTIVATED_TS === null
-              );
-              let selectedObject = initialState;
-              selectedObject = fetchResult?.find(
-                (item) => item?.id === result?.CAMPAIGN_ID
-              );
-
-              setCampaignData(selectedObject);
-            }
-          } catch (error) {
-            console.error("Error fetching data:", error);
+            setCampaignList([response.data.data]);
           }
-        }}
-        catch(error){console.log(error);}
+          console.log("campaignList:", campaignList);
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetch_campaigns();
-  }, [user?.Consumer, data?.runId]);
+      };
+      campaignListFun();
+    }
+  }, [selectedCampaignGroupId, user?.Consumer]);
+
+  useEffect(() => {
+    if (selectedCampaignId !== "") {
+      const campaignAdFun = async () => {
+        const payload = {
+          account_name: user?.Consumer,
+          campaign_id: selectedCampaignId,
+        };
+        try {
+          const response = await API.fetchingLinkedinCreativeAd(payload);
+          if (response.status === 200 && response?.data?.data) {
+            setCreativeAds(response?.data?.data);
+          } else {
+            console.log("No creative ads available for this campaign.");
+          }
+        } catch (error) {
+          console.log("Error fetching creative ads:", error);
+        }
+      };
+      campaignAdFun();
+    }
+  }, [selectedCampaignId]);
 
   const handleUploadAudience = async () => {
     setLoader({ ...loader, audienceLoader: true });
@@ -141,8 +142,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       account_name: user?.Consumer,
       run_id: data?.runId,
       templateName: data?.template_name,
-      campaign_id: campaignData?.id,
-      linkedin_account_name :campaignData1?.linkedin_account_name ,
+      linkedin_account_name: campaignData2.linkedin_account_name,
       consumer_database_name: "DCR_SAMP_CONSUMER1",
     };
     try {
@@ -150,9 +150,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       if (
         response.status === 200 &&
         response?.data?.data &&
-        response?.data?.data?.length > 0
+        response?.data?.data.length > 0
       ) {
-        let result = response?.data?.data[0];
+        const result = response?.data?.data[0];
         setStatus(`${result.STATUS} at ${handleDate(result?.UPLOAD_TS)}`);
         setLoader({ ...loader, audienceLoader: false });
         setAudienceUploaded(true);
@@ -169,18 +169,19 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
     const payload = {
       account_name: user?.Consumer,
       run_id: data?.runId,
-      campaign_id: campaignData?.id,
+      campaign_id: selectedCampaignId,
     };
+
     if (status === "Activate") {
       setLoader({ ...loader, activateLoader: true });
       try {
-        const response = await API.publishMetaAds(payload);
+        const response = await API.activateLinkedinCampaign(payload);
         if (
           response.status === 200 &&
           response?.data?.data &&
-          response?.data?.data?.length > 0
+          response?.data?.data.length > 0
         ) {
-          let result = response?.data?.data[0];
+          const result = response?.data?.data[0];
           setStatus(`${result.STATUS} at ${handleDate(result?.ACTIVATED_TS)}`);
           setButtonStatus("De-activate");
           setLoader({ ...loader, activateLoader: false });
@@ -195,18 +196,16 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       setLoader({ ...loader, activateLoader: true });
 
       try {
-        const response = await API.publishMetaAds(payload);
+        const response = await API.deActivateLinkedinCampaign(payload);
         if (
           response.status === 200 &&
           response?.data?.data &&
-          response?.data?.data?.length > 0
+          response?.data?.data.length > 0
         ) {
-          let result = response?.data?.data[0];
+          const result = response?.data?.data[0];
           setLoader({ ...loader, activateLoader: false });
           setButtonStatus("Activate");
-          setStatus(
-            `${result.STATUS} at ${handleDate(result?.DEACTIVATED_TS)}`
-          );
+          setStatus(`${result.STATUS} at ${handleDate(result?.DEACTIVATED_TS)}`);
         } else {
           setLoader({ ...loader, activateLoader: false });
         }
@@ -224,67 +223,88 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box
-        sx={style}
-        className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg "
-      >
+      <Box sx={style} className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg">
         <div className="text-amaranth-900 text-xl font-bold">LinkedIn Ad's</div>
         <div className="w-full mt-2 pb-21 flex flex-col">
-          <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+          <label className="block text-sm font-medium leading-6 text-amaranth-600">
             Campaign Group
           </label>
           <select
             name="campaignGroup"
             onChange={handleCampaignGroup}
-            value={campaignData?.name}
+            value={campaignData.name}
             required
-            className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+            className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600 bg-blend-darken shadow-sm ring-1 ring-inset ring-amaranth-600 placeholder:text-amaranth-600 focus:ring-2 focus:ring-inset focus:ring-amaranth-600 sm:text-sm sm:leading-6"
           >
             <option value="">Please select</option>
-            {campaignGroup?.map((item) => {
-              return <option value={item.name}>{item.name}</option>;
-            })}
+            {campaignGroup.map((item) => (
+              <option value={item.name} key={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
-          <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-            Campaign 
-          </label>
-          <select
-            name="campaign"
-            onChange={handleCampaign}
-            value={campaignData1?.name}
-            required
-            className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-          >
-            <option value="">Please select</option>
-            {campaignList?.map((item) => {
-              return <option value={item.name}>{item.name}</option>;
-            })}
-          </select>
-          <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-            Ad's
-          </label>
-          <select
-            name="Ad's"
-            onChange={handleCampaignAd}
-            value={campaignData2?.name}
-            required
-            className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
-          >
-            <option value="">Please select</option>
-            {campaignList?.map((item) => {
-              return <option value={item.name}>{item.name}</option>;
-            })}
-          </select>
-        </div>
-        <div className="w-full pb-21 flex flex-col">
-          {campaignData?.id !== "" && (
-            <span className="text-amaranth-900 text-sm">
-              Campaign Id : <strong>{campaignData?.id}</strong>
-            </span>
+          {campaignData.id !== "" && (
+            <div className="w-full pb-21 flex flex-col">
+              <span className="text-amaranth-900 text-sm">
+                CampaignGroup-Id: <strong>{campaignData.id}</strong>
+              </span>
+            </div>
           )}
         </div>
+        <label className="block text-sm font-medium leading-6 text-amaranth-600">
+          Campaign
+        </label>
+        <select
+          name="campaign"
+          onChange={handleCampaign}
+          value={campaignData1.name}
+          required
+          className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600 bg-blend-darken shadow-sm ring-1 ring-inset ring-amaranth-600 placeholder:text-amaranth-600 focus:ring-2 focus:ring-inset focus:ring-amaranth-600 sm:text-sm sm:leading-6"
+        >
+          <option value="">Please select</option>
+          {campaignList && campaignList.length > 0 ? (
+    campaignList.map((item) => (
+      <option value={item.name} key={item.id}>
+                {item.name}
+              </option>
+    ))
+  ) : (
+    <option value="">No campaigns available</option>
+  )}
+        </select>
+        {campaignData1.id !== "" && (
+          <div className="w-full pb-21 flex flex-col">
+            <span className="text-amaranth-900 text-sm">
+              Campaign Id: <strong>{selectedCampaignId}</strong>
+            </span>
+          </div>
+        )}
+        <label className="block text-sm font-medium leading-6 text-amaranth-600">
+          Ad's
+        </label>
+        <select
+          name="Ads"
+          onChange={handleCreativeAd}
+          value={selectedCreativeAdId}
+          required
+          className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600 bg-blend-darken shadow-sm ring-1 ring-inset ring-amaranth-600 placeholder:text-amaranth-600 focus:ring-2 focus:ring-inset focus:ring-amaranth-600 sm:text-sm sm:leading-6"
+        >
+          <option value="">Please select</option>
+          {creativeAds.map((item) => (
+            <option value={item.name} key={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+        {campaignData.id !== "" && (
+          <div className="w-full pb-21 flex flex-col">
+            {/* <span className="text-amaranth-900 text-sm">
+              Campaign Id: <strong>{campaignData.id}</strong>
+            </span> */}
+          </div>
+        )}
         <div className="mt-4">
-          {!loader?.audienceLoader ? (
+          {!loader.audienceLoader ? (
             <button
               onClick={handleUploadAudience}
               className={
@@ -292,7 +312,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
                   ? "bg-gray-400 opacity-1 flex items-center px-4 py-2 text-sm text-white rounded-md"
                   : "bg-amaranth-600 opacity-1 flex items-center px-4 py-2 text-sm text-white rounded-md"
               }
-              disabled={audienceUploaded || campaignData?.id === ""}
+              disabled={audienceUploaded || campaignData.id === ""}
             >
               Upload Audience
             </button>
@@ -312,12 +332,10 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
 
         {audienceUploaded && (
           <div className="mt-2">
-            {!loader?.activateLoader ? (
+            {!loader.activateLoader ? (
               <button
                 onClick={() =>
-                  handleActivate(
-                    buttonStatus === "Activate" ? "Activate" : "De-activate"
-                  )
+                  handleActivate(buttonStatus === "Activate" ? "Activate" : "De-activate")
                 }
                 className="bg-amaranth-600 opacity-1 flex items-center px-4 py-2 text-sm text-white rounded-md"
               >
