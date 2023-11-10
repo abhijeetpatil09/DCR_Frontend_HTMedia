@@ -57,9 +57,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const handleCampaign = (event) => {
     const selectedObject = campaignList.find((item) => item.name === event.target.value);
     setCampaignData1(selectedObject);
-    console.log(selectedObject);
     setSelectedCampaignId(selectedObject.id);
-    console.log(selectedCampaignId);
     setSelectedCreativeAdId("");
   };
 
@@ -67,10 +65,6 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
     setSelectedCreativeAdId(event.target.value);
     const selectedObject = creativeAds.find((item) => item.name === event.target.value);
     setCampaignData2(selectedObject);
-    console.log(selectedObject);
-    setSelectedCampaignId(selectedObject.id);
-    console.log(selectedCampaignId);
-    setSelectedCreativeAdId("");
   };
 
   useEffect(() => {
@@ -123,18 +117,19 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
         };
         try {
           const response = await API.fetchingLinkedinCreativeAd(payload);
-          if (response.status === 200 && response?.data?.data) {
-            setCreativeAds(response?.data?.data);
+          if (response.status === 200 && response?.data) {
+            setCreativeAds([response?.data]);
           } else {
             console.log("No creative ads available for this campaign.");
           }
+          console.log(creativeAds);
         } catch (error) {
           console.log("Error fetching creative ads:", error);
         }
       };
       campaignAdFun();
     }
-  }, [selectedCampaignId]);
+  }, [selectedCampaignId, user?.Consumer]);
 
   const handleUploadAudience = async () => {
     setLoader({ ...loader, audienceLoader: true });
@@ -142,7 +137,8 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       account_name: user?.Consumer,
       run_id: data?.runId,
       templateName: data?.template_name,
-      linkedin_account_name: campaignData2.linkedin_account_name,
+     //linkedin_account_name: campaignData2.linkedin_account_name,
+     linkedin_account_name: user?.Consumer,
       consumer_database_name: "DCR_SAMP_CONSUMER1",
     };
     try {
@@ -263,16 +259,16 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
         >
           <option value="">Please select</option>
           {campaignList && campaignList.length > 0 ? (
-    campaignList.map((item) => (
-      <option value={item.name} key={item.id}>
+            campaignList.map((item) => (
+              <option value={item.name} key={item.id}>
                 {item.name}
               </option>
-    ))
-  ) : (
-    <option value="">No campaigns available</option>
-  )}
+            ))
+          ) : (
+            <option value="">No campaigns available</option>
+          )}
         </select>
-        {campaignData1.id !== "" && (
+        {selectedCampaignId && (
           <div className="w-full pb-21 flex flex-col">
             <span className="text-amaranth-900 text-sm">
               Campaign Id: <strong>{selectedCampaignId}</strong>
@@ -289,20 +285,26 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
           required
           className="bg-transparent block w-full rounded-md border-0 py-1.5 text-amaranth-600 bg-blend-darken shadow-sm ring-1 ring-inset ring-amaranth-600 placeholder:text-amaranth-600 focus:ring-2 focus:ring-inset focus:ring-amaranth-600 sm:text-sm sm:leading-6"
         >
+
           <option value="">Please select</option>
-          {creativeAds.map((item) => (
-            <option value={item.name} key={item.id}>
-              {item.name}
-            </option>
-          ))}
+          {Array.isArray(creativeAds) ? (
+            creativeAds.map((item, index) => (
+              <option value={item.data} key={index}>
+                {item.data}
+              </option>
+            ))
+          ) : (
+            <option value="Error">Creative Ads data is not available.</option>
+          )}
         </select>
-        {campaignData.id !== "" && (
+        {selectedCreativeAdId && (
           <div className="w-full pb-21 flex flex-col">
-            {/* <span className="text-amaranth-900 text-sm">
-              Campaign Id: <strong>{campaignData.id}</strong>
-            </span> */}
+            <span className="text-amaranth-900 text-sm">
+              Ads: <strong>{selectedCreativeAdId}</strong>
+            </span>
           </div>
         )}
+
         <div className="mt-4">
           {!loader.audienceLoader ? (
             <button
