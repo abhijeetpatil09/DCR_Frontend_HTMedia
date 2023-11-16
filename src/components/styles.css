@@ -170,3 +170,7 @@ th, td {
 .ant-select-selection-search-input {
   min-width: 0px !important;
 }
+
+.MuiButtonBase-root {
+  color: #2d7de3 !important;
+}

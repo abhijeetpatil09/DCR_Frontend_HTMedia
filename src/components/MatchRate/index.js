@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Papa from "papaparse";
 import { read, utils } from "xlsx";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { LinkedIn } from "@material-ui/icons";
+
 import { handleDate, isObjectEmpty } from "../../utils/commonFunctions";
 
 import * as actions from "../../redux/actions/index";
@@ -21,8 +24,9 @@ import meta from "../../Assets/META.svg";
 import google from "../../Assets/GoogleAd.svg";
 import ModalForMetaAds from "./ModalForMetaAds";
 import ModalForLinkedIn from "./ModalForLinkedIn";
+import MatchAttributes from "./matchAttributes";
+
 import API from "../../apiServices/api";
-import { LinkedIn } from "@material-ui/icons";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const nodeURL = process.env.REACT_APP_NODE_URL;
@@ -55,9 +59,11 @@ const initialState = {
   Consumer_Name: "",
   Column_Names: "",
   File_Name: "",
-  Match_Attribute: "",
-  Match_Attribute_Value: "",
+  Match_Attribute: {},
+  Match_Attribute_Value: {},
   file: "",
+  attachment_type: "",
+  sf_table_name: "",
 };
 
 const MatchRate = () => {
@@ -79,8 +85,6 @@ const MatchRate = () => {
     Consumer_Name: user?.Consumer,
   });
 
-  const [gender, setGender] = useState("male");
-  const [age, setAge] = useState("age_0_6");
   const [byPassAPICalled, setByPassAPICalled] = useState(false);
   const [note, setNote] = useState("");
   const [tableHead, setTableHead] = useState([]);
@@ -90,9 +94,15 @@ const MatchRate = () => {
   const [uploading, setUploading] = useState(false);
   const [downloadSample, setDownloadSample] = useState(false);
 
+  const [snowflakeTableList, setSnowflakeTableList] = useState([]);
+  const [matchAttributesList, setMatchAttributesList] = useState([]);
+  const [matchAttributesStatus, setMatchAttributesStatus] = useState(false);
+  const [identifiersList, setIdentifiersList] = useState([]);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [fileErrorMessage, setFileErrorMessage] = useState("");
-
+  const [providerAccountIdentifier, setProviderAccountIdentifier] =
+    useState("");
   const [emailLoading, setEmailLoading] = useState(false);
 
   // Create query Modal
@@ -146,27 +156,6 @@ const MatchRate = () => {
     },
   });
 
-  // useEffect for set match attribute values..
-  useEffect(() => {
-    if (formData["Match_Attribute"] === "gender") {
-      setFormData({
-        ...formData,
-        Match_Attribute_Value: gender,
-      });
-    } else if (formData["Match_Attribute"] === "age") {
-      setFormData({
-        ...formData,
-        Match_Attribute_Value: age,
-      });
-    } else if (formData["Match_Attribute"] === "overall") {
-      setFormData({
-        ...formData,
-        Match_Attribute_Value: "overall",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [age, formData?.Match_Attribute, gender]);
-
   const [data, setData] = useState([]);
 
   // UseEffect used for Inserting the Provider...
@@ -182,6 +171,29 @@ const MatchRate = () => {
         if (response.status === 200 && response?.data?.data) {
           let provider_name = response?.data?.data?.[0];
           setFormData({ ...formData, Provider_Name: provider_name?.PROVIDER });
+
+          try {
+            const payload = {
+              account_name: user?.Consumer,
+              db_name: user?.consumerDBName,
+              provider_name: provider_name?.PROVIDER,
+            };
+
+            const response = await API.getProviderAccount(payload);
+            if (
+              response.status === 200 &&
+              response?.data?.data?.length > 0 &&
+              response?.data?.data[0]?.PROV_ACCT_IDENTIFIER
+            ) {
+              let provider_account_identifier =
+                response?.data?.data[0]?.PROV_ACCT_IDENTIFIER;
+              setProviderAccountIdentifier(
+                `DCR_${provider_account_identifier}_PROVIDER_DB`
+              );
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -190,6 +202,133 @@ const MatchRate = () => {
     getAllProviders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.name]);
+
+  // get Identifier Types
+
+  useEffect(() => {
+    if (formData?.Provider_Name !== "" && open) {
+      const getIdentifierTypes = async () => {
+        const payload = {
+          account_name: formData?.Provider_Name,
+          provider_name: formData?.Provider_Name,
+          consumer_name: user?.Consumer,
+          db_name: providerAccountIdentifier,
+        };
+        try {
+          const response = await API.getIdentifierTypes(payload);
+          if (response.status === 200 && response?.data?.data) {
+            setIdentifiersList(
+              response?.data?.data?.[0]?.IDENTIFIER_TYPE?.split(",")
+            );
+          } else {
+            setIdentifiersList([]);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      getIdentifierTypes();
+    }
+  }, [
+    user.name,
+    user?.Consumer,
+    formData?.Provider_Name,
+    providerAccountIdentifier,
+    open,
+  ]);
+
+  // get Match Attributes
+
+  useEffect(() => {
+    if (formData?.Provider_Name !== "" && open) {
+      const getMatchAttributes = async () => {
+        const payload = {
+          account_name: formData?.Provider_Name,
+          provider_name: formData?.Provider_Name,
+          consumer_name: user?.Consumer,
+          db_name: providerAccountIdentifier,
+        };
+        try {
+          const response = await API.getMatchAttributes(payload);
+          if (response.status === 200 && response?.data?.data) {
+            setMatchAttributesList(response?.data?.data);
+          } else {
+            setMatchAttributesList([]);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      getMatchAttributes();
+    }
+  }, [
+    user.name,
+    user?.Consumer,
+    formData?.Provider_Name,
+    providerAccountIdentifier,
+    open,
+  ]);
+
+  // get Match Attributes status
+
+  useEffect(() => {
+    if (formData?.Provider_Name !== "" && open) {
+      const getMatchAttributesStatus = async () => {
+        const payload = {
+          account_name: formData?.Provider_Name,
+          provider_name: formData?.Provider_Name,
+          consumer_name: user?.Consumer,
+          db_name: providerAccountIdentifier,
+        };
+        try {
+          const response = await API.getMatchAttributesStatus(payload);
+          if (response.status === 200 && response?.data?.data) {
+            if (response?.data?.data[0]?.COUNT === 1) {
+              setMatchAttributesStatus(true);
+            } else {
+              setMatchAttributesStatus(false);
+            }
+          } else {
+            setMatchAttributesStatus(true);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      getMatchAttributesStatus();
+    }
+  }, [
+    user.name,
+    user?.Consumer,
+    formData?.Provider_Name,
+    providerAccountIdentifier,
+    open,
+  ]);
+
+  useEffect(() => {
+    if (formData?.attachment_type === "sf_table") {
+      const getSnowflakeTable = async () => {
+        const payload = {
+          account_name: user?.Consumer,
+          db_name: user?.consumerDBName,
+        };
+        try {
+          const response = await API.getSnowflakeTables(payload);
+          if (response.status === 200 && response?.data?.data) {
+            let result = response?.data?.data?.map((item) => {
+              return item.TABLE_NAME;
+            });
+            setSnowflakeTableList(result);
+          } else {
+            setSnowflakeTableList([]);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      getSnowflakeTable();
+    }
+  }, [user?.consumerDBName, user?.Consumer, formData?.attachment_type]);
 
   const createNewRequest = async () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
@@ -362,7 +501,7 @@ const MatchRate = () => {
   //   return regex.test(inputString); // returns true if inputString matches the regex pattern, false otherwise
   // };
 
-  const callByPassAPI = async () => {
+  const callByPassAPI = async (newReqId, providerAccIdentifier) => {
     setByPassAPICalled(true);
     // fetchMainTable();
     handleClose();
@@ -370,12 +509,25 @@ const MatchRate = () => {
     const payload = {
       account_name: user?.Consumer,
       db_name: user?.consumerDBName,
+      provider_account_identifier: providerAccIdentifier,
+      newReqId: newReqId,
+      template_name: "ADVERTISER MATCH",
     };
     try {
       const response = await API.callProcedureMatchRate(payload);
       if (response.status === 200) {
         setByPassAPICalled(false);
         fetchMainTable();
+
+        try {
+          await API.callProcedureAnalytics(payload);
+          // if (response.status === 200) {
+          //   fetchMainTable();
+          //   setUploading(false);
+          // }
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         setByPassAPICalled(false);
         fetchMainTable();
@@ -392,106 +544,137 @@ const MatchRate = () => {
     }
   };
 
+  const insertDataIntoTable = async (filename) => {
+    try {
+      const payload = {
+        account_name: user?.Consumer,
+        template_name: formData?.Query_Name,
+        provider_name: formData?.Provider_Name,
+        columns: formData?.Column_Names,
+        consumer_name: formData?.Consumer_Name,
+        run_id: formData?.RunId,
+        file_name: filename,
+        attribute_name: matchAttributesStatus
+          ? JSON.stringify(formData?.Match_Attribute)
+          : null,
+        // attribute_value: formData?.Match_Attribute_Value,
+        consumer_database_name: user?.consumerDBName,
+        tag: formData?.attachment_type,
+        provider_account_identifier: providerAccountIdentifier,
+      };
+
+      const response = await API.insertMatchRateRequest(payload);
+      if (response.status === 200) {
+        try {
+          const payload = {
+            account_name: formData?.Provider_Name,
+            // db_name: user?.providerDBName,
+            db_name: `DCR_${providerAccountIdentifier}_PROVIDER_DB`,
+            run_id: formData.RunId,
+          };
+
+          const response = await API.insertRunId(payload);
+          if (response.status === 200) {
+            dispatch(
+              actions.PublisherForm({
+                RequestId: formData?.RunId,
+                fetchData: true,
+              })
+            );
+            callByPassAPI(formData.RunId, providerAccountIdentifier);
+            setLoading(false);
+          }
+        } catch (error) {
+          setLoading(false);
+
+          console.error("Error fetching data:", error);
+        }
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (downloadSample || fileErrorMessage !== "") {
-      setDownloadSample(false);
+    if (matchAttributesStatus && isObjectEmpty(formData?.Match_Attribute)) {
+      toast.error("Please select Match Attribute");
       return;
     }
-    setLoading(true);
-
     formData.RunId = Date.now();
+    setLoading(true);
+    setErrorMessage("");
 
-    // Upload file in Local uploadedFiles folder..
-    const fileName = `${
-      formData.RunId + "." + formData?.file?.name?.split(".")[1]
-    }`;
-    const modifiedFile = new File([formData?.file], fileName, {
-      type: formData?.file.type,
-    });
-    formData.File_Name = fileName;
-    formData.file = modifiedFile;
-    const localFile = new FormData();
+    if (formData?.attachment_type === "attachment") {
+      if (downloadSample || fileErrorMessage !== "") {
+        setDownloadSample(false);
+        return;
+      }
+      // Upload file in Local uploadedFiles folder..
+      const fileName = `${
+        formData.RunId + "." + formData?.file?.name?.split(".")[1]
+      }`;
+      const modifiedFile = new File([formData?.file], fileName, {
+        type: formData?.file.type,
+      });
+      formData.File_Name = fileName;
+      formData.file = modifiedFile;
+      const localFile = new FormData();
 
-    localFile.append("myFile", modifiedFile);
+      localFile.append("myFile", modifiedFile);
 
-    axios
-      .post(`${nodeURL}/api/localFileUpload`, localFile, {
-        headers: {
-          "content-type": "multipart/form-data",
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .then(async (response) => {
-        if (parseInt(response?.status) === 200) {
-          const payload = {
-            account_name: user?.Consumer,
-            filename: fileName,
-            identifyer: formData?.Column_Names.toUpperCase(),
-            db_name: user?.consumerDBName,
-          };
-          try {
-            const response = await API.attachment(payload);
-            if (response?.status === 200 && response?.data?.data === true) {
-              fetchMainTable();
-              try {
-                const payload = {
-                  account_name: user?.Consumer,
-                  template_name: formData?.Query_Name,
-                  provider_name: formData?.Provider_Name,
-                  columns: formData?.Column_Names,
-                  consumer_name: formData?.Consumer_Name,
-                  run_id: formData?.RunId,
-                  file_name: formData?.File_Name,
-                  attribute_name: formData?.Match_Attribute,
-                  attribute_value: formData?.Match_Attribute_Value,
-                  consumer_database_name: user?.consumerDBName,
-                  tag: formData?.attachment_type,
-                };
-                const response = await API.insertMatchRateRequest(payload);
-                if (response.status === 200) {
-                  try {
-                    const payload = {
-                      account_name: formData?.Provider_Name,
-                      db_name: user?.providerDBName,
-                      run_id: formData.RunId,
-                    };
-
-                    const response = await API.insertRunId(payload);
-                    if (response.status === 200) {
-                      dispatch(
-                        actions.PublisherForm({
-                          RequestId: formData?.RunId,
-                          fetchData: true,
-                        })
-                      );
-                      callByPassAPI();
-                    }
-                  } catch (error) {
-                    setLoading(false);
-
-                    console.error("Error fetching data:", error);
-                  }
-                }
-              } catch (error) {
-                console.log(error);
+      axios
+        .post(`${nodeURL}/api/localFileUpload`, localFile, {
+          headers: {
+            "content-type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then(async (response) => {
+          if (parseInt(response?.status) === 200) {
+            const payload = {
+              account_name: user?.Consumer,
+              filename: fileName,
+              identifyer: formData?.Column_Names.toUpperCase(),
+              db_name: user?.consumerDBName,
+            };
+            try {
+              const response = await API.attachment(payload);
+              if (
+                parseInt(response?.status) === 200 &&
+                response?.data?.data === true
+              ) {
+                fetchMainTable();
+                insertDataIntoTable(fileName);
+              } else {
+                fetchMainTable();
+                setLoading(false);
+                setErrorMessage(
+                  "The data is not matching with requested Identifier."
+                );
               }
-            } else {
-              fetchMainTable();
+            } catch (error) {
               setLoading(false);
-              setErrorMessage(
-                "The data is not matching with requested Identifier."
-              );
-            }
-          } catch (error) {
-            setLoading(false);
 
-            console.error("Error fetching data:", error);
+              console.error("Error fetching data:", error);
+            }
+          } else {
+            setLoading(false);
+            setErrorMessage("Something went wrong, please try again later !!!");
           }
-        }
-      })
-      .catch((error) => console.log(error));
+        })
+        .catch((error) => {
+          setLoading(false);
+          setErrorMessage("Something went wrong, please try again later !!!");
+          console.error("Error fetching data:", error);
+        });
+    } else {
+      insertDataIntoTable(formData?.sf_table_name);
+    }
   };
 
   const fetchTable = (data, runId) => {
@@ -627,60 +810,34 @@ const MatchRate = () => {
     ) {
       setOpenSampleData(true);
     } else {
-      // const payload = {
-      //   account_name: user?.Consumer,
-      // };
-      // try {
-      //   // select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;
-      //   const response = await API.demo(payload);
+      const payload = {
+        account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
+      };
+      try {
+        // select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;
+        const response = await API.enrichmentCustomerSampleView(payload);
 
-      //   if (response.status === 200 && response?.data?.data) {
-      //     let head = [];
-      //     let row = [];
-      //     let data = response?.data?.data;
-      //     if (data?.length > 0) {
-      //       head = data && Object.keys(data[0]);
-      //       data?.map((obj) => {
-      //         return row.push(head?.map((key) => obj[key]));
-      //       });
-      //     }
-      //     setOpenSampleData(true);
-      //     dispatch(
-      //       actions.ConsumerQueryForm({
-      //         SampleFileData: { head: head, rows: row },
-      //       })
-      //     );
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
-
-      axios
-        .get(`${baseURL}/${user?.name}`, {
-          params: {
-            query: "select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;",
-          },
-        })
-        .then((response) => {
-          if (response?.data?.data) {
-            let head = [];
-            let row = [];
-            let data = response?.data?.data;
-            if (data?.length > 0) {
-              head = data && Object.keys(data[0]);
-              data?.map((obj) => {
-                return row.push(head?.map((key) => obj[key]));
-              });
-            }
-            setOpenSampleData(true);
-            dispatch(
-              actions.ConsumerQueryForm({
-                SampleFileData: { head: head, rows: row },
-              })
-            );
+        if (response.status === 200 && response?.data?.data) {
+          let head = [];
+          let row = [];
+          let data = response?.data?.data;
+          if (data?.length > 0) {
+            head = data && Object.keys(data[0]);
+            data?.map((obj) => {
+              return row.push(head?.map((key) => obj[key]));
+            });
           }
-        })
-        .catch((error) => console.log(error));
+          setOpenSampleData(true);
+          dispatch(
+            actions.ConsumerQueryForm({
+              SampleFileData: { head: head, rows: row },
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -1227,49 +1384,94 @@ const MatchRate = () => {
               onSubmit={handleSubmit}
             >
               <div>
-                <div className="mt-2 flex flex-col">
-                  <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
-                    Upload File
-                  </label>
-                  <input
-                    // className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
-                    className=""
-                    type="file"
-                    id="myFileInput"
-                    onChange={handleFileInput}
-                    required
-                  />
-                </div>
-                <div className="flex pt-2">
-                  {fileErrorMessage !== "" && (
-                    <span className="text-red-600">{fileErrorMessage}</span>
-                  )}
-                </div>
                 <div className="mt-2 pb-21 flex flex-col">
-                  <button
-                    className="flex flex-row text-amaranth-600"
-                    onClick={() => {
-                      downloadNewFile();
-                      setDownloadSample(true);
-                    }}
+                  <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                    Attachment type
+                  </label>
+                  <select
+                    name="attachment_type"
+                    onChange={handleCustomerFormData}
+                    required
+                    // value={formData.attachment_type}
+                    className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span className="pl-2 underline">Download Template</span>
-                  </button>
+                    <option value="">Please select</option>
+                    <option value="attachment">Attachment</option>
+                    <option value="sf_table">SF Table</option>
+                  </select>
                 </div>
+
+                {formData.attachment_type === "attachment" ? (
+                  <>
+                    <div className="mt-2 flex flex-col">
+                      <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                        Upload File
+                      </label>
+                      <input
+                        // className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700"
+                        className=""
+                        type="file"
+                        id="myFileInput"
+                        onChange={handleFileInput}
+                        required
+                      />
+                    </div>
+                    <div className="flex pt-2">
+                      {fileErrorMessage !== "" && (
+                        <span className="text-red-600">{fileErrorMessage}</span>
+                      )}
+                    </div>
+                    <div className="mt-2 pb-21 flex flex-col">
+                      <button
+                        className="flex flex-row text-amaranth-600"
+                        onClick={() => {
+                          downloadNewFile();
+                          setDownloadSample(true);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <span className="pl-2 underline">
+                          Download Template
+                        </span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="mt-2 pb-21 flex flex-col">
+                    <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
+                      Snowflake Table
+                    </label>
+                    <select
+                      name="sf_table_name"
+                      onChange={handleCustomerFormData}
+                      required
+                      // value={formData.sf_table_name}
+                      className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
+                    >
+                      <option value="">Please select</option>
+                      {snowflakeTableList?.map((table_name, index) => {
+                        return (
+                          <option key={index} value={table_name}>
+                            {table_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                )}
 
                 <div className="mt-2 pb-21 flex flex-col">
                   <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
@@ -1282,13 +1484,28 @@ const MatchRate = () => {
                     className="bg-transparent  block w-full rounded-md border-0 py-1.5 text-amaranth-600  bg-blend-darken    shadow-sm ring-1 ring-inset ring-amaranth-600  placeholder:text-amaranth-600  focus:ring-2 focus:ring-inset focus:ring-amaranth-600  sm:text-sm sm:leading-6"
                   >
                     <option value="">Please select</option>
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                    <option value="MAID">MAID-WIP</option>
+                    {identifiersList.length > 0 &&
+                      identifiersList?.map((item, idx) => {
+                        return (
+                          <option key={idx} value={item?.toLowerCase()}>
+                            {item}
+                          </option>
+                        );
+                      })}
                   </select>
                 </div>
 
-                <div className="mt-2 pb-21 flex flex-col">
+                {matchAttributesStatus && (
+                  <div className="mt-2 pb-21 flex flex-col">
+                    <MatchAttributes
+                      formData={formData}
+                      setFormData={setFormData}
+                      matchAttributesList={matchAttributesList}
+                    />
+                  </div>
+                )}
+
+                {/* <div className="mt-2 pb-21 flex flex-col">
                   <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                     Match Attribute
                   </label>
@@ -1380,7 +1597,7 @@ const MatchRate = () => {
                       </label>
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="flex justify-end">
                   {loading ? (
                     <div className="my-2 flex w-full justify-center rounded-md bg-amaranth-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-amranth-600 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth-700">
