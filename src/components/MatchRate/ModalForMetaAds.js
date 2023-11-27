@@ -148,7 +148,11 @@ const ModalForMetaAds = ({ open, handleClose, data }) => {
         ) {
           let result = response?.data?.data[0];
           setStatus(`${result.STATUS} at ${handleDate(result?.ACTIVATED_TS)}`);
-          setButtonStatus("De-activate");
+          if (result.STATUS === "PAUSED") {
+            setButtonStatus("Activate");
+          } else {
+            setButtonStatus("De-activate");
+          }
           setLoader({ ...loader, activateLoader: false });
         } else {
           setLoader({ ...loader, activateLoader: false });
@@ -161,7 +165,7 @@ const ModalForMetaAds = ({ open, handleClose, data }) => {
       setLoader({ ...loader, activateLoader: true });
 
       try {
-        const response = await API.publishMetaAds(payload);
+        const response = await API.stopMetaAds(payload);
         if (
           response.status === 200 &&
           response?.data?.data &&
