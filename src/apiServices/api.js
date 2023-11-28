@@ -100,6 +100,23 @@ const getProviderAccount = (payload) =>
     `/get_provider_account?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&provider_name=${payload.provider_name}`
   );
 
+const getSnowflakeTables = (payload) =>
+  api.get(
+    `/sf_table_list?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}`
+  );
+const getIdentifierTypes = (payload) =>
+  api.get(
+    `/get_column_list?account_name=${payload.account_name}&provider_name=${payload.provider_name}&consumer_name=${payload.consumer_name}&provider_database_name=${payload.db_name}`
+  );
+const getMatchAttributes = (payload) =>
+  api.get(
+    `/fetch_match_attributes?account_name=${payload.account_name}&provider_name=${payload.provider_name}&consumer_name=${payload.consumer_name}&provider_database_name=${payload.db_name}`
+  );
+const getMatchAttributesStatus = (payload) =>
+  api.get(
+    `/count_match_attribute_status?account_name=${payload.account_name}&provider_name=${payload.provider_name}&consumer_name=${payload.consumer_name}&provider_database_name=${payload.db_name}`
+  );
+
 // MAtch Rate API
 
 const attachment = (payload) =>
@@ -121,26 +138,32 @@ const viewRequestDataMatchRate = (payload) =>
   api.get(
     `/view_request_data?account_name=${payload.account_name}&templateName=${payload.templateName}&run_id=${payload.run_id}&consumer_database_name=${payload.consumer_database_name}`
   );
- 
-  const queryRequests = (payload) =>
+
+const queryRequests = (payload) =>
   api.get(
     `/Query_Requests?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&run_id=${payload.run_id}`
-  ); 
-  
+  );
+
 const insert_requestUplToClientSpace = (payload) =>
-api.get(
-  `/insert_request_upl_to_client_space?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}`
-);
+  api.get(
+    `/insert_request_upl_to_client_space?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}`
+  );
 
 const updateDashboardTableStatus = (payload) =>
-api.get(
-  `/update_dashboard_table_status?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&run_id=${payload.run_id}`
-);
+  api.get(
+    `/update_dashboard_table_status?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&run_id=${payload.run_id}`
+  );
 
 const callMatchedDataProcedure = (payload) =>
-api.get(
-  `/call_matched_data_procedure?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}`
-);
+  api.get(
+    `/call_matched_data_procedure?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}`
+  );
+
+const callProcedureAnalytics = (payload) =>
+  api.get(
+    `/call_procedure_analytics?account_name=${payload.account_name}&consumer_database_name=${payload.db_name}&run_id=${payload.newReqId}`
+  );
+
 // Enrichment Page API's
 
 const getAllowedColumns = (payload) =>
@@ -173,7 +196,7 @@ const fetchingLinkedinCampaign = (payload) =>
     `/fetching_linkedin_campaign?account_name=${payload.account_name}&campaign_group_id=${payload.campaign_group_id}`
   );
 
- const fetchingLinkedinCreativeAd = (payload) =>
+const fetchingLinkedinCreativeAd = (payload) =>
   api.get(
     `/fetching_linkedin_creative_ad?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}`
   );
@@ -187,12 +210,12 @@ const updateCampaignWithAudienceList = (payload) =>
   api.get(
     `/update_campaign_with_audience_list?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}&run_id=${payload.run_id}`
   );
-  
+
 const activateLinkedinCampaign = (payload) =>
   api.get(
     `/activate_linkedin_campaign?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}`
   );
-  
+
 const deActivateLinkedinCampaign = (payload) =>
   api.get(
     `/de_activate_linkedin_campaign?account_name=${payload.account_name}&campaign_id=${payload.campaign_id}`
@@ -343,6 +366,12 @@ const API = {
   insert_requestUplToClientSpace,
   updateDashboardTableStatus,
   callMatchedDataProcedure,
+  callProcedureAnalytics,
+
+  getSnowflakeTables,
+  getIdentifierTypes,
+  getMatchAttributes,
+  getMatchAttributesStatus,
 
   // Enrichment
   getAllowedColumns,
@@ -390,7 +419,6 @@ const API = {
   updateCampaignWithAudienceList,
   activateLinkedinCampaign,
   deActivateLinkedinCampaign,
-
 };
 
 export default API;

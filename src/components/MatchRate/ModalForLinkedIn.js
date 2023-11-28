@@ -24,10 +24,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const [selectedCampaignId, setSelectedCampaignId] = useState("");
   const [selectedCreativeAdId, setSelectedCreativeAdId] = useState("");
 
-  const [campaignData, setCampaignData] = useState({
-    id: "",
-    name: "",
-  });
+  const [campaignData, setCampaignData] = useState(initialState);
   const [campaignData1, setCampaignData1] = useState({});
  
   const [status, setStatus] = useState("");
@@ -45,13 +42,17 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const user = state?.user;
 
   const handleCampaignGroup = (event) => {
-    const selectedObject = campaignGroup.find((item) => item.name === event.target.value);
+    const selectedObject = campaignGroup.find(
+      (item) => item.name === event.target.value
+    );
     setCampaignData(selectedObject);
     setSelectedCampaignGroupId(selectedObject.id);
   };
 
   const handleCampaign = (event) => {
-    const selectedObject = campaignList.find((item) => item.name === event.target.value);
+    const selectedObject = campaignList.find(
+      (item) => item.name === event.target.value
+    );
     setCampaignData1(selectedObject);
     setSelectedCampaignId(selectedObject.id);
     setSelectedCreativeAdId("");
@@ -101,6 +102,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       };
       campaignListFun();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCampaignGroupId, user?.Consumer]);
 
   //useEffect for Campaign Ad's
@@ -200,7 +202,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
           const result = response?.data?.data[0];
           setLoader({ ...loader, activateLoader: false });
           setButtonStatus("Activate");
-          setStatus(`${result.STATUS} at ${handleDate(result?.DEACTIVATED_TS)}`);
+          setStatus(
+            `${result.STATUS} at ${handleDate(result?.DEACTIVATED_TS)}`
+          );
         } else {
           setLoader({ ...loader, activateLoader: false });
         }
@@ -218,7 +222,10 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style} className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg">
+      <Box
+        sx={style}
+        className="bg-white bg-opacity-75 backdrop-filter backdrop-blur-lg"
+      >
         <div className="text-amaranth-900 text-xl font-bold">LinkedIn Ad's</div>
         <div className="w-full mt-2 pb-21 flex flex-col">
           <label className="block text-sm font-medium leading-6 text-amaranth-600">
@@ -338,7 +345,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
             {!loader.activateLoader ? (
               <button
                 onClick={() =>
-                  handleActivate(buttonStatus === "Activate" ? "Activate" : "De-activate")
+                  handleActivate(
+                    buttonStatus === "Activate" ? "Activate" : "De-activate"
+                  )
                 }
                 className="bg-amaranth-600 opacity-1 flex items-center px-4 py-2 text-sm text-white rounded-md"
               >
