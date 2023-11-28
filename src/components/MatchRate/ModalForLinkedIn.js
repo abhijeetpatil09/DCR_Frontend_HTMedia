@@ -15,11 +15,6 @@ const style = {
   borderRadius: 5,
 };
 
-const initialState = {
-  id: "",
-  name: "",
-};
-
 const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const [campaignGroup, setCampaignGroup] = useState([]);
   const [campaignList, setCampaignList] = useState([]);
@@ -34,11 +29,12 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
     name: "",
   });
   const [campaignData1, setCampaignData1] = useState({});
-  const [campaignData2, setCampaignData2] = useState({});
-
+ 
   const [status, setStatus] = useState("");
   const [audienceUploaded, setAudienceUploaded] = useState(false);
   const [buttonStatus, setButtonStatus] = useState("Activate");
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [loader, setLoader] = useState({
     audienceLoader: false,
@@ -63,12 +59,11 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
 
   const handleCreativeAd = (event) => {
     setSelectedCreativeAdId(event.target.value);
-    const selectedObject = creativeAds.find((item) => item.name === event.target.value);
-    setCampaignData2(selectedObject);
   };
 
+  //useEffect for CampaignGroup
   useEffect(() => {
-    if (campaignData.id === "") {
+    if (selectedCampaignGroupId === "") {
       const campaignGroupList = async () => {
         const payload = {
           account_name: user?.Consumer,
@@ -85,8 +80,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       };
       campaignGroupList();
     }
-  }, [campaignData.id, user?.Consumer, data?.runId]);
+  }, [user?.Consumer, data?.runId, selectedCampaignGroupId]);
 
+  //useEffect for CampaignList
   useEffect(() => {
     if (selectedCampaignGroupId !== "") {
       const campaignListFun = async () => {
@@ -99,7 +95,6 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
           if (response.status === 200 && response?.data?.data) {
             setCampaignList([response.data.data]);
           }
-          console.log("campaignList:", campaignList);
         } catch (error) {
           console.log(error);
         }
@@ -108,6 +103,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
     }
   }, [selectedCampaignGroupId, user?.Consumer]);
 
+  //useEffect for Campaign Ad's
   useEffect(() => {
     if (selectedCampaignId !== "") {
       const campaignAdFun = async () => {
@@ -122,7 +118,6 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
           } else {
             console.log("No creative ads available for this campaign.");
           }
-          console.log(creativeAds);
         } catch (error) {
           console.log("Error fetching creative ads:", error);
         }
@@ -137,23 +132,27 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       account_name: user?.Consumer,
       run_id: data?.runId,
       templateName: data?.template_name,
-     //linkedin_account_name: campaignData2.linkedin_account_name,
-     linkedin_account_name: user?.Consumer,
+      linkedin_account_name: user?.Consumer,
       consumer_database_name: "DCR_SAMP_CONSUMER1",
     };
     try {
       const response = await API.uploadLinkedinAudience(payload);
       if (
         response.status === 200 &&
-        response?.data?.data &&
+        response?.data?.data && 
         response?.data?.data.length > 0
       ) {
         const result = response?.data?.data[0];
         setStatus(`${result.STATUS} at ${handleDate(result?.UPLOAD_TS)}`);
         setLoader({ ...loader, audienceLoader: false });
         setAudienceUploaded(true);
+        console.log("upload Succesfull");
       } else {
         setLoader({ ...loader, audienceLoader: false });
+        console.log("error: in Uploading");
+        const errorMessage = response?.data?.error || "Unknown error";
+        console.log("Error in Uploading:", errorMessage);
+        setErrorMessage(errorMessage);
       }
     } catch (error) {
       setLoader({ ...loader, audienceLoader: false });
@@ -239,10 +238,10 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
               </option>
             ))}
           </select>
-          {campaignData.id !== "" && (
+          {selectedCampaignGroupId !== "" && (
             <div className="w-full pb-21 flex flex-col">
               <span className="text-amaranth-900 text-sm">
-                CampaignGroup-Id: <strong>{campaignData.id}</strong>
+                CampaignGroup-Id: <strong>{selectedCampaignGroupId}</strong>
               </span>
             </div>
           )}
@@ -287,16 +286,11 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
         >
 
           <option value="">Please select</option>
-          {Array.isArray(creativeAds) ? (
-            creativeAds.map((item, index) => (
+          {creativeAds.map((item, index) => (
               <option value={item.data} key={index}>
                 {item.data}
-              </option>
-            ))
-          ) : (
-            <option value="Error">Creative Ads data is not available.</option>
-          )}
-        </select>
+              </option>))}
+         </select>
         {selectedCreativeAdId && (
           <div className="w-full pb-21 flex flex-col">
             <span className="text-amaranth-900 text-sm">
@@ -330,6 +324,13 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
               />
             </button>
           )}
+          
+  {/* Display error message */}
+  {errorMessage && (
+    <div className="mt-2 text-red-500 text-sm">
+      Error: {errorMessage}
+    </div>
+  )}
         </div>
 
         {audienceUploaded && (
