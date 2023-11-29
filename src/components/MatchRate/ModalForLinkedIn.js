@@ -24,9 +24,9 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
   const [selectedCampaignId, setSelectedCampaignId] = useState("");
   const [selectedCreativeAdId, setSelectedCreativeAdId] = useState("");
 
-  const [campaignData, setCampaignData] = useState(initialState);
+  const [campaignData, setCampaignData] = useState("");
   const [campaignData1, setCampaignData1] = useState({});
- 
+
   const [status, setStatus] = useState("");
   const [audienceUploaded, setAudienceUploaded] = useState(false);
   const [buttonStatus, setButtonStatus] = useState("Activate");
@@ -128,6 +128,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
     }
   }, [selectedCampaignId, user?.Consumer]);
 
+  // Handle upload Audience 
   const handleUploadAudience = async () => {
     setLoader({ ...loader, audienceLoader: true });
     const payload = {
@@ -141,7 +142,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       const response = await API.uploadLinkedinAudience(payload);
       if (
         response.status === 200 &&
-        response?.data?.data && 
+        response?.data?.data &&
         response?.data?.data.length > 0
       ) {
         const result = response?.data?.data[0];
@@ -162,6 +163,8 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
     }
   };
 
+
+  // Handle Activate DeActivate
   const handleActivate = async (status) => {
     const payload = {
       account_name: user?.Consumer,
@@ -294,10 +297,10 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
 
           <option value="">Please select</option>
           {creativeAds.map((item, index) => (
-              <option value={item.data} key={index}>
-                {item.data}
-              </option>))}
-         </select>
+            <option value={item.data} key={index}>
+              {item.data}
+            </option>))}
+        </select>
         {selectedCreativeAdId && (
           <div className="w-full pb-21 flex flex-col">
             <span className="text-amaranth-900 text-sm">
@@ -331,13 +334,13 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
               />
             </button>
           )}
-          
-  {/* Display error message */}
-  {errorMessage && (
-    <div className="mt-2 text-red-500 text-sm">
-      Error: {errorMessage}
-    </div>
-  )}
+
+          {/* Display error message */}
+          {errorMessage && (
+            <div className="mt-2 text-red-500 text-sm">
+              Error: {errorMessage}
+            </div>
+          )}
         </div>
 
         {audienceUploaded && (

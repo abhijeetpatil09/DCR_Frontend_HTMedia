@@ -748,6 +748,7 @@ const MatchRate = () => {
       const response = await API.queryRequests(payload);
       if (response.status === 200 && response?.data?.data) {
         let data = response?.data?.data?.[0];
+        console.log("Data:",data);
         const payload = {
           account_name: user?.Consumer,
           template_name: formData?.Query_Name,
@@ -762,7 +763,7 @@ const MatchRate = () => {
           tag: formData?.attachment_type,
         };
         try {
-          console.log(formData?.Column_Names);
+         
 
           const response = await API.insert_requestUplToClientSpace(payload);
           if (response.status === 200) {

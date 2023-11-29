@@ -126,7 +126,7 @@ const attachment = (payload) =>
 
 const insertMatchRateRequest = (payload) =>
   api.get(
-    `/insert_request_data_match_rate?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}`
+    `/insert_request_data_match_rate?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}&tag=${payload.tag}`
   );
 
 const insertRunId = (payload) =>
@@ -146,7 +146,7 @@ const queryRequests = (payload) =>
 
 const insert_requestUplToClientSpace = (payload) =>
   api.get(
-    `/insert_request_upl_to_client_space?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}`
+    `/insert_request_upl_to_client_space?account_name=${payload.account_name}&template_name=${payload.template_name}&provider_name=${payload.provider_name}&columns=${payload.columns}&consumer_name=${payload.consumer_name}&run_id=${payload.run_id}&file_name=${payload.file_name}&attribute_name=${payload.attribute_name}&attribute_value=${payload.attribute_value}&consumer_database_name=${payload.consumer_database_name}&tag=${payload.tag}`
   );
 
 const updateDashboardTableStatus = (payload) =>
