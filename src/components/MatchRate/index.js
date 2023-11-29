@@ -104,7 +104,7 @@ const MatchRate = () => {
   const [providerAccountIdentifier, setProviderAccountIdentifier] =
     useState("");
   const [emailLoading, setEmailLoading] = useState(false);
-
+  const [databaseName, setDatabaseName] = useState("");
   // Create query Modal
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
@@ -171,6 +171,7 @@ const MatchRate = () => {
         if (response.status === 200 && response?.data?.data) {
           let provider_name = response?.data?.data?.[0];
           setFormData({ ...formData, Provider_Name: provider_name?.PROVIDER });
+          getDatabaseName(provider_name.PROVIDER);
 
           try {
             const payload = {
@@ -760,12 +761,11 @@ const MatchRate = () => {
           attribute_name: data?.ATTRIBUTE_NAME,
           attribute_value: data?.ATTRIBUTE_VALUE,
           consumer_database_name: user?.consumerDBName,
-          tag: formData?.attachment_type,
+          //tag: formData.attachment_type,
+          tag: data.TAG,
         };
         try {
-         
-
-          const response = await API.insert_requestUplToClientSpace(payload);
+         const response = await API.insert_requestUplToClientSpace(payload);
           if (response.status === 200) {
             const payload = {
               account_name: user?.Consumer,
@@ -801,19 +801,41 @@ const MatchRate = () => {
     // toast.success(`Sample Template has been downloaded...`);
   };
 
+  const getDatabaseName = async (selectedProvider) => {
+    const payload = {
+      account_name: user?.Consumer,
+      selectedProvider: selectedProvider,
+      consumer_database_name: user?.consumerDBName,
+    };
+    try {
+      const response = await API.getDatabaseName(payload);
+      if (response.status === 200 && response?.data?.data) {
+        let db_name = response?.data?.data;
+        setDatabaseName(db_name[0]?.DATABASE);
+      } else {
+        setDatabaseName("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+
   /// View the sample data...
 
   const handleViewSample = async () => {
     if (
       SampleFileData &&
-      SampleFileData !== "undefined" &&
-      !isObjectEmpty(SampleFileData)
+      SampleFileData !== "undefined"
+      && !isObjectEmpty(SampleFileData)
     ) {
       setOpenSampleData(true);
     } else {
       const payload = {
         account_name: user?.Consumer,
-        db_name: user?.consumerDBName,
+        db_name: databaseName,
       };
       try {
         // select * from DCR_PROVIDER2.CLEANROOM.CUSTOMERS_SAMPLE_VW;

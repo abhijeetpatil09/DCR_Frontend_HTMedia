@@ -282,7 +282,7 @@ const Enrichment = () => {
     } else {
       const payload = {
         account_name: user?.name,
-        db_name: user?.consumerDBName,
+        db_name: databaseName,
       };
       try {
         const response = await API.enrichmentCustomerSampleView(payload);

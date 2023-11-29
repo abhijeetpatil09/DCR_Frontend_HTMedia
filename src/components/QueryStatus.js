@@ -44,6 +44,19 @@ const resultstyle = {
   overflow: "scroll",
 };
 
+const initialState = {
+  Query_Name: "advertiser_match",
+  Provider_Name: "",
+  Consumer_Name: "",
+  Column_Names: "",
+  File_Name: "",
+  Match_Attribute: {},
+  Match_Attribute_Value: {},
+  file: "",
+  attachment_type: "",
+  sf_table_name: "",
+};
+
 const QueryStatus = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -59,6 +72,10 @@ const QueryStatus = () => {
   const [requestId, setRequestId] = useState("");
   const [uploading, setUploading] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
+  const [formData, setFormData] = useState({
+    ...initialState,
+    Consumer_Name: user?.Consumer,
+  });
 
   const [requestFailedReason, setRequestFailedReason] = React.useState({
     openModal: false,
@@ -215,130 +232,77 @@ const QueryStatus = () => {
 
   const handleUploadData = async (runId) => {
     setUploading(true);
-    //  pending....
-    /*
-      const payload ={};
-      try{
-         query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
-        const response = await API.Demo(payload);
-            if (response.status === 200 && response?.data?.data) {
-            let data = response?.data?.data?.[0];            
-                    
-                      const payload ={};
-                      try{
-                         query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
-                        const response = await API.Demo(payload);
-                        if (response.status === 200) {      
-                                const payload ={};
-                                try{
-                                  update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';
-                                  const response = await API.Demo(payload);
-                                   
-                                  if (response.status === 200 ) {
-                                     fetchMainTable();
-                                     callByPassUpload();
-                                     }
-                                
-                                }
-                                catch(error)
-                                {
-                                  console.log(error);
-                                }      
-                      }}
-                      catch(error)
-                      {
-                        console.log(error);
-                      }
-                    }
-                      }
-    catch(error)
-      {
-        console.log(error);
-      }
-      */
-    axios
-      .get(`${baseURL}/${user?.name}`, {
-        params: {
-          query: `select * from DCR_SAMP_CONSUMER1.PUBLIC.DCR_QUERY_REQUEST1 where run_id = '${runId}';`,
-        },
-      })
-      .then((response) => {
-        if (response?.data?.data) {
-          let data = response?.data?.data?.[0];
-          axios
-            .get(`${baseURL}/${user?.name}`, {
-              params: {
-                query: `insert into DCR_SAMP_CONSUMER1.PUBLIC.DEMO_REQUESTS(QUERY_NAME,PROVIDER_NAME,COLUMN_NAMES,CONSUMER_NAME,FILE_NAME, match_attribute,match_attribute_value,Run_id) values ('${data.TEMPLATE_NAME}','${data.PROVIDER_NAME}','${data.COLUMNS}','${data.CONSUMER_NAME}','${data.FILE_NAME}','${data.ATTRIBUTE_NAME}','${data.ATTRIBUTE_VALUE}','${data.RUN_ID}');`,
-              },
-            })
-            .then((response) => {
-              if (response) {
-                axios
-                  .get(`${baseURL}/${user?.name}`, {
-                    params: {
-                      query: `update DCR_SAMP_CONSUMER1.PUBLIC.DASHBOARD_TABLE set UPL_INTO_CLI_SPACE = 'In Progress' where RUN_ID = '${data.RUN_ID}';`,
-                    },
-                  })
-                  .then((response) => {
-                    if (response) {
-                      fetchMainTable();
-                      callByPassUpload();
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
+    const payload = {
+      account_name: user?.Consumer,
+      db_name: user?.consumerDBName,
+      run_id: runId,
+    };
+    try {
+      const response = await API.queryRequests(payload);
+      if (response.status === 200 && response?.data?.data) {
+        let data = response?.data?.data?.[0];
+        console.log("Data:",data);
+        const payload = {
+          account_name: user?.Consumer,
+          template_name: formData?.Query_Name,
+          provider_name: data.PROVIDER_NAME,
+          columns: data?.COLUMNS,
+          consumer_name: formData?.Consumer_Name,
+          run_id: runId,
+          file_name: data?.FILE_NAME,
+          attribute_name: data?.ATTRIBUTE_NAME,
+          attribute_value: data?.ATTRIBUTE_VALUE,
+          consumer_database_name: user?.consumerDBName,
+         // tag: formData?.attachment_type,
+          tag: data.TAG,
+        };
+        try {
+         console.log("attachment :",formData?.attachment_type);
+
+          const response = await API.insert_requestUplToClientSpace(payload);
+          if (response.status === 200) {
+            const payload = {
+              account_name: user?.Consumer,
+              db_name: user?.consumerDBName,
+              run_id: runId,
+            };
+            try {
+              const response = await API.updateDashboardTableStatus(payload);
+              if (response.status === 200) {
+                fetchMainTable();
+                callByPassUpload();
               }
-            })
-            .catch((error) => {
+            } catch (error) {
               console.log(error);
-            });
+            }
+          }
+        } catch (error) {
+          console.log(error);
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const callByPassUpload = () => {
-    setTimeout(() => {
+    setTimeout(async () => {
       fetchMainTable();
-      //PENDING...
-      /*
-      const payload ={
-     };
-      try{
-        const response = await API.Demo(payload);
-          if (response.status === 200) {
-            fetchMainTable();
-            setUploading(false);
-          }
- 
-      }
-      catch(error)
-      {
+      const payload = {
+        account_name: user?.Consumer,
+        db_name: user?.consumerDBName,
+      };
+      try {
+        const response = await API.callMatchedDataProcedure(payload);
+        if (response.status === 200) {
+          fetchMainTable();
+          setUploading(false);
+        }
+      } catch (error) {
         console.log(error);
         fetchMainTable();
         setUploading(false);
       }
-      */
-      axios
-        .get(`${baseURL}/${user?.name}/procedure`, {
-          params: {
-            query: `call DCR_SAMP_CONSUMER1.PUBLIC.proc_matched_data();`,
-          },
-        })
-        .then((response) => {
-          if (response) {
-            fetchMainTable();
-            setUploading(false);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          fetchMainTable();
-          setUploading(false);
-        });
     }, 2000);
   };
 
