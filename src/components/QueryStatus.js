@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +27,7 @@ import CustomTable from "./CommonComponent/Table";
 import CommonModal from "./CommonComponent/Modal";
 import ModalForMetaAds from "./MatchRate/ModalForMetaAds";
 
-const baseURL = process.env.REACT_APP_BASE_URL;
+//const baseURL = process.env.REACT_APP_BASE_URL;
 
 // Modal style
 const resultstyle = {

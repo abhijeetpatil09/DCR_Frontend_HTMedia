@@ -68,7 +68,7 @@ const ModalForLinkedIn = ({ open, handleClose, data }) => {
       const campaignGroupList = async () => {
         const payload = {
           account_name: user?.Consumer,
-          run_id: data?.runId,
+         // run_id: data?.runId,
         };
         try {
           const response = await API.fetchingLinkedinCampaignGroups(payload);

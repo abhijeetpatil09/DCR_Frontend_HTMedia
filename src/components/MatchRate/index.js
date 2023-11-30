@@ -144,6 +144,7 @@ const MatchRate = () => {
     data: {
       runId: "",
       template_name: "",
+      IDENTIFIER_TYPE:"",
       campaign: [],
     },
   });
@@ -152,6 +153,7 @@ const MatchRate = () => {
     data: {
       runId: "",
       template_name: "",
+      IDENTIFIER_TYPE:"",
       campaign: [],
     },
   });
@@ -305,7 +307,7 @@ const MatchRate = () => {
     providerAccountIdentifier,
     open,
   ]);
-
+// useEffect for sf_table
   useEffect(() => {
     if (formData?.attachment_type === "sf_table") {
       const getSnowflakeTable = async () => {
@@ -331,7 +333,8 @@ const MatchRate = () => {
     }
   }, [user?.consumerDBName, user?.Consumer, formData?.attachment_type]);
 
-  const createNewRequest = async () => {
+  // createNewRequest function
+    const createNewRequest = async () => {
     if (formData.Consumer_Name !== "" && formData.Query_Name !== "") {
       const payload = {
         account_name: user?.Consumer,
@@ -363,6 +366,7 @@ const MatchRate = () => {
   };
 
   useEffect(() => {
+    
     fetchMainTable();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -563,7 +567,7 @@ const MatchRate = () => {
         tag: formData?.attachment_type,
         provider_account_identifier: providerAccountIdentifier,
       };
-
+     console.log("tag value : " , formData?.attachment_type);
       const response = await API.insertMatchRateRequest(payload);
       if (response.status === 200) {
         try {
@@ -820,11 +824,7 @@ const MatchRate = () => {
     }
   };
 
-
-
-
   /// View the sample data...
-
   const handleViewSample = async () => {
     if (
       SampleFileData &&
@@ -935,7 +935,7 @@ const MatchRate = () => {
     navigate("/analytics");
   };
 
-  const handleClickMetaAds = (runId, template_name) => {
+  const handleClickMetaAds = (runId, template_name,IDENTIFIER_TYPE) => {
     const templateName = template_name.replace(/ /g, "_");
     setShowMetaAds({
       ...showMetaAds,
@@ -943,11 +943,12 @@ const MatchRate = () => {
       data: {
         runId: runId,
         template_name: templateName,
+        IDENTIFIER_TYPE:IDENTIFIER_TYPE,
       },
     });
   };
 
-  const handleClickLinkedInAds = (runId, template_name) => {
+  const handleClickLinkedInAds = (runId, template_name,IDENTIFIER_TYPE) => {
     const templateName = template_name.replace(/ /g, "_");
     setShowLinkedInAds({
       ...showLinkedInAds,
@@ -955,6 +956,7 @@ const MatchRate = () => {
       data: {
         runId: runId,
         template_name: templateName,
+        IDENTIFIER_TYPE:IDENTIFIER_TYPE,
       },
     });
   };
@@ -1231,7 +1233,8 @@ const MatchRate = () => {
                             onClick={() =>
                               handleClickMetaAds(
                                 item.RUN_ID,
-                                item.TEMPLATE_NAME
+                                item.TEMPLATE_NAME,
+                                item.IDENTIFIER_TYPE
                               )
                             }
                             disabled={item.STATUS.toLowerCase() !== "completed"}
@@ -1261,7 +1264,8 @@ const MatchRate = () => {
                             onClick={() =>
                               handleClickLinkedInAds(
                                 item.RUN_ID,
-                                item.TEMPLATE_NAME
+                                item.TEMPLATE_NAME,
+                                item.IDENTIFIER_TYPE
                               )
                             }
                             disabled={item.STATUS.toLowerCase() !== "completed"}
@@ -1799,6 +1803,7 @@ const MatchRate = () => {
                 openModal: false,
                 runId: "",
                 template_name: "",
+                IDENTIFIER_TYPE:"",
               })
             }
             data={showMetaAds.data}
@@ -1815,6 +1820,7 @@ const MatchRate = () => {
                 openModal: false,
                 runId: "",
                 template_name: "",
+                IDENTIFIER_TYPE:"",
               })
             }
             data={showLinkedInAds.data}
