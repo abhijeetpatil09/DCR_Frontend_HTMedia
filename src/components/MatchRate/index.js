@@ -731,8 +731,8 @@ const MatchRate = () => {
       try {
         const response = await API.callMatchedDataProcedure(payload);
         if (response.status === 200) {
-          fetchMainTable();
           setUploading(false);
+          setTimeout(() => {fetchMainTable(); }, 2000);
         }
       } catch (error) {
         console.log(error);
@@ -1151,7 +1151,7 @@ const MatchRate = () => {
                       user?.role?.includes("Publisher") &&
                       user?.role?.includes("Consumer") ? (
                         <>
-                          {uploading &&
+                          {
                           item.UPL_INTO_CLI_SPACE?.toLowerCase() ===
                             "in progress" ? (
                             <div>
@@ -1476,7 +1476,7 @@ const MatchRate = () => {
                       </button>
                     </div>
                   </>
-                ) : (
+                ) : formData.attachment_type === "sf_table"? (
                   <div className="mt-2 pb-21 flex flex-col">
                     <label className="block text-sm font-medium leading-6 text-amaranth-600 ">
                       Snowflake Table
@@ -1498,7 +1498,7 @@ const MatchRate = () => {
                       })}
                     </select>
                   </div>
-                )}
+                ):(<></>)}
 
                 <div className="mt-2 pb-21 flex flex-col">
                   <label className="block text-sm font-medium leading-6 text-amaranth-600 ">

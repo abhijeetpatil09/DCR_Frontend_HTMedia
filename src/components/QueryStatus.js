@@ -14,6 +14,7 @@ import {
   TableRow,
   TablePagination,
 } from "@mui/material";
+import { LinkedIn } from "@material-ui/icons";
 
 import API from "../apiServices/api";
 
@@ -26,6 +27,7 @@ import * as actions from "../redux/actions/index";
 import CustomTable from "./CommonComponent/Table";
 import CommonModal from "./CommonComponent/Modal";
 import ModalForMetaAds from "./MatchRate/ModalForMetaAds";
+import ModalForLinkedIn from "./MatchRate/ModalForLinkedIn";
 
 //const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -98,6 +100,15 @@ const QueryStatus = () => {
     data: {
       runId: "",
       template_name: "",
+      campaign: [],
+    },
+  });
+  const [showLinkedInAds, setShowLinkedInAds] = useState({
+    openModal: false,
+    data: {
+      runId: "",
+      template_name: "",
+      IDENTIFIER_TYPE:"",
       campaign: [],
     },
   });
@@ -313,6 +324,19 @@ const QueryStatus = () => {
       data: {
         runId: runId,
         template_name: templateName,
+      },
+    });
+  };
+
+  const handleClickLinkedInAds = (runId, template_name,IDENTIFIER_TYPE) => {
+    const templateName = template_name.replace(/ /g, "_");
+    setShowLinkedInAds({
+      ...showLinkedInAds,
+      openModal: true,
+      data: {
+        runId: runId,
+        template_name: templateName,
+        IDENTIFIER_TYPE:IDENTIFIER_TYPE,
       },
     });
   };
@@ -725,6 +749,26 @@ const QueryStatus = () => {
                                   >
                                     <img src={google} alt="" />
                                   </button>
+                                    {/* LinkedInButton Added */}
+                          <button
+                            onClick={() =>
+                              handleClickLinkedInAds(
+                                row.RUN_ID,
+                                row.TEMPLATE_NAME,
+                                row.IDENTIFIER_TYPE
+                              )
+                            }
+                            disabled={row.STATUS.toLowerCase() !== "completed"}
+                            className={`${
+                              row.STATUS.toLowerCase() === "completed"
+                                ? "opacity-1 hover:text-inherit"
+                                : "disabled opacity-25 hover:text-inherit"
+                            }  px-2 hover:text-amaranth-600 w-8`}
+                            title="Run Ad campaign on LinkedIn ADs"
+                          >
+                            <LinkedIn className="text-amaranth-600" />
+                            {/* <img src={Linkedin} alt="" /> */}
+                          </button>
                                 </>
                               ) : null}
                             </div>
@@ -828,6 +872,23 @@ const QueryStatus = () => {
           data={showMetaAds.data}
         />
       ) : null}
+      
+        {/* Show LinkedIn ad's modal */}
+        {showLinkedInAds.openModal ? (
+          <ModalForLinkedIn
+            open={showLinkedInAds.openModal}
+            handleClose={() =>
+              setShowLinkedInAds({
+                ...showLinkedInAds,
+                openModal: false,
+                runId: "",
+                template_name: "",
+                IDENTIFIER_TYPE:"",
+              })
+            }
+            data={showLinkedInAds.data}
+          />
+        ) : null}
     </div>
   );
 };
